@@ -1,0 +1,4 @@
+/.lake/
+/.tooling/
+*.olean
+*.ilean

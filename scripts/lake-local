@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eu
+
+project_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+tool_home="$project_dir/.tooling/elan"
+
+if [ ! -x "$tool_home/bin/lake" ]; then
+  echo "Local Lean toolchain is not installed in $tool_home" >&2
+  exit 1
+fi
+
+ELAN_HOME="$tool_home" exec "$tool_home/bin/lake" "$@"
