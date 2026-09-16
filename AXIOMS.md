@@ -14,6 +14,16 @@ with this ledger and does not contain `sorryAx`.
    already provide a usable theorem. Each such assumption must be separately
    named and stated here before it is used.
 
+## Currently declared
+
+1. `D5.Background.lowerCentralSeries_le_dimensionSubgroup`:
+   `γₙ(G) ≤ Dₙ(G)` for every group and every positive `n`. The project defines
+   `Dₙ` directly from the two-sided augmentation ideal; Mathlib currently has
+   no integral dimension-subgroup development providing this theorem.
+
+Tahara's axiom has not yet been declared: its full parameter record and exact
+hypotheses are still being transcribed from Theorem 4.3.3.
+
 ## Forbidden
 
 - `sorry` or `by_contra` gaps closed by `sorryAx`;

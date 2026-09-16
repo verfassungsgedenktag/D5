@@ -11,6 +11,10 @@
 - Foundations build: successful, including the noncommutative group-ring
   definition using two-sided ideals.
 - Tahara pair arithmetic build: successful, with no `sorry`.
+- Axiom audit build: successful. Completed arithmetic lemmas use only Lean's
+  standard logical axioms (`propext`, `Classical.choice`, `Quot.sound`).
+- The proved inclusion `γ₆(G) ≤ [D₅(G),G]` additionally reports exactly the
+  declared background axiom `lowerCentralSeries_le_dimensionSubgroup`.
 
 Run the current verification with:
 

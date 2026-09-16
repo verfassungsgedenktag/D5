@@ -14,6 +14,8 @@
 - [x] Align `γₙ(G)` with Mathlib's lower central series indexing.
 - [x] Define the integral augmentation ideal and `Dₙ(G)`.
 - [ ] Prove or isolate functoriality and `γₙ(G) ≤ Dₙ(G)`.
+  - [x] Isolate `γₙ(G) ≤ Dₙ(G)` as one named background axiom.
+  - [ ] Formalize functoriality under quotient maps.
 - [ ] Establish quotient and weight bookkeeping modulo `γ₆(G)`.
 
 ## Phase 2 — Tahara interface
@@ -37,4 +39,6 @@
 - [ ] Prove the finite nilpotent case.
 - [ ] Pass from a finite group to `G / γ₆(G)`.
 - [ ] Prove both subgroup inclusions.
+  - [x] Prove `γ₆(G) ≤ [D₅(G),G]` from the recorded background axiom.
+  - [ ] Prove `[D₅(G),G] ≤ γ₆(G)` using the Tahara calculation.
 - [ ] Run `lake build` and audit the final theorem with `#print axioms`.
