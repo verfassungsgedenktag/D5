@@ -33,6 +33,8 @@
 ## Phase 3 — document calculations
 
 - [ ] Formalize Sections 3–4 (integer divisibility).
+  - [x] Prove the multiplicative consequence (6) of condition (4.3.6) in
+    `γ₂/γ₃`, including collection of all finite cyclic coordinates.
   - [x] Pair equations (12), (13) and divisibilities (14)–(17), in
     denominator-free integer form.
   - [x] Binomial identities multiplying `C(n,2)` by 2 and `C(n,3)` by 3.
