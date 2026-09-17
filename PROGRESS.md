@@ -24,9 +24,9 @@
 
 ## Phase 2 — Tahara interface
 
-- [ ] Transcribe Theorem 4.3.3 exactly from the cited source.
-- [ ] Represent its finite cyclic coordinates and arithmetic conditions.
-- [ ] Declare the reviewed statement as the named Tahara axiom.
+- [x] Transcribe Theorem 4.3.3 exactly from the cited source.
+- [x] Represent its finite cyclic coordinates and arithmetic conditions.
+- [x] Declare the reviewed statement as the named Tahara axiom.
 
 ## Phase 3 — document calculations
 

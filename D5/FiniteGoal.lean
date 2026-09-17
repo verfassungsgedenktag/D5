@@ -1,5 +1,6 @@
 import D5.BackgroundAxioms
 import D5.TaharaArithmetic
+import D5.Tahara
 import D5.Weight
 import D5.CommutatorIdentities
 import D5.CollectionModSix

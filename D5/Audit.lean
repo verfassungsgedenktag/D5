@@ -16,3 +16,5 @@ theorem will be added here when it exists.
 #print axioms D5.gamma_five_central_mod_gamma_six
 #print axioms D5.paperComm_mul_left_mod_gamma_six
 #print axioms D5.paperComm_mul_right_mod_gamma_six
+#print axioms D5.Tahara.mem_dimensionSubgroup_five_iff
+#print axioms D5.Tahara.word_mem_dimensionSubgroup_five

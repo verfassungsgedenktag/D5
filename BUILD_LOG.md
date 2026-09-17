@@ -32,3 +32,7 @@ Run the current verification with:
   and the explicitly listed background axiom
   `commutator_gamma_le_gamma_add`.
 - Source scan: no `sorry` or `sorryAx` occurs in any Lean file.
+- Tahara interface build: successful. The formal statement includes all
+  cyclic-coordinate data, the ordered noncommutative word (4.3.1), and all
+  conditions (4.3.2)--(4.3.15). Its only new mathematical assumption is the
+  named axiom `D5.Tahara.description`.
