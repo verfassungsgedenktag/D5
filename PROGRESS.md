@@ -40,9 +40,8 @@
 - [ ] Formalize Sections 5–14 (`[w, ξ] ≡ κ mod γ₆`).
   - [x] Prove formula (18), including ordered product collection and all
     three integer-power extractions.
-  - [x] Prove the exact Hall--Witt identity and the weight-four core of
-    rotation (19) modulo `γ₅`; the explicit weight-five corrections modulo
-    `γ₆` remain.
+  - [x] Prove the exact Hall--Witt identity and full rotation formula (19),
+    including its four explicit weight-five corrections modulo `γ₆`.
 - [ ] Formalize Sections 15–25 (`κ ≡ 1 mod γ₆`).
 
 ## Phase 4 — finite-group theorem and audit

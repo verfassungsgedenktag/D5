@@ -8,6 +8,7 @@ import D5.TaharaReduction
 import D5.TaharaWeights
 import D5.TaharaExpand
 import D5.Rotation
+import D5.RotationSix
 import D5.Weight
 import D5.CommutatorIdentities
 import D5.CollectionModSix

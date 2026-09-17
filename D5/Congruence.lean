@@ -39,6 +39,11 @@ theorem modEq_iff_div_mem {N : Subgroup G} [N.Normal] {a b : G} :
     ModEq N a b ↔ a / b ∈ N :=
   QuotientGroup.eq_iff_div_mem
 
+theorem ModEq.mono {N M : Subgroup G} [N.Normal] [M.Normal]
+    (hNM : N ≤ M) {a b : G} (h : ModEq N a b) : ModEq M a b := by
+  rw [modEq_iff_div_mem]
+  exact hNM (modEq_iff_div_mem.mp h)
+
 theorem modEq_one_iff_mem {N : Subgroup G} [N.Normal] {a : G} :
     ModEq N a 1 ↔ a ∈ N := by
   simp [ModEq, QuotientGroup.eq_one_iff]
