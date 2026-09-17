@@ -20,6 +20,10 @@ with this ledger and does not contain `sorryAx`.
    `γₙ(G) ≤ Dₙ(G)` for every group and every positive `n`. The project defines
    `Dₙ` directly from the two-sided augmentation ideal; Mathlib currently has
    no integral dimension-subgroup development providing this theorem.
+2. `D5.Background.commutator_gamma_le_gamma_add`:
+   `[γᵣ(G),γₛ(G)] ≤ γᵣ₊ₛ(G)` for positive weights. Mathlib defines the
+   lower central series and proves the one-step descending-series property,
+   but does not currently expose the two-weight estimate needed here.
 
 Tahara's axiom has not yet been declared: its full parameter record and exact
 hypotheses are still being transcribed from Theorem 4.3.3.

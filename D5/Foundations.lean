@@ -70,6 +70,10 @@ theorem gamma_succ (n : ℕ) (hn : 1 ≤ n) :
   conv_lhs => rw [← show n - 1 + 1 = n by omega]
   rfl
 
+instance gamma_normal (n : ℕ) : (gamma G n).Normal := by
+  unfold gamma
+  infer_instance
+
 end CentralSeries
 
 section DimensionSubgroups

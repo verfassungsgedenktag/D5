@@ -13,3 +13,6 @@ theorem will be added here when it exists.
 #print axioms D5.TaharaArithmetic.equation12
 #print axioms D5.TaharaArithmetic.dvd_wijj_mul_B2d
 #print axioms D5.gamma_six_le_commutator_dimension_five
+#print axioms D5.gamma_five_central_mod_gamma_six
+#print axioms D5.paperComm_mul_left_mod_gamma_six
+#print axioms D5.paperComm_mul_right_mod_gamma_six

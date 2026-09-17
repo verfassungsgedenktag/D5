@@ -16,7 +16,11 @@
 - [ ] Prove or isolate functoriality and `γₙ(G) ≤ Dₙ(G)`.
   - [x] Isolate `γₙ(G) ≤ Dₙ(G)` as one named background axiom.
   - [ ] Formalize functoriality under quotient maps.
-- [ ] Establish quotient and weight bookkeeping modulo `γ₆(G)`.
+- [x] Establish quotient congruence and the basic weight bookkeeping modulo
+  `γ₆(G)`.
+- [x] Prove exact product, inverse, swap, conjugation, and square identities
+  for the paper's commutator convention.
+- [x] Prove the two product-bilinearity rules in formula (56) modulo `γ₆`.
 
 ## Phase 2 — Tahara interface
 

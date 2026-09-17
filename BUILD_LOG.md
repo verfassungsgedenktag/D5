@@ -21,3 +21,14 @@ Run the current verification with:
 ```text
 ./scripts/lake-local build
 ```
+
+## 2026-09-17
+
+- Full build: successful (`3103` jobs).
+- Added quotient congruence modulo `γ₆`, lower-central-series weight
+  bookkeeping, and exact commutator identities in the paper's convention.
+- Verified both product-bilinearity rules from formula (56) modulo `γ₆`.
+- Axiom audit: these collection rules use only Lean's standard logical axioms
+  and the explicitly listed background axiom
+  `commutator_gamma_le_gamma_add`.
+- Source scan: no `sorry` or `sorryAx` occurs in any Lean file.
