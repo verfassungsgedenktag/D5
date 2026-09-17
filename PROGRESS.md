@@ -44,6 +44,9 @@
     three integer-power extractions.
   - [x] Prove the exact Hall--Witt identity and full rotation formula (19),
     including its four explicit weight-five corrections modulo `γ₆`.
+  - [x] Prove the weight-transfer rule used after (20) and use divisibilities
+    (16)--(17) to eliminate its last three weight-five factors. The full
+    six-factor transfer identity (20) remains.
 - [ ] Formalize Sections 15–25 (`κ ≡ 1 mod γ₆`).
 
 ## Phase 4 — finite-group theorem and audit

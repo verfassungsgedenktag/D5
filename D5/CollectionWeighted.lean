@@ -91,6 +91,62 @@ theorem paperComm_zpow_left_mod_gamma
           (ih.mul (paperComm_inv_left_mod_gamma hr hs
             (by simpa [Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using hn) ha hb))
 
+theorem mul_comm_mod_gamma
+    {n r s : ℕ} (hr : 1 ≤ r) (hs : 1 ≤ s) (hn : n ≤ r + s)
+    {x y : G} (hx : x ∈ gamma G r) (hy : y ∈ gamma G s) :
+    ModEq (gamma G n) (x * y) (y * x) := by
+  have heq : x * y = y * x * paperComm x y := by
+    simp only [paperComm_eq]
+    group
+  rw [heq]
+  simpa using (ModEq.refl (gamma G n) (y * x)).mul
+    (paperComm_mod_gamma_eq_one hr hs hn hx hy)
+
+theorem paperComm_mul_right_mod_gamma
+    {n r s t : ℕ} (hr : 1 ≤ r) (hs : 1 ≤ s) (ht : 1 ≤ t)
+    (hnConj : n ≤ r + s + t) (hnComm : n ≤ (r + t) + (r + s))
+    {a b c : G} (ha : a ∈ gamma G r)
+    (hb : b ∈ gamma G s) (hc : c ∈ gamma G t) :
+    ModEq (gamma G n) (paperComm a (b * c))
+      (paperComm a b * paperComm a c) := by
+  rw [paperComm_mul_right]
+  have hab : paperComm a b ∈ gamma G (r + s) :=
+    paperComm_mem_gamma_add hr hs ha hb
+  have hac : paperComm a c ∈ gamma G (r + t) :=
+    paperComm_mem_gamma_add hr ht ha hc
+  have hconj : ModEq (gamma G n) (conjugateBy (paperComm a b) c)
+      (paperComm a b) :=
+    conjugateBy_mod_gamma (r := r + s) (s := t)
+      (Nat.le_add_right_of_le hr) ht
+      (by simpa [Nat.add_assoc] using hnConj) hab hc
+  have hfirst : ModEq (gamma G n)
+      (paperComm a c * conjugateBy (paperComm a b) c)
+      (paperComm a c * paperComm a b) :=
+    (ModEq.refl (gamma G n) (paperComm a c)).mul hconj
+  exact hfirst.trans <| mul_comm_mod_gamma
+    (n := n) (r := r + t) (s := r + s)
+      (Nat.le_add_right_of_le hr) (Nat.le_add_right_of_le hr)
+      hnComm hac hab
+
+theorem paperComm_zpow_right_mod_gamma
+    {n r s : ℕ} (hr : 1 ≤ r) (hs : 1 ≤ s)
+    (hnConj : n ≤ r + s + s) (hnComm : n ≤ (r + s) + (r + s))
+    {a b : G} (ha : a ∈ gamma G r) (hb : b ∈ gamma G s) (z : ℤ) :
+    ModEq (gamma G n) (paperComm a (b ^ z)) (paperComm a b ^ z) := by
+  induction z using Int.induction_on with
+  | zero => simpa [paperComm_eq] using ModEq.refl (gamma G n) (1 : G)
+  | succ v ih =>
+      rw [zpow_add_one, zpow_add_one]
+      exact (paperComm_mul_right_mod_gamma hr hs hs hnConj hnComm
+        ha ((gamma G s).zpow_mem hb v) hb).trans
+          (ih.mul (ModEq.refl (gamma G n) (paperComm a b)))
+  | pred v ih =>
+      rw [zpow_sub_one, zpow_sub_one]
+      exact (paperComm_mul_right_mod_gamma hr hs hs hnConj hnComm
+        ha ((gamma G s).zpow_mem hb (-v)) ((gamma G s).inv_mem hb)).trans
+          (ih.mul (paperComm_inv_right_mod_gamma hr hs
+            (by simpa [Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using hnConj) ha hb))
+
 /-- If the first argument changes modulo `γᵣ`, one further commutator with
 an element of weight `s` changes only modulo `γᵣ₊ₛ`. -/
 theorem paperComm_left_of_modEq_gamma
@@ -120,17 +176,6 @@ theorem paperComm_right_of_modEq_gamma
   have h := (paperComm_left_of_modEq_gamma hs hr hbc ha).inv
   rw [← paperComm_swap b a, ← paperComm_swap c a] at h
   simpa [Nat.add_comm] using h
-
-theorem mul_comm_mod_gamma
-    {n r s : ℕ} (hr : 1 ≤ r) (hs : 1 ≤ s) (hn : n ≤ r + s)
-    {x y : G} (hx : x ∈ gamma G r) (hy : y ∈ gamma G s) :
-    ModEq (gamma G n) (x * y) (y * x) := by
-  have heq : x * y = y * x * paperComm x y := by
-    simp only [paperComm_eq]
-    group
-  rw [heq]
-  simpa using (ModEq.refl (gamma G n) (y * x)).mul
-    (paperComm_mod_gamma_eq_one hr hs hn hx hy)
 
 /-- The nested power extraction used in the first block of formula (18). -/
 theorem paperComm_paperComm_zpow_left_mod_gamma_six
