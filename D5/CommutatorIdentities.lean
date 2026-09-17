@@ -80,6 +80,15 @@ theorem paperComm_sq_right (a b : G) :
     conjugateBy_eq_mul_paperComm]
   simp [mul_assoc]
 
+/-- The Hall--Witt identity in the commutator and conjugation conventions
+used by the source proof.  This is an exact group identity. -/
+theorem hallWitt (x y z : G) :
+    conjugateBy (paperComm (paperComm x y⁻¹) z) y *
+      conjugateBy (paperComm (paperComm y z⁻¹) x) z *
+      conjugateBy (paperComm (paperComm z x⁻¹) y) x = 1 := by
+  simp only [paperComm_eq, conjugateBy, inv_inv]
+  group
+
 end
 
 end D5

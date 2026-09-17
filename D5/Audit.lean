@@ -18,6 +18,8 @@ theorem will be added here when it exists.
 #print axioms D5.paperComm_mul_right_mod_gamma_six
 #print axioms D5.paperComm_zpow_zpow_mod_gamma_six
 #print axioms D5.paperComm_paperComm_zpow_left_mod_gamma_six
+#print axioms D5.hallWitt
+#print axioms D5.rotation_main_mod_gamma_five
 #print axioms D5.Tahara.mem_dimensionSubgroup_five_iff
 #print axioms D5.Tahara.word_mem_dimensionSubgroup_five
 #print axioms D5.Tahara.commutator_representative_formula18

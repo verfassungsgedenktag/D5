@@ -60,6 +60,19 @@ theorem paperComm_inv_left_mod_gamma
   exact conjugateBy_mod_gamma (r := s + r) (s := r)
     (Nat.le_add_right_of_le hs) hr hn hinv ((gamma G r).inv_mem ha)
 
+theorem paperComm_inv_right_mod_gamma
+    {n r s : ℕ} (hr : 1 ≤ r) (hs : 1 ≤ s) (hn : n ≤ s + r + s)
+    {a b : G} (ha : a ∈ gamma G r) (hb : b ∈ gamma G s) :
+    ModEq (gamma G n) (paperComm a b⁻¹) (paperComm a b)⁻¹ := by
+  rw [paperComm_inv_right, paperComm_swap]
+  have hba : paperComm b a ∈ gamma G (s + r) :=
+    paperComm_mem_gamma_add hs hr hb ha
+  have hinv : (paperComm a b)⁻¹ ∈ gamma G (s + r) := by
+    rw [← paperComm_swap]
+    exact hba
+  exact conjugateBy_mod_gamma (r := s + r) (s := s)
+    (Nat.le_add_right_of_le hs) hs hn hinv ((gamma G s).inv_mem hb)
+
 theorem paperComm_zpow_left_mod_gamma
     {n r s : ℕ} (hr : 1 ≤ r) (hs : 1 ≤ s) (hn : n ≤ r + s + r)
     {a b : G} (ha : a ∈ gamma G r) (hb : b ∈ gamma G s) (v : ℤ) :
@@ -97,6 +110,27 @@ theorem paperComm_left_of_modEq_gamma
     simpa using hvanish.mul (ModEq.refl (gamma G (r + s)) (paperComm b c))
   rw [show a = (a / b) * b by simp [div_eq_mul_inv]]
   exact hsplit.trans hprod
+
+/-- The symmetric transport rule for a change in the second argument. -/
+theorem paperComm_right_of_modEq_gamma
+    {r s : ℕ} (hr : 1 ≤ r) (hs : 1 ≤ s)
+    {a b c : G} (hbc : ModEq (gamma G s) b c)
+    (ha : a ∈ gamma G r) :
+    ModEq (gamma G (r + s)) (paperComm a b) (paperComm a c) := by
+  have h := (paperComm_left_of_modEq_gamma hs hr hbc ha).inv
+  rw [← paperComm_swap b a, ← paperComm_swap c a] at h
+  simpa [Nat.add_comm] using h
+
+theorem mul_comm_mod_gamma
+    {n r s : ℕ} (hr : 1 ≤ r) (hs : 1 ≤ s) (hn : n ≤ r + s)
+    {x y : G} (hx : x ∈ gamma G r) (hy : y ∈ gamma G s) :
+    ModEq (gamma G n) (x * y) (y * x) := by
+  have heq : x * y = y * x * paperComm x y := by
+    simp only [paperComm_eq]
+    group
+  rw [heq]
+  simpa using (ModEq.refl (gamma G n) (y * x)).mul
+    (paperComm_mod_gamma_eq_one hr hs hn hx hy)
 
 /-- The nested power extraction used in the first block of formula (18). -/
 theorem paperComm_paperComm_zpow_left_mod_gamma_six
