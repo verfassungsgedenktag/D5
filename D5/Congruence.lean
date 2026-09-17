@@ -1,4 +1,4 @@
-import D5.Foundations
+import D5.CommutatorIdentities
 import Mathlib.GroupTheory.QuotientGroup.Basic
 
 /-!
@@ -81,6 +81,12 @@ theorem ModEq.paperComm {N : Subgroup G} [N.Normal]
     ModEq N (D5.paperComm a b) (D5.paperComm c d) := by
   change D5.paperComm (a : G ⧸ N) b = D5.paperComm (c : G ⧸ N) d
   rw [hac, hbd]
+
+theorem ModEq.conjugateBy {N : Subgroup G} [N.Normal]
+    {a b c d : G} (hac : ModEq N a c) (hbd : ModEq N b d) :
+    ModEq N (D5.conjugateBy a b) (D5.conjugateBy c d) := by
+  unfold D5.conjugateBy
+  exact (hbd.inv.mul hac).mul hbd
 
 /-- Congruence modulo the sixth term of the paper-indexed lower central
 series. -/

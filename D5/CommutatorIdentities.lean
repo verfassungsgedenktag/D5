@@ -64,6 +64,22 @@ theorem conjugateBy_eq_mul_paperComm (x y : G) :
   simp only [paperComm_eq, conjugateBy]
   group
 
+theorem conjugateBy_mul (x y z : G) :
+    conjugateBy (x * y) z = conjugateBy x z * conjugateBy y z := by
+  simp only [conjugateBy]
+  group
+
+theorem conjugateBy_zpow (x z : G) (v : ℤ) :
+    conjugateBy (x ^ v) z = conjugateBy x z ^ v := by
+  induction v using Int.induction_on with
+  | zero => simp [conjugateBy]
+  | succ n ih =>
+      rw [zpow_add_one, zpow_add_one, conjugateBy_mul, ih]
+  | pred n ih =>
+      rw [zpow_sub_one, zpow_sub_one, conjugateBy_mul, ih]
+      simp [conjugateBy]
+      group
+
 /-- First power-collection identity. It is kept exact; later files discard
 the correction factor by a weight estimate when appropriate. -/
 theorem paperComm_sq_left (a b : G) :

@@ -36,3 +36,11 @@ Run the current verification with:
   cyclic-coordinate data, the ordered noncommutative word (4.3.1), and all
   conditions (4.3.2)--(4.3.15). Its only new mathematical assumption is the
   named axiom `D5.Tahara.description`.
+- Full formula (20) build: successful (`3119` jobs). Both truncated
+  Hall--Petresco expansions, all six factors, the arbitrary exponent `u`,
+  and the reduction by divisibilities (16)--(17) are checked by Lean.
+- Axiom audit for formula (20): only Lean's standard logical axioms and the
+  declared background axiom `commutator_gamma_le_gamma_add`; no additional
+  mathematical axiom was introduced.
+- Source scan after formula (20): no `sorry`, `sorryAx`, or `admit` occurs in
+  any Lean file.

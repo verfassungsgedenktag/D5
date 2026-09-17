@@ -25,5 +25,9 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.word_mem_dimensionSubgroup_five
 #print axioms D5.Tahara.commutator_representative_formula18
 #print axioms D5.Tahara.condition6_multiplicative_of_satisfies
+#print axioms D5.paperComm_zpow_right_hallPetresco
+#print axioms D5.paperComm_zpow_left_hallPetresco_weight_two
+#print axioms D5.transfer_formula20
 #print axioms D5.Tahara.formula20_last_three_vanish
+#print axioms D5.Tahara.transfer_formula20_reduced
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

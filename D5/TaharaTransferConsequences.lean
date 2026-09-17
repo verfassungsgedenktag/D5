@@ -1,5 +1,6 @@
 import D5.TaharaCondition6
 import D5.WeightFivePowers
+import D5.Transfer20
 
 /-!
 # Divisibility consequences after the full transfer formula
@@ -66,6 +67,42 @@ theorem formula20_last_three_vanish
         D5.modGammaSix_zpow_eq_one_of_dvd hrepeatedBase hdB3
       lastEntry :=
         D5.modGammaSix_zpow_eq_one_of_dvd hlastBase hdNegB3 }
+
+/-- Formula (20) specialized to a Tahara pair, after the three weight-five
+terms killed by (16)--(17) have been removed. -/
+theorem transfer_formula20_reduced
+    (C : Context G) (P : Parameters C.s C.t) (hP : P.Satisfies)
+    (ξ : G) {i j : Fin C.s} (hij : i < j) :
+    D5.ModGammaSix
+      (D5.paperComm (D5.paperComm ξ (C.x1 j))
+        (C.x1 i ^ orderInt C.d j) ^ P.u i j)
+      (D5.paperComm
+          (D5.paperComm ξ (C.x1 j ^ orderInt C.d j)) (C.x1 i) ^ P.u i j *
+        D5.paperComm
+          (D5.paperComm (D5.paperComm (C.x1 j) ξ) (C.x1 j)) (C.x1 i) ^
+            (P.u i j * TaharaArithmetic.binom2 (C.d j)) *
+        D5.paperComm
+          (D5.paperComm (D5.paperComm (C.x1 j) ξ) (C.x1 i)) (C.x1 i) ^
+            (-P.u i j * TaharaArithmetic.binom2 (C.d j))) := by
+  have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hxj : C.x1 j ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hxi : C.x1 i ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hfull := D5.transfer_formula20 hξ hxj hxi (C.d j) (P.u i j)
+  have hv := formula20_last_three_vanish C P hP ξ hij
+  exact hfull.trans <| by
+    simpa only [mul_one, orderInt] using
+      (((((D5.ModEq.refl (D5.gamma G 6)
+      (D5.paperComm
+        (D5.paperComm ξ (C.x1 j ^ orderInt C.d j)) (C.x1 i) ^ P.u i j)).mul
+      (D5.ModEq.refl (D5.gamma G 6)
+        (D5.paperComm
+          (D5.paperComm (D5.paperComm (C.x1 j) ξ) (C.x1 j)) (C.x1 i) ^
+            (P.u i j * TaharaArithmetic.binom2 (C.d j))))).mul
+      (D5.ModEq.refl (D5.gamma G 6)
+        (D5.paperComm
+          (D5.paperComm (D5.paperComm (C.x1 j) ξ) (C.x1 i)) (C.x1 i) ^
+            (-P.u i j * TaharaArithmetic.binom2 (C.d j))))).mul
+      hv.commutatorSuffix).mul hv.threeRepeated).mul hv.lastEntry
 
 end
 

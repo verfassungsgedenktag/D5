@@ -44,9 +44,10 @@
     three integer-power extractions.
   - [x] Prove the exact Hall--Witt identity and full rotation formula (19),
     including its four explicit weight-five corrections modulo `γ₆`.
-  - [x] Prove the weight-transfer rule used after (20) and use divisibilities
-    (16)--(17) to eliminate its last three weight-five factors. The full
-    six-factor transfer identity (20) remains.
+  - [x] Prove both truncated Hall--Petresco formulas needed for the transfer,
+    the full six-factor identity (20), and its arbitrary outer power `u`.
+  - [x] Use divisibilities (16)--(17) to eliminate the last three
+    weight-five factors in (20), obtaining the reduced Tahara-pair formula.
 - [ ] Formalize Sections 15–25 (`κ ≡ 1 mod γ₆`).
 
 ## Phase 4 — finite-group theorem and audit
