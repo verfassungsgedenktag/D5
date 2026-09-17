@@ -70,6 +70,10 @@ theorem gamma_succ (n : ℕ) (hn : 1 ≤ n) :
   conv_lhs => rw [← show n - 1 + 1 = n by omega]
   rfl
 
+theorem gamma_antitone : Antitone (gamma G) := by
+  intro m n hmn
+  exact lowerCentralSeries_antitone (Nat.sub_le_sub_right hmn 1)
+
 instance gamma_normal (n : ℕ) : (gamma G n).Normal := by
   unfold gamma
   infer_instance

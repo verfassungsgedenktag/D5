@@ -16,5 +16,9 @@ theorem will be added here when it exists.
 #print axioms D5.gamma_five_central_mod_gamma_six
 #print axioms D5.paperComm_mul_left_mod_gamma_six
 #print axioms D5.paperComm_mul_right_mod_gamma_six
+#print axioms D5.paperComm_zpow_zpow_mod_gamma_six
+#print axioms D5.paperComm_paperComm_zpow_left_mod_gamma_six
 #print axioms D5.Tahara.mem_dimensionSubgroup_five_iff
 #print axioms D5.Tahara.word_mem_dimensionSubgroup_five
+#print axioms D5.Tahara.commutator_representative_formula18
+#print axioms D5.finite_group_theorem_of_nilpotent_elementwise

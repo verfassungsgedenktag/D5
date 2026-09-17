@@ -43,6 +43,14 @@ theorem modEq_one_iff_mem {N : Subgroup G} [N.Normal] {a : G} :
     ModEq N a 1 ↔ a ∈ N := by
   simp [ModEq, QuotientGroup.eq_one_iff]
 
+/-- Membership can be transported across a congruence when the modulus lies
+inside the target subgroup. -/
+theorem mem_of_modEq_of_le {N H : Subgroup G} [N.Normal]
+    (hNH : N ≤ H) {a b : G} (hab : ModEq N a b) (hb : b ∈ H) : a ∈ H := by
+  have hdiv : a / b ∈ H := hNH (modEq_iff_div_mem.mp hab)
+  rw [show a = (a / b) * b by simp [div_eq_mul_inv]]
+  exact H.mul_mem hdiv hb
+
 theorem ModEq.mul {N : Subgroup G} [N.Normal] {a b c d : G}
     (hab : ModEq N a b) (hcd : ModEq N c d) :
     ModEq N (a * c) (b * d) := by

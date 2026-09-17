@@ -53,6 +53,11 @@ theorem paperComm_swap (a b : G) :
   simp only [paperComm_eq]
   group
 
+/-- Dictionary from Mathlib's element commutator to the paper convention. -/
+theorem commutatorElement_eq_paperComm_inv (a b : G) :
+    ⁅a, b⁆ = paperComm a⁻¹ b⁻¹ := by
+  simp only [paperComm_eq, inv_inv, commutatorElement_def]
+
 /-- Expanding a conjugation as a commutator correction. -/
 theorem conjugateBy_eq_mul_paperComm (x y : G) :
     conjugateBy x y = x * paperComm x y := by

@@ -40,6 +40,30 @@ theorem three_mul_binom3 (n : ℕ) :
   norm_num at hz
   simpa [binom2, binom3, mul_comm] using hz
 
+/-- The exact binomial difference identity used after (17), with all
+quantities represented in `ℤ`. -/
+theorem binom2_mul_sub_ratio (d q : ℕ) (hd : 0 < d) (hq : 0 < q) :
+    binom2 (d * q) - (q : ℤ) * binom2 d =
+      (d : ℤ) * d * binom2 q := by
+  apply mul_left_cancel₀ (by norm_num : (2 : ℤ) ≠ 0)
+  calc
+    2 * (binom2 (d * q) - (q : ℤ) * binom2 d) =
+        2 * binom2 (d * q) - (q : ℤ) * (2 * binom2 d) := by ring
+    _ = ((d * q : ℕ) : ℤ) * (((d * q - 1 : ℕ) : ℤ)) -
+        (q : ℤ) * ((d : ℤ) * (((d - 1 : ℕ) : ℤ))) := by
+          rw [two_mul_binom2, two_mul_binom2]
+    _ = (d : ℤ) * d * ((q : ℤ) * (((q - 1 : ℕ) : ℤ))) := by
+          rw [Nat.cast_mul,
+            Nat.cast_sub (Nat.one_le_iff_ne_zero.mpr
+              (Nat.mul_ne_zero (Nat.ne_of_gt hd) (Nat.ne_of_gt hq))),
+            Nat.cast_sub (Nat.one_le_iff_ne_zero.mpr (Nat.ne_of_gt hd)),
+            Nat.cast_sub (Nat.one_le_iff_ne_zero.mpr (Nat.ne_of_gt hq))]
+          push_cast
+          ring
+    _ = (d : ℤ) * d * (2 * binom2 q) := by
+          rw [two_mul_binom2]
+    _ = 2 * ((d : ℤ) * d * binom2 q) := by ring
+
 /-- If `d` divides both `2x` and `3x`, then it divides `x`. This is the
 Bezout step used repeatedly in Section 4. -/
 theorem dvd_of_dvd_two_mul_of_dvd_three_mul {d x : ℤ}

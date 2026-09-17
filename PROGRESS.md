@@ -15,12 +15,14 @@
 - [x] Define the integral augmentation ideal and `Dₙ(G)`.
 - [ ] Prove or isolate functoriality and `γₙ(G) ≤ Dₙ(G)`.
   - [x] Isolate `γₙ(G) ≤ Dₙ(G)` as one named background axiom.
-  - [ ] Formalize functoriality under quotient maps.
+  - [x] Prove functoriality under every group homomorphism.
 - [x] Establish quotient congruence and the basic weight bookkeeping modulo
   `γ₆(G)`.
 - [x] Prove exact product, inverse, swap, conjugation, and square identities
   for the paper's commutator convention.
 - [x] Prove the two product-bilinearity rules in formula (56) modulo `γ₆`.
+- [x] Prove weight-parametrized collection at an arbitrary truncation level,
+  including the nested power extraction needed at weights five and six.
 
 ## Phase 2 — Tahara interface
 
@@ -34,14 +36,17 @@
   - [x] Pair equations (12), (13) and divisibilities (14)–(17), in
     denominator-free integer form.
   - [x] Binomial identities multiplying `C(n,2)` by 2 and `C(n,3)` by 3.
-  - [ ] Package the pair lemmas against the exact Tahara parameter record.
+  - [x] Package the pair lemmas against the exact Tahara parameter record.
 - [ ] Formalize Sections 5–14 (`[w, ξ] ≡ κ mod γ₆`).
+  - [x] Prove formula (18), including ordered product collection and all
+    three integer-power extractions.
 - [ ] Formalize Sections 15–25 (`κ ≡ 1 mod γ₆`).
 
 ## Phase 4 — finite-group theorem and audit
 
 - [ ] Prove the finite nilpotent case.
-- [ ] Pass from a finite group to `G / γ₆(G)`.
+- [x] Formalize the reduction from a finite group to `G / γ₆(G)`; its use
+  is conditional only on the remaining finite nilpotent calculation.
 - [ ] Prove both subgroup inclusions.
   - [x] Prove `γ₆(G) ≤ [D₅(G),G]` from the recorded background axiom.
   - [ ] Prove `[D₅(G),G] ≤ γ₆(G)` using the Tahara calculation.

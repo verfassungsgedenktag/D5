@@ -10,7 +10,7 @@ printed pages 80--81).
 
 - a finite group of nilpotency class at most four (`gamma G 5 = ⊥`);
 - ordered cyclic bases for `G/γ₂`, `γ₂/γ₃`, and `γ₃/γ₄`;
-- their positive orders `d`, `e`, and `f`, with the divisibility chains;
+- their nontrivial orders `d`, `e`, and `f`, with the divisibility chains;
 - structural coefficients `b`, `c`, `delta`, and `alpha`;
 - the three structural relations preceding Theorem 4.3.3, modulo `γ₄`.
 

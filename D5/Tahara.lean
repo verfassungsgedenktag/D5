@@ -48,13 +48,56 @@ def orderedProductWhere {n : ℕ} (p : Fin n → Prop) [DecidablePred p]
     (f : Fin n → G) : G :=
   (((List.finRange n).filter p).map f).prod
 
+theorem orderedProduct_mem (H : Subgroup G) {n : ℕ} (f : Fin n → G)
+    (hf : ∀ i, f i ∈ H) : orderedProduct f ∈ H := by
+  unfold orderedProduct
+  have aux : ∀ xs : List (Fin n), (∀ i ∈ xs, f i ∈ H) → (xs.map f).prod ∈ H := by
+    intro xs
+    induction xs with
+    | nil => simp
+    | cons i xs ih =>
+        intro h
+        simp only [List.map_cons, List.prod_cons]
+        exact H.mul_mem (h i (by simp)) (ih fun j hj => h j (by simp [hj]))
+  exact aux (List.finRange n) fun i hi => hf i
+
+theorem listProd_mem (H : Subgroup G) (xs : List G)
+    (hxs : ∀ x ∈ xs, x ∈ H) : xs.prod ∈ H := by
+  induction xs with
+  | nil => simp
+  | cons x xs ih =>
+      simp only [List.prod_cons]
+      exact H.mul_mem (hxs x (by simp)) (ih fun y hy => hxs y (by simp [hy]))
+
+theorem orderedProductWhere_mem (H : Subgroup G) {n : ℕ}
+    (p : Fin n → Prop) [DecidablePred p] (f : Fin n → G)
+    (hf : ∀ i, p i → f i ∈ H) : orderedProductWhere p f ∈ H := by
+  unfold orderedProductWhere
+  have aux : ∀ xs : List (Fin n), (∀ i ∈ xs, p i → f i ∈ H) →
+      (((xs.filter p).map f).prod : G) ∈ H := by
+    intro xs
+    induction xs with
+    | nil => simp
+    | cons i xs ih =>
+        intro h
+        by_cases hi : p i
+        · rw [List.filter_cons_of_pos (p := fun b => decide (p b))
+            (decide_eq_true hi)]
+          simp only [List.map_cons, List.prod_cons]
+          exact H.mul_mem (h i (by simp) hi)
+            (ih fun j hj hjp => h j (by simp [hj]) hjp)
+        · rw [List.filter_cons_of_neg (p := fun b => decide (p b))
+            (by simp [decide_eq_false hi])]
+          exact ih fun j hj hjp => h j (by simp [hj]) hjp
+  exact aux (List.finRange n) fun i hi hip => hf i hip
+
 /-- A finite ordered family is a cyclic basis for `H / K`, with the listed
 orders, when every coset has a unique ordered normal form. -/
 def IsCyclicBasis {n : ℕ} (H K : Subgroup G) [K.Normal]
     (x : Fin n → G) (order : Fin n → ℕ) : Prop :=
   (∀ i, x i ∈ H) ∧
   (∀ i, x i ∉ K) ∧
-  (∀ i, 0 < order i) ∧
+  (∀ i, 1 < order i) ∧
   ∀ y, y ∈ H → ∃! a : ∀ i, Fin (order i),
     D5.ModEq K y (orderedProduct fun i => x i ^ (a i).val)
 
@@ -65,7 +108,7 @@ def orderInt {n : ℕ} (d : Fin n → ℕ) (i : Fin n) : ℤ :=
 /-- The integral ratio `d(j) / d(i)`.  Contexts separately assert the
 divisibility which makes this the exact quotient used by Tahara. -/
 def orderRatio {n : ℕ} (d : Fin n → ℕ) (i j : Fin n) : ℤ :=
-  d j / d i
+  ((d j / d i : ℕ) : ℤ)
 
 /-- The modulus `gcd(d(i),e(k))`, cast to the integers. -/
 def orderGCD {m n : ℕ} (d : Fin m → ℕ) (e : Fin n → ℕ)
