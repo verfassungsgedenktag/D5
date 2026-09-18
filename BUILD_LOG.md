@@ -63,3 +63,6 @@ Run the current verification with:
   declared background axiom `commutator_gamma_le_gamma_add`; no new
   mathematical axiom was introduced.
 - Source scan: no `sorry`, `sorryAx`, or `admit` occurs in any Lean file.
+- Formula (23): full build successful (`3124` jobs). Relation (1), the
+  weight-six disappearance of its third-layer tail, and the global
+  three-index collection are checked by Lean.

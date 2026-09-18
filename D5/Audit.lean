@@ -41,4 +41,6 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.structural_expansion21_grouped
 #print axioms D5.Tahara.formula21_x2_order_nested_coordinates
 #print axioms D5.Tahara.structural_expansion21
+#print axioms D5.Tahara.formula23_local
+#print axioms D5.Tahara.transfer_formula23
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

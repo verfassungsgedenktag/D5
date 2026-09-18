@@ -51,6 +51,9 @@
   - [x] Prove the weight `(1,2,1)` transfer formula (22), including its
     weight-five correction, and specialize it to the ordered Tahara
     second-weight word.
+  - [x] Prove formula (23), including substitution of relation (1), removal
+    of its third-layer tail by weight, and collection of the three finite
+    indices into the displayed double product.
   - [x] Prove the structural expansion (21).
     - [x] Verify its local substitution of relation (1) through two
       commutators and split the second- and third-weight coordinate blocks.
