@@ -48,6 +48,9 @@
     the full six-factor identity (20), and its arbitrary outer power `u`.
   - [x] Use divisibilities (16)--(17) to eliminate the last three
     weight-five factors in (20), obtaining the reduced Tahara-pair formula.
+  - [x] Prove the weight `(1,2,1)` transfer formula (22), including its
+    weight-five correction, and specialize it to the ordered Tahara
+    second-weight word.
 - [ ] Formalize Sections 15–25 (`κ ≡ 1 mod γ₆`).
 
 ## Phase 4 — finite-group theorem and audit

@@ -44,3 +44,5 @@ Run the current verification with:
   mathematical axiom was introduced.
 - Source scan after formula (20): no `sorry`, `sorryAx`, or `admit` occurs in
   any Lean file.
+- Formula (22): the universal weight `(1,2,1)` transfer and its specialization
+  to the ordered Tahara second-weight word compile successfully.

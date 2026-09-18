@@ -30,4 +30,6 @@ theorem will be added here when it exists.
 #print axioms D5.transfer_formula20
 #print axioms D5.Tahara.formula20_last_three_vanish
 #print axioms D5.Tahara.transfer_formula20_reduced
+#print axioms D5.transfer_formula22
+#print axioms D5.Tahara.transfer_formula22
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise
