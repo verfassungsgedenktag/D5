@@ -25,6 +25,7 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.word_mem_dimensionSubgroup_five
 #print axioms D5.Tahara.commutator_representative_formula18
 #print axioms D5.Tahara.condition6_multiplicative_of_satisfies
+#print axioms D5.Tahara.structuralSecondCoefficient_eq
 #print axioms D5.paperComm_zpow_right_hallPetresco
 #print axioms D5.paperComm_zpow_left_hallPetresco_weight_two
 #print axioms D5.transfer_formula20

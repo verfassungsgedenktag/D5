@@ -150,6 +150,37 @@ theorem orderedProduct_orderedProduct_swap_gammaThree
     (List.finRange m) (List.finRange n) f
     (fun i hi j hj => hf i j)
 
+/-- Exact collection of powers of one element.  No nilpotency assumption is
+needed because powers of the same element commute. -/
+theorem listProd_zpow_same_base (a : G) (zs : List ℤ) :
+    (zs.map fun z => a ^ z).prod = a ^ zs.sum := by
+  induction zs with
+  | nil => simp
+  | cons z zs ih =>
+      simp only [List.map_cons, List.prod_cons, List.sum_cons, ih]
+      rw [zpow_add]
+
+theorem orderedProduct_zpow_same_base
+    {n : ℕ} (a : G) (e : Fin n → ℤ) :
+    Tahara.orderedProduct (fun i => a ^ e i) = a ^ ∑ i, e i := by
+  unfold Tahara.orderedProduct
+  rw [show (List.finRange n).map (fun i => a ^ e i) =
+      (((List.finRange n).map e).map fun z => a ^ z) by simp [List.map_map]]
+  rw [listProd_zpow_same_base]
+  congr 1
+
+theorem orderedProductWhere_zpow_same_base
+    {n : ℕ} (p : Fin n → Prop) [DecidablePred p]
+    (a : G) (e : Fin n → ℤ) :
+    Tahara.orderedProductWhere p (fun i => a ^ e i) =
+      a ^ ∑ i ∈ Finset.univ.filter p, e i := by
+  unfold Tahara.orderedProductWhere
+  let is := (List.finRange n).filter p
+  rw [show is.map (fun i => a ^ e i) =
+      ((is.map e).map fun z => a ^ z) by simp [List.map_map]]
+  rw [listProd_zpow_same_base]
+  congr 1
+
 end
 
 end D5

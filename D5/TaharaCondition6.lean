@@ -63,6 +63,25 @@ theorem orderInt_eq_mul_ratio (C : Context G) {i j : Fin C.s} (hij : i ≤ j) :
 
 end Context
 
+/-- The exponent of `[ξ,x₂ₚ,x₁ᵢ]` obtained by grouping the two pairwise
+blocks on the left of formula (21). -/
+def structuralSecondCoefficient
+    (C : Context G) (P : Parameters C.s C.t)
+    (i : Fin C.s) (p : Fin C.t) : ℤ :=
+  (∑ h ∈ Finset.univ.filter (i < ·), P.u i h * C.b h p) -
+    (∑ h ∈ Finset.univ.filter (· < i),
+      P.u h i * orderRatio C.d h i * C.b h p)
+
+/-- Condition (4.3.6) identifies the grouped exponent used in (21). -/
+theorem structuralSecondCoefficient_eq
+    (C : Context G) (P : Parameters C.s C.t) (h6 : P.Condition6)
+    (i : Fin C.s) (p : Fin C.t) :
+    structuralSecondCoefficient C P i p =
+      -P.v i p * orderInt C.d i - P.v' i p * orderInt C.e p := by
+  have h := h6 i p
+  dsimp [structuralSecondCoefficient] at *
+  linarith
+
 private theorem x2_quotient_pairwise_commute (C : Context G)
     (p q : Fin C.t) :
     Commute ((C.x2 p : G ⧸ D5.gamma G 3)) (C.x2 q) := by

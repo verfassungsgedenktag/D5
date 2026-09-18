@@ -58,6 +58,8 @@
       extract all coefficients `b(j,p)` and `c(j,l)`.
     - [x] Prove powered coordinate expansion and the reusable finite-product
       Fubini/pointwise collection rules in the abelian layer `γ₃/γ₆`.
+    - [x] Isolate condition (4.3.6) as the exact grouped exponent identity
+      for the second-weight coordinates in (21).
     - [ ] Collect the ordered coordinate products and their global exponent
       sums.
 - [ ] Formalize Sections 15–25 (`κ ≡ 1 mod γ₆`).
