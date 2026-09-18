@@ -49,3 +49,6 @@ Run the current verification with:
 - Formula (21), local structural stage: relation (1) is transported through
   two commutators and both coordinate blocks are expanded term by term with
   their `b(j,p)` and `c(j,l)` exponents.
+- Added checked finite-product collection in the abelian layer `γ₃/γ₆`,
+  including pointwise multiplication, distribution of integer powers, and
+  exchange of two finite ordered-product loops.

@@ -56,6 +56,8 @@
       commutators and split the second- and third-weight coordinate blocks.
     - [x] Expand both blocks into their individual ordered coordinates and
       extract all coefficients `b(j,p)` and `c(j,l)`.
+    - [x] Prove powered coordinate expansion and the reusable finite-product
+      Fubini/pointwise collection rules in the abelian layer `γ₃/γ₆`.
     - [ ] Collect the ordered coordinate products and their global exponent
       sums.
 - [ ] Formalize Sections 15–25 (`κ ≡ 1 mod γ₆`).

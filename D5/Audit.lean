@@ -34,4 +34,6 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.transfer_formula22
 #print axioms D5.Tahara.structural_expansion21_local
 #print axioms D5.Tahara.structural_expansion21_coordinates
+#print axioms D5.Tahara.structural_expansion21_coordinates_zpow
+#print axioms D5.orderedProduct_orderedProduct_swap_gammaThree
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

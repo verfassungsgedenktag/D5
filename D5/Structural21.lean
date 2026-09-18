@@ -1,5 +1,6 @@
 import D5.TaharaExpand
 import D5.CollectionWeighted
+import D5.AbelianCollectionSix
 
 /-!
 # Structural replacement used in formula (21)
@@ -309,6 +310,62 @@ theorem structural_expansion21_coordinates
   exact (structural_expansion21_local C ξ i j).trans <|
     (structural_expansion21_second_block C ξ i j).mul
       (structural_expansion21_third_block C ξ i j)
+
+/-- Powered coordinate form of the local structural expansion.  This is the
+form used when the two pairwise factors of (21) are multiplied globally. -/
+theorem structural_expansion21_coordinates_zpow
+    (C : Context G) (ξ : G) (i j : Fin C.s) (u : ℤ) :
+    D5.ModGammaSix
+      (D5.paperComm
+        (D5.paperComm ξ (C.x1 j ^ orderInt C.d j)) (C.x1 i) ^ u)
+      ((orderedProduct fun p =>
+          D5.paperComm (D5.paperComm ξ (C.x2 p)) (C.x1 i) ^
+            (u * C.b j p)) *
+        (orderedProduct fun l =>
+          D5.paperComm (D5.paperComm ξ (C.x3 l)) (C.x1 i) ^
+            (u * C.c j l))) := by
+  let F2 : Fin C.t → G := fun p =>
+    D5.paperComm (D5.paperComm ξ (C.x2 p)) (C.x1 i)
+  let F3 : Fin C.r → G := fun l =>
+    D5.paperComm (D5.paperComm ξ (C.x3 l)) (C.x1 i)
+  have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hxi : C.x1 i ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hF2 : ∀ p, F2 p ∈ D5.gamma G 3 := by
+    intro p
+    exact D5.gamma_antitone G (by norm_num) <|
+      D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+        (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+          hξ (C.x2_mem_gamma2 p)) hxi
+  have hF3 : ∀ l, F3 l ∈ D5.gamma G 3 := by
+    intro l
+    exact D5.gamma_antitone G (by norm_num) <|
+      D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+        (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+          hξ (C.x3_mem_gamma3 l)) hxi
+  have hB2 : orderedProduct (fun p => F2 p ^ C.b j p) ∈ D5.gamma G 3 :=
+    orderedProduct_mem (D5.gamma G 3) _ fun p =>
+      (D5.gamma G 3).zpow_mem (hF2 p) _
+  have hB3 : orderedProduct (fun l => F3 l ^ C.c j l) ∈ D5.gamma G 3 :=
+    orderedProduct_mem (D5.gamma G 3) _ fun l =>
+      (D5.gamma G 3).zpow_mem (hF3 l) _
+  have hbase := (structural_expansion21_coordinates C ξ i j).zpow u
+  have hsplit := D5.gammaThree_mul_zpow hB2 hB3 u
+  have hpow2 := D5.orderedProduct_zpow_gammaThree
+    (fun p => F2 p ^ C.b j p)
+    (fun p => (D5.gamma G 3).zpow_mem (hF2 p) _) u
+  have hpow3 := D5.orderedProduct_zpow_gammaThree
+    (fun l => F3 l ^ C.c j l)
+    (fun l => (D5.gamma G 3).zpow_mem (hF3 l) _) u
+  refine hbase.trans <| hsplit.trans <| (hpow2.mul hpow3).trans ?_
+  apply (modEq_orderedProduct (N := D5.gamma G 6) (fun p => by
+    simp only [F2, ← zpow_mul]
+    congr 1
+    ring_nf)).mul
+  apply modEq_orderedProduct
+  intro l
+  simp only [F3, ← zpow_mul]
+  congr 1
+  ring_nf
 
 end
 
