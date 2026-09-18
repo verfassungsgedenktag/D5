@@ -103,6 +103,79 @@ theorem orderedProduct_pointwise_mul_gammaThree
   simpa [List.map_map] using listProd_pointwise_mul_gammaThree
     (List.finRange n) f g (fun i hi => hf i) (fun i hi => hg i)
 
+theorem orderedProductWhere_pointwise_mul_gammaThree
+    {n : ℕ} (p : Fin n → Prop) [DecidablePred p]
+    (f g : Fin n → G)
+    (hf : ∀ i, p i → f i ∈ gamma G 3)
+    (hg : ∀ i, p i → g i ∈ gamma G 3) :
+    ModGammaSix
+      (Tahara.orderedProductWhere p fun i => f i * g i)
+      (Tahara.orderedProductWhere p f * Tahara.orderedProductWhere p g) := by
+  unfold Tahara.orderedProductWhere
+  let is := (List.finRange n).filter p
+  simpa [List.map_map] using listProd_pointwise_mul_gammaThree is f g
+    (fun i hi => hf i (of_decide_eq_true (List.mem_filter.mp hi).2))
+    (fun i hi => hg i (of_decide_eq_true (List.mem_filter.mp hi).2))
+
+theorem orderedProduct_four_gammaThree
+    {n : ℕ} (a b c d : Fin n → G)
+    (ha : ∀ i, a i ∈ gamma G 3) (hb : ∀ i, b i ∈ gamma G 3)
+    (hc : ∀ i, c i ∈ gamma G 3) (hd : ∀ i, d i ∈ gamma G 3) :
+    ModGammaSix
+      (Tahara.orderedProduct fun i => (a i * b i) * (c i * d i))
+      ((Tahara.orderedProduct a * Tahara.orderedProduct b) *
+        (Tahara.orderedProduct c * Tahara.orderedProduct d)) := by
+  have hout := orderedProduct_pointwise_mul_gammaThree
+    (fun i => a i * b i) (fun i => c i * d i)
+    (fun i => (gamma G 3).mul_mem (ha i) (hb i))
+    (fun i => (gamma G 3).mul_mem (hc i) (hd i))
+  exact hout.trans <|
+    (orderedProduct_pointwise_mul_gammaThree a b ha hb).mul
+      (orderedProduct_pointwise_mul_gammaThree c d hc hd)
+
+theorem orderedProductWhere_four_gammaThree
+    {n : ℕ} (p : Fin n → Prop) [DecidablePred p]
+    (a b c d : Fin n → G)
+    (ha : ∀ i, p i → a i ∈ gamma G 3)
+    (hb : ∀ i, p i → b i ∈ gamma G 3)
+    (hc : ∀ i, p i → c i ∈ gamma G 3)
+    (hd : ∀ i, p i → d i ∈ gamma G 3) :
+    ModGammaSix
+      (Tahara.orderedProductWhere p fun i => (a i * b i) * (c i * d i))
+      ((Tahara.orderedProductWhere p a * Tahara.orderedProductWhere p b) *
+        (Tahara.orderedProductWhere p c * Tahara.orderedProductWhere p d)) := by
+  have hout := orderedProductWhere_pointwise_mul_gammaThree p
+    (fun i => a i * b i) (fun i => c i * d i)
+    (fun i hi => (gamma G 3).mul_mem (ha i hi) (hb i hi))
+    (fun i hi => (gamma G 3).mul_mem (hc i hi) (hd i hi))
+  exact hout.trans <|
+    (orderedProductWhere_pointwise_mul_gammaThree p a b ha hb).mul
+      (orderedProductWhere_pointwise_mul_gammaThree p c d hc hd)
+
+/-- A permutation of weight-at-least-three factors does not change their
+product modulo `γ₆`. -/
+theorem listProd_perm_gammaThree
+    {xs ys : List G} (hperm : xs.Perm ys)
+    (hxs : ∀ x ∈ xs, x ∈ gamma G 3) :
+    ModGammaSix xs.prod ys.prod := by
+  induction hperm with
+  | nil => exact ModEq.refl (gamma G 6) 1
+  | cons x hperm ih =>
+      simp only [List.prod_cons]
+      exact (ModEq.refl (gamma G 6) x).mul <|
+        ih fun y hy => hxs y (by simp [hy])
+  | swap x y zs =>
+      simp only [List.prod_cons]
+      have hx : x ∈ gamma G 3 := hxs x (by simp)
+      have hy : y ∈ gamma G 3 := hxs y (by simp)
+      simpa only [mul_assoc] using
+        ((mul_comm_mod_gamma (n := 6) (r := 3) (s := 3)
+          (by norm_num) (by norm_num) (by norm_num) hx hy).symm.mul
+            (ModEq.refl (gamma G 6) zs.prod))
+  | trans hxy hyz ihxy ihyz =>
+      exact (ihxy hxs).trans <| ihyz fun z hz =>
+        hxs z (hxy.mem_iff.mpr hz)
+
 /-- Fubini reindexing for two finite ordered products of elements of `γ₃`.
 The relative order inside each row or column is retained; commutation modulo
 `γ₆` permits exchanging the two loops. -/
@@ -150,6 +223,21 @@ theorem orderedProduct_orderedProduct_swap_gammaThree
     (List.finRange m) (List.finRange n) f
     (fun i hi j hj => hf i j)
 
+theorem orderedProductWhere_orderedProduct_swap_gammaThree
+    {m n : ℕ} (p : Fin m → Prop) [DecidablePred p]
+    (f : Fin m → Fin n → G)
+    (hf : ∀ i, p i → ∀ j, f i j ∈ gamma G 3) :
+    ModGammaSix
+      (Tahara.orderedProductWhere p fun i =>
+        Tahara.orderedProduct fun j => f i j)
+      (Tahara.orderedProduct fun j =>
+        Tahara.orderedProductWhere p fun i => f i j) := by
+  unfold Tahara.orderedProduct Tahara.orderedProductWhere
+  simpa [List.map_map] using listProd_listProd_swap_gammaThree
+    ((List.finRange m).filter p) (List.finRange n) f
+    (fun i hi j hj =>
+      hf i (of_decide_eq_true (List.mem_filter.mp hi).2) j)
+
 /-- Exact collection of powers of one element.  No nilpotency assumption is
 needed because powers of the same element commute. -/
 theorem listProd_zpow_same_base (a : G) (zs : List ℤ) :
@@ -180,6 +268,24 @@ theorem orderedProductWhere_zpow_same_base
       ((is.map e).map fun z => a ^ z) by simp [List.map_map]]
   rw [listProd_zpow_same_base]
   congr 1
+
+/-- Collect a filtered family of coordinate blocks by adding the exponent
+of each fixed coordinate. -/
+theorem orderedProductWhere_coordinateBlocks_gammaThree
+    {m n : ℕ} (p : Fin m → Prop) [DecidablePred p]
+    (a : Fin n → G) (ha : ∀ j, a j ∈ gamma G 3)
+    (e : Fin m → Fin n → ℤ) :
+    ModGammaSix
+      (Tahara.orderedProductWhere p fun i =>
+        Tahara.orderedProduct fun j => a j ^ e i j)
+      (Tahara.orderedProduct fun j =>
+        a j ^ ∑ i ∈ Finset.univ.filter p, e i j) := by
+  refine (orderedProductWhere_orderedProduct_swap_gammaThree p
+    (fun i j => a j ^ e i j)
+    (fun i hi j => (gamma G 3).zpow_mem (ha j) _)).trans ?_
+  apply Tahara.modEq_orderedProduct
+  intro j
+  rw [orderedProductWhere_zpow_same_base]
 
 end
 

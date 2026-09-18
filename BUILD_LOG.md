@@ -52,3 +52,14 @@ Run the current verification with:
 - Added checked finite-product collection in the abelian layer `γ₃/γ₆`,
   including pointwise multiplication, distribution of integer powers, and
   exchange of two finite ordered-product loops.
+
+## 2026-09-18
+
+- Formula (21): full build successful (`3123` jobs). Lean checks the global
+  triangular-product reindexing, collection by `x₂` and `x₃` coordinates,
+  the exponent identity from condition (4.3.6), and the expansion of the
+  `e(p)v'` contribution through relation (2).
+- Axiom audit for formula (21): only Lean's standard logical axioms and the
+  declared background axiom `commutator_gamma_le_gamma_add`; no new
+  mathematical axiom was introduced.
+- Source scan: no `sorry`, `sorryAx`, or `admit` occurs in any Lean file.

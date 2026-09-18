@@ -51,7 +51,7 @@
   - [x] Prove the weight `(1,2,1)` transfer formula (22), including its
     weight-five correction, and specialize it to the ordered Tahara
     second-weight word.
-  - [ ] Prove the structural expansion (21).
+  - [x] Prove the structural expansion (21).
     - [x] Verify its local substitution of relation (1) through two
       commutators and split the second- and third-weight coordinate blocks.
     - [x] Expand both blocks into their individual ordered coordinates and
@@ -60,8 +60,9 @@
       Fubini/pointwise collection rules in the abelian layer `γ₃/γ₆`.
     - [x] Isolate condition (4.3.6) as the exact grouped exponent identity
       for the second-weight coordinates in (21).
-    - [ ] Collect the ordered coordinate products and their global exponent
-      sums.
+    - [x] Collect the ordered coordinate products and their global exponent
+      sums, apply condition (4.3.6), and expand the `e(p)v'` contribution
+      with relation (2).
 - [ ] Formalize Sections 15–25 (`κ ≡ 1 mod γ₆`).
 
 ## Phase 4 — finite-group theorem and audit
