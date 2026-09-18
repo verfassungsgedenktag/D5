@@ -51,6 +51,13 @@
   - [x] Prove the weight `(1,2,1)` transfer formula (22), including its
     weight-five correction, and specialize it to the ordered Tahara
     second-weight word.
+  - [ ] Prove the structural expansion (21).
+    - [x] Verify its local substitution of relation (1) through two
+      commutators and split the second- and third-weight coordinate blocks.
+    - [x] Expand both blocks into their individual ordered coordinates and
+      extract all coefficients `b(j,p)` and `c(j,l)`.
+    - [ ] Collect the ordered coordinate products and their global exponent
+      sums.
 - [ ] Formalize Sections 15–25 (`κ ≡ 1 mod γ₆`).
 
 ## Phase 4 — finite-group theorem and audit

@@ -10,6 +10,7 @@ import D5.TaharaExpand
 import D5.TaharaCondition6
 import D5.TaharaTransferConsequences
 import D5.TaharaTransfer22
+import D5.Structural21
 import D5.Rotation
 import D5.RotationSix
 import D5.Weight

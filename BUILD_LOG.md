@@ -46,3 +46,6 @@ Run the current verification with:
   any Lean file.
 - Formula (22): the universal weight `(1,2,1)` transfer and its specialization
   to the ordered Tahara second-weight word compile successfully.
+- Formula (21), local structural stage: relation (1) is transported through
+  two commutators and both coordinate blocks are expanded term by term with
+  their `b(j,p)` and `c(j,l)` exponents.

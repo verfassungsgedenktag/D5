@@ -32,4 +32,6 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.transfer_formula20_reduced
 #print axioms D5.transfer_formula22
 #print axioms D5.Tahara.transfer_formula22
+#print axioms D5.Tahara.structural_expansion21_local
+#print axioms D5.Tahara.structural_expansion21_coordinates
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise
