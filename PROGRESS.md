@@ -59,6 +59,8 @@
     Hall--Witt rotation.
   - [x] Formalize formula (27): rearrange condition (13) and prove that its
     modulus `gcd(d(i), f(l))` kills the indicated weight-five commutator.
+  - [x] Prove the local relation-(3) alpha-coordinate expansion used in
+    formula (28), including an arbitrary integer outer exponent.
   - [x] Prove the structural expansion (21).
     - [x] Verify its local substitution of relation (1) through two
       commutators and split the second- and third-weight coordinate blocks.
