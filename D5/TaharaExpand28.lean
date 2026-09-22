@@ -625,6 +625,33 @@ theorem formula28_rotate_relation_factor
   · exact (by simp [D5.gamma])
   · exact (by simp [D5.gamma])
 
+/-- The left `w` stream after the sign-changing rotation in (28). -/
+def formula28WLeftRotatedTripleStream
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun i => orderedProductWhere (· ≤ i) fun g =>
+    orderedProductWhere (i ≤ ·) fun h =>
+      if _ : g < h then
+        D5.paperComm (D5.paperComm
+          (D5.paperComm (C.x1 g ^ orderInt C.d g) (C.x1 h)) ξ)
+          (C.x1 i) ^ (-P.w g i h)
+      else 1
+
+theorem formula28_wleft_rotate
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula28WLeftRawTripleStream C P ξ)
+      (formula28WLeftRotatedTripleStream C P ξ) := by
+  unfold formula28WLeftRawTripleStream formula28WLeftRotatedTripleStream
+  apply modEq_orderedProduct
+  intro i
+  apply modEq_orderedProductWhere
+  intro g hgi
+  apply modEq_orderedProductWhere
+  intro h hih
+  by_cases hgh : g < h
+  · simpa [hgh] using formula28_rotate_relation_factor C ξ g h i hgh
+      (P.w g i h)
+  · simpa [hgh] using (D5.ModEq.refl (D5.gamma G 6) (1 : G))
+
 end
 
 end D5.Tahara
