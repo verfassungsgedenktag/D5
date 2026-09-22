@@ -92,6 +92,12 @@
     - [x] Collect the ordered coordinate products and their global exponent
       sums, apply condition (4.3.6), and expand the `e(p)v'` contribution
       with relation (2).
+  - [ ] Formalize Section 10 (formula (29)).
+    - [x] For each `i < j`, derive all six formula-(19) factors, distribute
+      the outer integer power, normalize the first main factor by the
+      cyclic-order ratio, and apply reduced formula (20) to the second.
+    - [ ] Collect the local outputs and formulas (21)--(28) into the twelve
+      displayed finite-product streams.
 - [ ] Formalize Sections 15–25 (`κ ≡ 1 mod γ₆`).
 
 ## Phase 4 — finite-group theorem and audit

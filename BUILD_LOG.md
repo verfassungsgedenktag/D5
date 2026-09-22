@@ -86,3 +86,7 @@ Run the current verification with:
   `x₁ᵢ^{d(j)}` by a checked threefold power-extraction lemma; diagonal terms
   are restored and proved trivial.  The result matches all four displayed
   finite products exactly.
+- Section 10 local formula-(19)--(20) calculation: full build successful
+  (`3128` jobs).  The audit of `formula19_pair`, `formula19_low_main`, and
+  `formula19_and_20_pair` uses only the existing commutator-weight
+  background axiom.

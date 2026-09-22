@@ -60,4 +60,7 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula28_threefold_zpow_left
 #print axioms D5.Tahara.formula28_u_ratio_factor
 #print axioms D5.Tahara.formula28
+#print axioms D5.Tahara.formula19_pair
+#print axioms D5.Tahara.formula19_low_main
+#print axioms D5.Tahara.formula19_and_20_pair
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise
