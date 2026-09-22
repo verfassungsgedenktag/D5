@@ -57,8 +57,9 @@
   - [x] Prove formulas (24)--(26): eliminate the diagonal by condition (14)
     and combine each strict pair by condition (15) and a weight-controlled
     Hall--Witt rotation.
-  - [x] Formalize formula (27): rearrange condition (13) and prove that its
-    modulus `gcd(d(i), f(l))` kills the indicated weight-five commutator.
+  - [x] Formalize formula (27): rearrange condition (13), prove that its
+    modulus `gcd(d(i), f(l))` kills the indicated weight-five commutator,
+    and apply the replacement to the global third-coordinate product.
   - [x] Prove the local relation-(3) alpha-coordinate expansion used in
     formula (28), including an arbitrary integer outer exponent.
   - [x] Prove the structural expansion (21).

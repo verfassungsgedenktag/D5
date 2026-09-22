@@ -160,6 +160,27 @@ theorem formula21_third_exponent_condition13
       congr 1
       ring
 
+/-- The global third-coordinate product after the exponent replacement in
+formula (27). -/
+def formula27ReplacementGrouped
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun i => orderedProduct fun l =>
+    D5.paperComm (D5.paperComm ξ (C.x3 l)) (C.x1 i) ^
+      condition13ReplacementCoefficient C P i l
+
+theorem formula27
+    (C : Context G) (P : Parameters C.s C.t) (h13 : P.Condition13)
+    (ξ : G) :
+    D5.ModGammaSix
+      (formula21FinalThirdGrouped C P ξ)
+      (formula27ReplacementGrouped C P ξ) := by
+  unfold formula21FinalThirdGrouped formula27ReplacementGrouped
+  apply modEq_orderedProduct
+  intro i
+  apply modEq_orderedProduct
+  intro l
+  exact formula21_third_exponent_condition13 C P h13 ξ i l
+
 end
 
 end D5.Tahara

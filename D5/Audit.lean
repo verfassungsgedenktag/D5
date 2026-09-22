@@ -47,6 +47,7 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.weight_two_block_cancels26
 #print axioms D5.Tahara.condition13_rearranged
 #print axioms D5.Tahara.formula21_third_exponent_condition13
+#print axioms D5.Tahara.formula27
 #print axioms D5.Tahara.alpha_coordinate_expansion
 #print axioms D5.Tahara.alpha_coordinate_expansion_zpow
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise
