@@ -90,3 +90,6 @@ Run the current verification with:
   (`3128` jobs).  The audit of `formula19_pair`, `formula19_low_main`, and
   `formula19_and_20_pair` uses only the existing commutator-weight
   background axiom.
+- Section 10 triangular collection: the local result is lifted to every
+  pair `i < j`, and Lean checks the eight-factor reordering and its finite
+  product collection into the correction product and `formula21MainPairProduct`.

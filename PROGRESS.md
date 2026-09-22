@@ -96,6 +96,9 @@
     - [x] For each `i < j`, derive all six formula-(19) factors, distribute
       the outer integer power, normalize the first main factor by the
       cyclic-order ratio, and apply reduced formula (20) to the second.
+    - [x] Lift that calculation to the full triangular product and use a
+      checked eight-factor permutation in `γ₃/γ₆` to separate its six
+      correction factors from the two main streams of formula (21).
     - [ ] Collect the local outputs and formulas (21)--(28) into the twelve
       displayed finite-product streams.
 - [ ] Formalize Sections 15–25 (`κ ≡ 1 mod γ₆`).
