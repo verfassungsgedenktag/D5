@@ -74,6 +74,8 @@
   - [ ] Rotate the resulting commutators into the exact displayed order and
     signs of formula (28), including the conversion of the ratio power in
     the `u`-stream.
+    - [x] Prove the common local inner-commutator rotation at weights
+      `(3,1,1)`, with its sign and arbitrary integer exponent.
   - [x] Prove the structural expansion (21).
     - [x] Verify its local substitution of relation (1) through two
       commutators and split the second- and third-weight coordinate blocks.

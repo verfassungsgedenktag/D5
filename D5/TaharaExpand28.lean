@@ -589,6 +589,27 @@ theorem formula28_all_coordinate_expansions
     ((formula28_wright_coordinate_expansion C P ξ).mul
       (formula28_wprime_coordinate_expansion C P ξ))
 
+/-- At weights `(3,1,1)`, reversing the first two entries of the inner
+commutator reverses the resulting weight-five commutator.  This is the
+local sign change used in every displayed factor of (28). -/
+theorem formula28_rotate_inner
+    {a ξ x : G} (ha : a ∈ D5.gamma G 3) (hξ : ξ ∈ D5.gamma G 1)
+    (hx : x ∈ D5.gamma G 1) (z : ℤ) :
+    D5.ModGammaSix
+      (D5.paperComm (D5.paperComm ξ a) x ^ z)
+      (D5.paperComm (D5.paperComm a ξ) x ^ (-z)) := by
+  have hb : D5.paperComm ξ a ∈ D5.gamma G 4 :=
+    D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hξ ha
+  have hinv := D5.paperComm_inv_left_mod_gamma
+    (n := 6) (r := 4) (s := 1)
+    (by norm_num) (by norm_num) (by norm_num) hb hx
+  have hp := hinv.zpow (-z)
+  have hpow : D5.ModGammaSix
+      (D5.paperComm (D5.paperComm ξ a) x ^ z)
+      (D5.paperComm ((D5.paperComm ξ a)⁻¹) x ^ (-z)) := by
+    convert hp.symm using 1 <;> simp only [zpow_neg, inv_zpow] <;> group
+  simpa only [← D5.paperComm_swap ξ a] using hpow
+
 end
 
 end D5.Tahara
