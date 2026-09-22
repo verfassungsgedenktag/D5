@@ -74,3 +74,6 @@ Run the current verification with:
   Lean separates all four alpha-coordinate streams in (27), then reindexes
   and expands the complete `u`-stream using relation (3).  The result is the
   raw first-layer commutator stream before the displayed rotations.
+- Formula (28), second stream: relation (3) now expands the full left
+  `w(g,i,h)` triangular stream.  Lean checks the diagonal separately from
+  `alpha(i,i,l)=0` and recollects both nested finite index products.

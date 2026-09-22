@@ -65,6 +65,8 @@
   - [x] Split formula (27) into its four alpha-coordinate streams and expand
     the full `u`-stream through relation (3), with finite reindexing and
     coefficient multiplication checked in Lean.
+  - [x] Expand the left `w`-stream through relation (3), including its
+    diagonal-zero case and both finite reindexings.
   - [ ] Complete the other three streams of formula (28), then rotate the
     resulting commutators into the exact displayed order and signs.
   - [x] Prove the structural expansion (21).

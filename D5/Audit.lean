@@ -52,4 +52,5 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.alpha_coordinate_expansion_zpow
 #print axioms D5.Tahara.formula27_split_alpha_streams
 #print axioms D5.Tahara.formula28_u_coordinate_expansion
+#print axioms D5.Tahara.formula28_wleft_coordinate_expansion
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise
