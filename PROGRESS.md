@@ -67,6 +67,8 @@
     coefficient multiplication checked in Lean.
   - [x] Expand the left `w`-stream through relation (3), including its
     diagonal-zero case and both finite reindexings.
+  - [x] Expand the right `w`-stream through relation (3), including its
+    diagonal-zero case and both finite reindexings.
   - [ ] Complete the other three streams of formula (28), then rotate the
     resulting commutators into the exact displayed order and signs.
   - [x] Prove the structural expansion (21).

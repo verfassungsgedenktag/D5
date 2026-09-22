@@ -77,3 +77,5 @@ Run the current verification with:
 - Formula (28), second stream: relation (3) now expands the full left
   `w(g,i,h)` triangular stream.  Lean checks the diagonal separately from
   `alpha(i,i,l)=0` and recollects both nested finite index products.
+- Formula (28), third stream: the same checked expansion now covers the
+  right `w(g,h,i)` triangle, including its independent diagonal case.
