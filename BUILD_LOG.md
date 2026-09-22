@@ -66,3 +66,5 @@ Run the current verification with:
 - Formula (23): full build successful (`3124` jobs). Relation (1), the
   weight-six disappearance of its third-layer tail, and the global
   three-index collection are checked by Lean.
+- Formula (26): local and global collection of the weight-two block compile;
+  conditions (14)--(15) are used only through their stated congruences.

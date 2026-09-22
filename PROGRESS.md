@@ -54,6 +54,9 @@
   - [x] Prove formula (23), including substitution of relation (1), removal
     of its third-layer tail by weight, and collection of the three finite
     indices into the displayed double product.
+  - [x] Prove formulas (24)--(26): eliminate the diagonal by condition (14)
+    and combine each strict pair by condition (15) and a weight-controlled
+    Hall--Witt rotation.
   - [x] Prove the structural expansion (21).
     - [x] Verify its local substitution of relation (1) through two
       commutators and split the second- and third-weight coordinate blocks.
