@@ -69,8 +69,11 @@
     diagonal-zero case and both finite reindexings.
   - [x] Expand the right `w`-stream through relation (3), including its
     diagonal-zero case and both finite reindexings.
-  - [ ] Complete the other three streams of formula (28), then rotate the
-    resulting commutators into the exact displayed order and signs.
+  - [x] Expand the final `w'`-stream through relation (3), including its
+    diagonal-zero case, and combine all four streams.
+  - [ ] Rotate the resulting commutators into the exact displayed order and
+    signs of formula (28), including the conversion of the ratio power in
+    the `u`-stream.
   - [x] Prove the structural expansion (21).
     - [x] Verify its local substitution of relation (1) through two
       commutators and split the second- and third-weight coordinate blocks.

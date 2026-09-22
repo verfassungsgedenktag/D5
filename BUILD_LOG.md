@@ -79,3 +79,5 @@ Run the current verification with:
   `alpha(i,i,l)=0` and recollects both nested finite index products.
 - Formula (28), third stream: the same checked expansion now covers the
   right `w(g,h,i)` triangle, including its independent diagonal case.
+- Formula (28), all coordinate expansions: the final `w'` stream is checked
+  and all four streams are combined into a single raw commutator product.

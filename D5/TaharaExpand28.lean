@@ -485,6 +485,110 @@ theorem formula28_wright_coordinate_expansion
     exact (hlocal i).trans (hG i)
   exact H.symm
 
+/-- The last alpha stream of (28), after relation (3). -/
+def formula28WPrimeRawTripleStream
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun i => orderedProductWhere (i < ·) fun g =>
+    orderedProductWhere (g ≤ ·) fun h =>
+      if _ : g < h then
+        D5.paperComm (D5.paperComm ξ
+          (D5.paperComm (C.x1 g ^ orderInt C.d g) (C.x1 h)))
+          (C.x1 i) ^ P.w' i g h
+      else 1
+
+theorem formula28_wprime_coordinate_expansion
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula28WPrimeCoordinateStream C P ξ)
+      (formula28WPrimeRawTripleStream C P ξ) := by
+  let A : Fin C.s → Fin C.r → G := fun i l =>
+    D5.paperComm (D5.paperComm ξ (C.x3 l)) (C.x1 i)
+  have hA : ∀ i l, A i l ∈ D5.gamma G 3 := by
+    intro i l
+    have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+    have hxi : C.x1 i ∈ D5.gamma G 1 := by simp [D5.gamma]
+    exact D5.gamma_antitone G (show 3 ≤ 5 by norm_num) <|
+      D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+        (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+          hξ (C.x3_mem_gamma3 l)) hxi
+  have hH : ∀ i g,
+      D5.ModGammaSix
+        (orderedProductWhere (g ≤ ·) fun h => orderedProduct fun l =>
+          A i l ^ (P.w' i g h * C.alpha g h l))
+        (formula21ThirdCoordinateBlock C ξ i fun l =>
+          ∑ h ∈ Finset.univ.filter (g ≤ ·), P.w' i g h * C.alpha g h l) := by
+    intro i g
+    simpa [A, formula21ThirdCoordinateBlock] using
+      D5.orderedProductWhere_coordinateBlocks_gammaThree (g ≤ ·)
+        (A i) (hA i) (fun h l => P.w' i g h * C.alpha g h l)
+  have hG : ∀ i,
+      D5.ModGammaSix
+        (orderedProductWhere (i < ·) fun g => orderedProductWhere (g ≤ ·)
+          fun h => orderedProduct fun l => A i l ^ (P.w' i g h * C.alpha g h l))
+        (formula21ThirdCoordinateBlock C ξ i fun l =>
+          ∑ g ∈ Finset.univ.filter (i < ·),
+            ∑ h ∈ Finset.univ.filter (g ≤ ·), P.w' i g h * C.alpha g h l) := by
+    intro i
+    refine (modEq_orderedProductWhere (i < ·) fun g hg => hH i g).trans ?_
+    change D5.ModGammaSix
+      (orderedProductWhere (i < ·) fun g => orderedProduct fun l => A i l ^
+        ∑ h ∈ Finset.univ.filter (g ≤ ·), P.w' i g h * C.alpha g h l)
+      (orderedProduct fun l => A i l ^ ∑ g ∈ Finset.univ.filter (i < ·),
+        ∑ h ∈ Finset.univ.filter (g ≤ ·), P.w' i g h * C.alpha g h l)
+    exact D5.orderedProductWhere_coordinateBlocks_gammaThree (i < ·)
+      (A i) (hA i) (fun g l =>
+        ∑ h ∈ Finset.univ.filter (g ≤ ·), P.w' i g h * C.alpha g h l)
+  have hlocal : ∀ i,
+      D5.ModGammaSix
+        (orderedProductWhere (i < ·) fun g => orderedProductWhere (g ≤ ·)
+          fun h => if hgh : g < h then
+            D5.paperComm (D5.paperComm ξ
+              (D5.paperComm (C.x1 g ^ orderInt C.d g) (C.x1 h)))
+              (C.x1 i) ^ P.w' i g h else 1)
+        (orderedProductWhere (i < ·) fun g => orderedProductWhere (g ≤ ·)
+          fun h => orderedProduct fun l => A i l ^ (P.w' i g h * C.alpha g h l)) := by
+    intro i
+    apply modEq_orderedProductWhere
+    intro g hig
+    apply modEq_orderedProductWhere
+    intro h hh
+    by_cases hgh : g < h
+    · simpa [A, hgh] using alpha_coordinate_expansion_zpow C ξ i g h hgh
+        (P.w' i g h)
+    · have hEq : g = h := le_antisymm hh (le_of_not_gt hgh)
+      subst h
+      simpa [A, orderedProduct, C.alpha_diag] using
+        (D5.ModEq.refl (D5.gamma G 6) (1 : G))
+  unfold formula28WPrimeCoordinateStream formula28WPrimeRawTripleStream
+  have H : D5.ModGammaSix
+      (orderedProduct fun i => orderedProductWhere (i < ·) fun g =>
+        orderedProductWhere (g ≤ ·) fun h => if hgh : g < h then
+          D5.paperComm (D5.paperComm ξ
+            (D5.paperComm (C.x1 g ^ orderInt C.d g) (C.x1 h)))
+            (C.x1 i) ^ P.w' i g h else 1)
+      (orderedProduct fun i => formula21ThirdCoordinateBlock C ξ i fun l =>
+        ∑ g ∈ Finset.univ.filter (i < ·),
+          ∑ h ∈ Finset.univ.filter (g ≤ ·), P.w' i g h * C.alpha g h l) := by
+    apply modEq_orderedProduct
+    intro i
+    exact (hlocal i).trans (hG i)
+  exact H.symm
+
+/-- Formula (27) after all four alpha streams have been expanded through
+relation (3).  This is formula (28) before the final rotations that put its
+commutators into the paper's displayed convention. -/
+theorem formula28_all_coordinate_expansions
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula27ReplacementGrouped C P ξ)
+      ((formula28URawPairStream C P ξ *
+          formula28WLeftRawTripleStream C P ξ) *
+        (formula28WRightRawTripleStream C P ξ *
+          formula28WPrimeRawTripleStream C P ξ)) := by
+  exact (formula27_split_alpha_streams C P ξ).trans <|
+    ((formula28_u_coordinate_expansion C P ξ).mul
+      (formula28_wleft_coordinate_expansion C P ξ)).mul
+    ((formula28_wright_coordinate_expansion C P ξ).mul
+      (formula28_wprime_coordinate_expansion C P ξ))
+
 end
 
 end D5.Tahara
