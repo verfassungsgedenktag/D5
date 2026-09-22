@@ -610,6 +610,21 @@ theorem formula28_rotate_inner
     convert hp.symm using 1 <;> simp only [zpow_neg, inv_zpow] <;> group
   simpa only [← D5.paperComm_swap ξ a] using hpow
 
+/-- The rotation specialized to a non-diagonal relation-(3) commutator. -/
+theorem formula28_rotate_relation_factor
+    (C : Context G) (ξ : G) (g h i : Fin C.s) (hgh : g < h) (z : ℤ) :
+    D5.ModGammaSix
+      (D5.paperComm (D5.paperComm ξ
+        (D5.paperComm (C.x1 g ^ orderInt C.d g) (C.x1 h))) (C.x1 i) ^ z)
+      (D5.paperComm (D5.paperComm
+        (D5.paperComm (C.x1 g ^ orderInt C.d g) (C.x1 h)) ξ) (C.x1 i) ^ (-z)) := by
+  apply formula28_rotate_inner
+  · exact D5.paperComm_mem_gamma_add (r := 2) (s := 1)
+      (by norm_num) (by norm_num) (C.x1_order_power_mem_gamma2 g)
+      (by simp [D5.gamma])
+  · exact (by simp [D5.gamma])
+  · exact (by simp [D5.gamma])
+
 end
 
 end D5.Tahara
