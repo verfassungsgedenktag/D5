@@ -57,6 +57,8 @@
   - [x] Prove formulas (24)--(26): eliminate the diagonal by condition (14)
     and combine each strict pair by condition (15) and a weight-controlled
     Hall--Witt rotation.
+  - [x] Formalize formula (27): rearrange condition (13) and prove that its
+    modulus `gcd(d(i), f(l))` kills the indicated weight-five commutator.
   - [x] Prove the structural expansion (21).
     - [x] Verify its local substitution of relation (1) through two
       commutators and split the second- and third-weight coordinate blocks.

@@ -13,6 +13,8 @@ printed pages 80--81).
 - their nontrivial orders `d`, `e`, and `f`, with the divisibility chains;
 - structural coefficients `b`, `c`, `delta`, and `alpha`;
 - the three structural relations preceding Theorem 4.3.3, modulo `γ₄`.
+- the order membership `x₃(l)^{f(l)} ∈ γ₄`, used by the source proof when
+  it replaces a weight-five exponent modulo `gcd(d(i), f(l))`.
 
 `D5.Tahara.IsCyclicBasis` is not an additional axiom. It defines “cyclic
 basis” as existence and uniqueness of the ordered normal form with exponents

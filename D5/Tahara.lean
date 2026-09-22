@@ -150,6 +150,10 @@ structure Context (G : Type u) [Group G] where
       orderedProduct fun l => x3 l ^ c i l)
   x2_power : ∀ p, D5.ModEq (D5.gamma G 4)
     (x2 p ^ orderInt e p) (orderedProduct fun l => x3 l ^ delta p l)
+  /-- The order relation in the cyclic quotient `γ₃/γ₄`.  It is recorded
+  explicitly because the chosen normal-form predicate alone only encodes
+  representatives, whereas formulas (27)--(28) use this power membership. -/
+  x3_order_power : ∀ l, x3 l ^ orderInt f l ∈ D5.gamma G 4
   x1_power_comm : ∀ i j, i < j → D5.ModEq (D5.gamma G 4)
     (D5.paperComm (x1 i ^ orderInt d i) (x1 j))
     (orderedProduct fun l => x3 l ^ alpha i j l)

@@ -68,3 +68,5 @@ Run the current verification with:
   three-index collection are checked by Lean.
 - Formula (26): local and global collection of the weight-two block compile;
   conditions (14)--(15) are used only through their stated congruences.
+- Formula (27): the condition-(13) exponent comparison and its transport to
+  the weight-five third-coordinate commutator compile successfully.
