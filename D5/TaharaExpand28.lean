@@ -1,4 +1,5 @@
 import D5.TaharaCondition13
+import D5.TaharaReduction
 
 /-!
 # The local alpha-coordinate expansion for formula (28)
@@ -651,6 +652,288 @@ theorem formula28_wleft_rotate
   · simpa [hgh] using formula28_rotate_relation_factor C ξ g h i hgh
       (P.w g i h)
   · simpa [hgh] using (D5.ModEq.refl (D5.gamma G 6) (1 : G))
+
+/-- The right `w` stream after the sign-changing rotation in (28). -/
+def formula28WRightRotatedTripleStream
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun i => orderedProductWhere (· ≤ i) fun g =>
+    orderedProductWhere (fun h => g ≤ h ∧ h ≤ i) fun h =>
+      if _ : g < h then
+        D5.paperComm (D5.paperComm
+          (D5.paperComm (C.x1 g ^ orderInt C.d g) (C.x1 h)) ξ)
+          (C.x1 i) ^ (-P.w g h i)
+      else 1
+
+theorem formula28_wright_rotate
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula28WRightRawTripleStream C P ξ)
+      (formula28WRightRotatedTripleStream C P ξ) := by
+  unfold formula28WRightRawTripleStream formula28WRightRotatedTripleStream
+  apply modEq_orderedProduct
+  intro i
+  apply modEq_orderedProductWhere
+  intro g hgi
+  apply modEq_orderedProductWhere
+  intro h hh
+  by_cases hgh : g < h
+  · simpa [hgh] using formula28_rotate_relation_factor C ξ g h i hgh
+      (P.w g h i)
+  · simpa [hgh] using (D5.ModEq.refl (D5.gamma G 6) (1 : G))
+
+/-- The `w'` stream after the sign-changing rotation in (28). -/
+def formula28WPrimeRotatedTripleStream
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun i => orderedProductWhere (i < ·) fun g =>
+    orderedProductWhere (g ≤ ·) fun h =>
+      if _ : g < h then
+        D5.paperComm (D5.paperComm
+          (D5.paperComm (C.x1 g ^ orderInt C.d g) (C.x1 h)) ξ)
+          (C.x1 i) ^ (-P.w' i g h)
+      else 1
+
+theorem formula28_wprime_rotate
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula28WPrimeRawTripleStream C P ξ)
+      (formula28WPrimeRotatedTripleStream C P ξ) := by
+  unfold formula28WPrimeRawTripleStream formula28WPrimeRotatedTripleStream
+  apply modEq_orderedProduct
+  intro i
+  apply modEq_orderedProductWhere
+  intro g hig
+  apply modEq_orderedProductWhere
+  intro h hgh_le
+  by_cases hgh : g < h
+  · simpa [hgh] using formula28_rotate_relation_factor C ξ g h i hgh
+      (P.w' i g h)
+  · simpa [hgh] using (D5.ModEq.refl (D5.gamma G 6) (1 : G))
+
+/-- A power may be extracted from the first entry through three successive
+weight-one commutators at the `γ₆` truncation. -/
+theorem formula28_threefold_zpow_left
+    {a b c e : G} (ha : a ∈ D5.gamma G 2)
+    (hb : b ∈ D5.gamma G 1) (hc : c ∈ D5.gamma G 1)
+    (he : e ∈ D5.gamma G 1) (v : ℤ) :
+    D5.ModGammaSix
+      (D5.paperComm (D5.paperComm (D5.paperComm (a ^ v) b) c) e)
+      (D5.paperComm (D5.paperComm (D5.paperComm a b) c) e ^ v) := by
+  have h1 : D5.ModEq (D5.gamma G 4)
+      (D5.paperComm (a ^ v) b) (D5.paperComm a b ^ v) :=
+    D5.paperComm_zpow_left_mod_gamma
+      (n := 4) (r := 2) (s := 1)
+      (by norm_num) (by norm_num) (by norm_num) ha hb v
+  have h2 := D5.paperComm_left_of_modEq_gamma
+    (r := 4) (s := 1) (by norm_num) (by norm_num) h1 hc
+  have h3 := D5.paperComm_left_of_modEq_gamma
+    (r := 5) (s := 1) (by norm_num) (by norm_num) h2 he
+  have hab : D5.paperComm a b ∈ D5.gamma G 3 :=
+    D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) ha hb
+  have h4 : D5.ModEq (D5.gamma G 5)
+      (D5.paperComm (D5.paperComm a b ^ v) c)
+      (D5.paperComm (D5.paperComm a b) c ^ v) :=
+    D5.paperComm_zpow_left_mod_gamma
+      (n := 5) (r := 3) (s := 1)
+      (by norm_num) (by norm_num) (by norm_num) hab hc v
+  have h5 := D5.paperComm_left_of_modEq_gamma
+    (r := 5) (s := 1) (by norm_num) (by norm_num) h4 he
+  have habc : D5.paperComm (D5.paperComm a b) c ∈ D5.gamma G 4 :=
+    D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hab hc
+  have h6 := D5.paperComm_zpow_left_mod_gamma
+    (n := 6) (r := 4) (s := 1)
+    (by norm_num) (by norm_num) (by norm_num) habc he v
+  exact h3.trans <| h5.trans h6
+
+/-- The special power conversion in the `u` stream: the ratio
+`d(i)/d(h)` is absorbed into the first generator power. -/
+theorem formula28_u_ratio_factor
+    (C : Context G) (ξ : G) (h i : Fin C.s) (hhi : h < i) (u : ℤ) :
+    D5.ModGammaSix
+      (D5.paperComm (D5.paperComm
+        (D5.paperComm (C.x1 h ^ orderInt C.d h) (C.x1 i)) ξ) (C.x1 i) ^
+          (-(u * orderRatio C.d h i)))
+      (D5.paperComm (D5.paperComm
+        (D5.paperComm (C.x1 h ^ orderInt C.d i) (C.x1 i)) ξ) (C.x1 i) ^
+          (-u)) := by
+  let dbase : G := C.x1 h ^ orderInt C.d h
+  let q : ℤ := orderRatio C.d h i
+  have hd : orderInt C.d i = orderInt C.d h * q := by
+    simpa [q] using C.orderInt_eq_mul_ratio (le_of_lt hhi)
+  have hbase : dbase ^ q = C.x1 h ^ orderInt C.d i := by
+    simp only [dbase, ← zpow_mul, hd]
+  have hpow := formula28_threefold_zpow_left
+    (a := dbase) (b := C.x1 i) (c := ξ) (e := C.x1 i)
+    (C.x1_order_power_mem_gamma2 h)
+    (by simp [D5.gamma]) (by simp [D5.gamma]) (by simp [D5.gamma]) q
+  rw [hbase] at hpow
+  have hp := hpow.zpow (-u)
+  have heq : D5.ModGammaSix
+      (D5.paperComm (D5.paperComm (D5.paperComm dbase (C.x1 i)) ξ)
+        (C.x1 i) ^ (-(u * q)))
+      ((D5.paperComm (D5.paperComm (D5.paperComm dbase (C.x1 i)) ξ)
+        (C.x1 i) ^ q) ^ (-u)) := by
+    rw [← zpow_mul]
+    congr 1
+    ring
+  exact heq.trans hp.symm
+
+/-- The first displayed product of formula (28). -/
+def formula28URotatedPairStream
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun i => orderedProductWhere (· < i) fun h =>
+    D5.paperComm (D5.paperComm
+      (D5.paperComm (C.x1 h ^ orderInt C.d i) (C.x1 i)) ξ)
+      (C.x1 i) ^ (-P.u h i)
+
+theorem formula28_u_rotate_and_absorb_ratio
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula28URawPairStream C P ξ)
+      (formula28URotatedPairStream C P ξ) := by
+  unfold formula28URawPairStream formula28URotatedPairStream
+  apply modEq_orderedProduct
+  intro i
+  apply modEq_orderedProductWhere
+  intro h hhi
+  exact (formula28_rotate_relation_factor C ξ h i i hhi
+    (P.u h i * orderRatio C.d h i)).trans <|
+      formula28_u_ratio_factor C ξ h i hhi (P.u h i)
+
+/-- Formula (28), with all four products in their final commutator
+orientation.  Diagonal terms in the last three products are represented by
+`1`; the next theorem removes these harmless conditionals. -/
+def formula28RotatedProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  ((formula28URotatedPairStream C P ξ *
+      formula28WLeftRotatedTripleStream C P ξ) *
+    (formula28WRightRotatedTripleStream C P ξ *
+      formula28WPrimeRotatedTripleStream C P ξ))
+
+theorem formula28_rotated
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula27ReplacementGrouped C P ξ)
+      (formula28RotatedProduct C P ξ) := by
+  exact (formula28_all_coordinate_expansions C P ξ).trans <|
+    ((formula28_u_rotate_and_absorb_ratio C P ξ).mul
+      (formula28_wleft_rotate C P ξ)).mul
+    ((formula28_wright_rotate C P ξ).mul
+      (formula28_wprime_rotate C P ξ))
+
+/-- The second product in the paper's displayed formula (28). -/
+def formula28WLeftDisplayedStream
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun j => orderedProductWhere (· ≤ j) fun i =>
+    orderedProductWhere (j ≤ ·) fun k =>
+      D5.paperComm (D5.paperComm
+        (D5.paperComm (C.x1 i ^ orderInt C.d i) (C.x1 k)) ξ)
+        (C.x1 j) ^ (-P.w i j k)
+
+/-- The third product in the paper's displayed formula (28). -/
+def formula28WRightDisplayedStream
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun k => orderedProductWhere (· ≤ k) fun i =>
+    orderedProductWhere (fun j => i ≤ j ∧ j ≤ k) fun j =>
+      D5.paperComm (D5.paperComm
+        (D5.paperComm (C.x1 i ^ orderInt C.d i) (C.x1 j)) ξ)
+        (C.x1 k) ^ (-P.w i j k)
+
+/-- The fourth product in the paper's displayed formula (28). -/
+def formula28WPrimeDisplayedStream
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun i => orderedProductWhere (i < ·) fun j =>
+    orderedProductWhere (j ≤ ·) fun k =>
+      D5.paperComm (D5.paperComm
+        (D5.paperComm (C.x1 j ^ orderInt C.d j) (C.x1 k)) ξ)
+        (C.x1 i) ^ (-P.w' i j k)
+
+private theorem formula28_same_generator_power_comm
+    (C : Context G) (i : Fin C.s) :
+    D5.paperComm (C.x1 i ^ orderInt C.d i) (C.x1 i) = 1 := by
+  apply D5.paperComm_eq_one_iff_mul_comm.mpr
+  exact (Commute.zpow_self (C.x1 i) (orderInt C.d i)).eq
+
+theorem formula28_wleft_remove_diagonal_condition
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula28WLeftRotatedTripleStream C P ξ)
+      (formula28WLeftDisplayedStream C P ξ) := by
+  unfold formula28WLeftRotatedTripleStream formula28WLeftDisplayedStream
+  apply modEq_orderedProduct
+  intro j
+  apply modEq_orderedProductWhere
+  intro i hij
+  apply modEq_orderedProductWhere
+  intro k hjk
+  by_cases hik : i < k
+  · simpa [hik] using (D5.ModEq.refl (D5.gamma G 6)
+      (D5.paperComm (D5.paperComm
+        (D5.paperComm (C.x1 i ^ orderInt C.d i) (C.x1 k)) ξ)
+        (C.x1 j) ^ (-P.w i j k)))
+  · have heq : i = k := le_antisymm (le_trans hij hjk) (le_of_not_gt hik)
+    subst k
+    rw [dif_neg (lt_irrefl i), formula28_same_generator_power_comm]
+    simpa [D5.paperComm_eq] using
+      (D5.ModEq.refl (D5.gamma G 6) (1 : G))
+
+theorem formula28_wright_remove_diagonal_condition
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula28WRightRotatedTripleStream C P ξ)
+      (formula28WRightDisplayedStream C P ξ) := by
+  unfold formula28WRightRotatedTripleStream formula28WRightDisplayedStream
+  apply modEq_orderedProduct
+  intro k
+  apply modEq_orderedProductWhere
+  intro i hik
+  apply modEq_orderedProductWhere
+  intro j hij
+  by_cases hij' : i < j
+  · simpa [hij'] using (D5.ModEq.refl (D5.gamma G 6)
+      (D5.paperComm (D5.paperComm
+        (D5.paperComm (C.x1 i ^ orderInt C.d i) (C.x1 j)) ξ)
+        (C.x1 k) ^ (-P.w i j k)))
+  · have heq : i = j := le_antisymm hij.1 (le_of_not_gt hij')
+    subst j
+    rw [dif_neg (lt_irrefl i), formula28_same_generator_power_comm]
+    simpa [D5.paperComm_eq] using
+      (D5.ModEq.refl (D5.gamma G 6) (1 : G))
+
+theorem formula28_wprime_remove_diagonal_condition
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula28WPrimeRotatedTripleStream C P ξ)
+      (formula28WPrimeDisplayedStream C P ξ) := by
+  unfold formula28WPrimeRotatedTripleStream formula28WPrimeDisplayedStream
+  apply modEq_orderedProduct
+  intro i
+  apply modEq_orderedProductWhere
+  intro j hij
+  apply modEq_orderedProductWhere
+  intro k hjk
+  by_cases hjk' : j < k
+  · simpa [hjk'] using (D5.ModEq.refl (D5.gamma G 6)
+      (D5.paperComm (D5.paperComm
+        (D5.paperComm (C.x1 j ^ orderInt C.d j) (C.x1 k)) ξ)
+        (C.x1 i) ^ (-P.w' i j k)))
+  · have heq : j = k := le_antisymm hjk (le_of_not_gt hjk')
+    subst k
+    rw [dif_neg (lt_irrefl j), formula28_same_generator_power_comm]
+    simpa [D5.paperComm_eq] using
+      (D5.ModEq.refl (D5.gamma G 6) (1 : G))
+
+/-- The exact four-product right hand side printed as formula (28). -/
+def formula28DisplayedProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  ((formula28URotatedPairStream C P ξ *
+      formula28WLeftDisplayedStream C P ξ) *
+    (formula28WRightDisplayedStream C P ξ *
+      formula28WPrimeDisplayedStream C P ξ))
+
+/-- Formula (28), including all finite index domains, signs, generator
+powers, the ratio absorption in the first product, and diagonal terms. -/
+theorem formula28
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula27ReplacementGrouped C P ξ)
+      (formula28DisplayedProduct C P ξ) := by
+  exact (formula28_rotated C P ξ).trans <|
+    ((D5.ModEq.refl (D5.gamma G 6) (formula28URotatedPairStream C P ξ)).mul
+      (formula28_wleft_remove_diagonal_condition C P ξ)).mul
+    ((formula28_wright_remove_diagonal_condition C P ξ).mul
+      (formula28_wprime_remove_diagonal_condition C P ξ))
 
 end
 

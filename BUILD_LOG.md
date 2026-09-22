@@ -81,3 +81,8 @@ Run the current verification with:
   right `w(g,h,i)` triangle, including its independent diagonal case.
 - Formula (28), all coordinate expansions: the final `w'` stream is checked
   and all four streams are combined into a single raw commutator product.
+- Formula (28), final form: all inner commutators are rotated with the
+  correct negative exponents; the `u`-stream ratio is absorbed into
+  `x₁ᵢ^{d(j)}` by a checked threefold power-extraction lemma; diagonal terms
+  are restored and proved trivial.  The result matches all four displayed
+  finite products exactly.

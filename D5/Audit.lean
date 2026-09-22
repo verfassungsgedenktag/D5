@@ -57,4 +57,7 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula28_wprime_coordinate_expansion
 #print axioms D5.Tahara.formula28_all_coordinate_expansions
 #print axioms D5.Tahara.formula28_rotate_inner
+#print axioms D5.Tahara.formula28_threefold_zpow_left
+#print axioms D5.Tahara.formula28_u_ratio_factor
+#print axioms D5.Tahara.formula28
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

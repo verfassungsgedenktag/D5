@@ -71,11 +71,15 @@
     diagonal-zero case and both finite reindexings.
   - [x] Expand the final `w'`-stream through relation (3), including its
     diagonal-zero case, and combine all four streams.
-  - [ ] Rotate the resulting commutators into the exact displayed order and
+  - [x] Rotate the resulting commutators into the exact displayed order and
     signs of formula (28), including the conversion of the ratio power in
     the `u`-stream.
     - [x] Prove the common local inner-commutator rotation at weights
       `(3,1,1)`, with its sign and arbitrary integer exponent.
+    - [x] Prove threefold extraction of a first-entry power modulo `γ₆` and
+      absorb `d(i)/d(h)` into `x₁ₕ^{d(i)}` in the `u`-stream.
+    - [x] Remove all diagonal conditionals and match the four exact finite
+      products, index domains, signs, and powers displayed in formula (28).
   - [x] Prove the structural expansion (21).
     - [x] Verify its local substitution of relation (1) through two
       commutators and split the second- and third-weight coordinate blocks.
