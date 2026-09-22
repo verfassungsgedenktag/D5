@@ -286,7 +286,7 @@ def formula28WLeftRawTripleStream
     (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
   orderedProduct fun i => orderedProductWhere (· ≤ i) fun g =>
     orderedProductWhere (i ≤ ·) fun h =>
-      if hgh : g < h then
+      if _ : g < h then
         D5.paperComm
           (D5.paperComm ξ
             (D5.paperComm (C.x1 g ^ orderInt C.d g) (C.x1 h)))
