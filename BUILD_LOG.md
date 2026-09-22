@@ -70,3 +70,7 @@ Run the current verification with:
   conditions (14)--(15) are used only through their stated congruences.
 - Formula (27): the condition-(13) exponent comparison and its transport to
   the weight-five third-coordinate commutator compile successfully.
+- Formula (28), first collection stage: successful full build (`3127` jobs).
+  Lean separates all four alpha-coordinate streams in (27), then reindexes
+  and expands the complete `u`-stream using relation (3).  The result is the
+  raw first-layer commutator stream before the displayed rotations.

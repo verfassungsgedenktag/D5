@@ -62,6 +62,11 @@
     and apply the replacement to the global third-coordinate product.
   - [x] Prove the local relation-(3) alpha-coordinate expansion used in
     formula (28), including an arbitrary integer outer exponent.
+  - [x] Split formula (27) into its four alpha-coordinate streams and expand
+    the full `u`-stream through relation (3), with finite reindexing and
+    coefficient multiplication checked in Lean.
+  - [ ] Complete the other three streams of formula (28), then rotate the
+    resulting commutators into the exact displayed order and signs.
   - [x] Prove the structural expansion (21).
     - [x] Verify its local substitution of relation (1) through two
       commutators and split the second- and third-weight coordinate blocks.
