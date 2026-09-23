@@ -90,4 +90,9 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.tripleProduct_reindex_kij
 #print axioms D5.Tahara.formula34_lines_nine_ten_twelve_to_canonical
 #print axioms D5.Tahara.formula34_w_streams
+#print axioms D5.Tahara.formula35_factor_expanded
+#print axioms D5.Tahara.formula35_expanded_product_vanish
+#print axioms D5.Tahara.formula35_reindexed_vanish
+#print axioms D5.Tahara.formula35_yields_wdoubleprime_main
+#print axioms D5.Tahara.formula34WExtraProduct_split_diagonal
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

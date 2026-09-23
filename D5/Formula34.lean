@@ -1120,6 +1120,807 @@ theorem formula34_w_streams
   (formula34_lines_nine_ten_twelve_to_canonical C P ξ).trans
     (formula34_w_canonical_product C P ξ)
 
+/-! ## Expanding formula (35) -/
+
+/-- Multilinearity in the second entry, collected over an arbitrary finite
+list.  This is the finite form needed to expand the three words in (33). -/
+theorem fourfold_second_listProd_mod_gamma_six
+    {ι : Type*} (is : List ι) (a : ι → G) {ξ x z : G}
+    (hξ : ξ ∈ D5.gamma G 1) (ha : ∀ i ∈ is, a i ∈ D5.gamma G 2)
+    (hx : x ∈ D5.gamma G 1) (hz : z ∈ D5.gamma G 1) :
+    D5.ModGammaSix
+      (D5.paperComm (D5.paperComm
+        (D5.paperComm ξ ((is.map a).prod)) x) z)
+      ((is.map fun i =>
+        D5.paperComm (D5.paperComm (D5.paperComm ξ (a i)) x) z).prod) := by
+  induction is with
+  | nil =>
+      simpa [D5.paperComm] using
+        D5.ModEq.refl (D5.gamma G 6) (1 : G)
+  | cons i is ih =>
+      have hai : a i ∈ D5.gamma G 2 := ha i (by simp)
+      have hatail : (is.map a).prod ∈ D5.gamma G 2 := by
+        apply listProd_mem
+        intro y hy
+        rcases List.mem_map.mp hy with ⟨j, hj, rfl⟩
+        exact ha j (by simp [hj])
+      simp only [List.map_cons, List.prod_cons]
+      exact (fourfold_second_mul_mod_gamma_six hξ hai hatail hx hz).trans
+        ((D5.ModEq.refl (D5.gamma G 6)
+          (D5.paperComm (D5.paperComm (D5.paperComm ξ (a i)) x) z)).mul
+            (ih (fun j hj => ha j (by simp [hj]))))
+
+/-- The preceding collection lemma for a filtered ordered product. -/
+theorem fourfold_second_orderedProductWhere_mod_gamma_six
+    {n : ℕ} (p : Fin n → Prop) [DecidablePred p]
+    (a : Fin n → G) {ξ x z : G}
+    (hξ : ξ ∈ D5.gamma G 1)
+    (ha : ∀ i, p i → a i ∈ D5.gamma G 2)
+    (hx : x ∈ D5.gamma G 1) (hz : z ∈ D5.gamma G 1) :
+    D5.ModGammaSix
+      (D5.paperComm (D5.paperComm
+        (D5.paperComm ξ (orderedProductWhere p a)) x) z)
+      (orderedProductWhere p fun i =>
+        D5.paperComm (D5.paperComm (D5.paperComm ξ (a i)) x) z) := by
+  unfold orderedProductWhere
+  apply fourfold_second_listProd_mod_gamma_six
+  · exact hξ
+  · intro i hi
+    exact ha i (of_decide_eq_true (List.mem_filter.mp hi).2)
+  · exact hx
+  · exact hz
+
+def formula35WBlock
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (j k : Fin C.s) : G :=
+  orderedProductWhere (· ≤ j) fun h =>
+    formula34WExtraFactor C P ξ h j k
+
+def formula35WPrimeBlock
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (j k : Fin C.s) : G :=
+  orderedProductWhere (fun h => j < h ∧ h ≤ k) fun h =>
+    formula34WPrimeExtraFactor C P ξ j h k
+
+def formula34WDoublePrimePositiveFactor
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (j k h : Fin C.s) : G :=
+  D5.paperComm (D5.paperComm
+    (D5.paperComm ξ (C.x1 h ^ orderInt C.d h)) (C.x1 k))
+      (C.x1 j) ^ P.w'' j k h
+
+def formula35WDoublePrimeBlock
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (j k : Fin C.s) : G :=
+  orderedProductWhere (k < ·) fun h =>
+    formula34WDoublePrimePositiveFactor C P ξ j k h
+
+theorem formula34WDoublePrimePositiveFactor_mem_gamma3
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (j k h : Fin C.s) :
+    formula34WDoublePrimePositiveFactor C P ξ j k h ∈
+      D5.gamma G 3 := by
+  have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hh : C.x1 h ^ orderInt C.d h ∈ D5.gamma G 2 :=
+    C.x1_order_power_mem_gamma2 h
+  have hk : C.x1 k ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hj : C.x1 j ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have h3 := D5.paperComm_mem_gamma_add (r := 1) (s := 2)
+    (by norm_num) (by norm_num) hξ hh
+  have h4 := D5.paperComm_mem_gamma_add (r := 3) (s := 1)
+    (by norm_num) (by norm_num) h3 hk
+  have h5 := D5.paperComm_mem_gamma_add (r := 4) (s := 1)
+    (by norm_num) (by norm_num) h4 hj
+  exact D5.gamma_antitone G (by norm_num : 3 ≤ 5) <|
+    (D5.gamma G 5).zpow_mem h5 _
+
+/-- Exact expansion of one factor in (35) into the three blocks of (33).
+The powers of the first-layer generators are transferred to the resulting
+weight-five commutators explicitly. -/
+theorem formula35_factor_expanded
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (j k : Fin C.s) :
+    D5.ModGammaSix
+      (D5.paperComm
+        (D5.paperComm (D5.paperComm ξ (formula33Word C P j k)) (C.x1 k))
+          (C.x1 j))
+      ((formula35WBlock C P ξ j k * formula35WPrimeBlock C P ξ j k) *
+        formula35WDoublePrimeBlock C P ξ j k) := by
+  let A : G := orderedProductWhere (· ≤ j) fun h =>
+    C.x1 h ^ (orderInt C.d h * P.w h j k)
+  let B : G := orderedProductWhere (fun h => j < h ∧ h ≤ k) fun h =>
+    C.x1 h ^ (orderInt C.d h * P.w' j h k)
+  let E : G := orderedProductWhere (k < ·) fun h =>
+    C.x1 h ^ (orderInt C.d h * P.w'' j k h)
+  let F : G → G := fun a =>
+    D5.paperComm (D5.paperComm (D5.paperComm ξ a) (C.x1 k)) (C.x1 j)
+  have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hk : C.x1 k ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hj : C.x1 j ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hA : A ∈ D5.gamma G 2 := by
+    apply orderedProductWhere_mem
+    intro h hh
+    rw [zpow_mul]
+    exact (D5.gamma G 2).zpow_mem (C.x1_order_power_mem_gamma2 h) _
+  have hB : B ∈ D5.gamma G 2 := by
+    apply orderedProductWhere_mem
+    intro h hh
+    rw [zpow_mul]
+    exact (D5.gamma G 2).zpow_mem (C.x1_order_power_mem_gamma2 h) _
+  have hE : E ∈ D5.gamma G 2 := by
+    apply orderedProductWhere_mem
+    intro h hh
+    rw [zpow_mul]
+    exact (D5.gamma G 2).zpow_mem (C.x1_order_power_mem_gamma2 h) _
+  have hsplit : D5.ModGammaSix (F ((A * B) * E)) ((F A * F B) * F E) := by
+    exact (fourfold_second_mul_mod_gamma_six hξ
+      ((D5.gamma G 2).mul_mem hA hB) hE hk hj).trans
+        ((fourfold_second_mul_mod_gamma_six hξ hA hB hk hj).mul
+          (D5.ModEq.refl (D5.gamma G 6) (F E)))
+  have hcollectA : D5.ModGammaSix (F A) (formula35WBlock C P ξ j k) := by
+    have hc := fourfold_second_orderedProductWhere_mod_gamma_six (· ≤ j)
+      (fun h => C.x1 h ^ (orderInt C.d h * P.w h j k)) hξ
+      (fun h hh => by
+        simp only
+        rw [zpow_mul]
+        exact (D5.gamma G 2).zpow_mem (C.x1_order_power_mem_gamma2 h) _)
+      hk hj
+    refine hc.trans ?_
+    apply modEq_orderedProductWhere
+    intro h hh
+    simp only
+    rw [zpow_mul]
+    simpa [F, formula34WExtraFactor] using
+      fourfold_second_zpow_mod_gamma_six hξ
+        (C.x1_order_power_mem_gamma2 h) hk hj (P.w h j k)
+  have hcollectB : D5.ModGammaSix (F B) (formula35WPrimeBlock C P ξ j k) := by
+    have hc := fourfold_second_orderedProductWhere_mod_gamma_six
+      (fun h => j < h ∧ h ≤ k)
+      (fun h => C.x1 h ^ (orderInt C.d h * P.w' j h k)) hξ
+      (fun h hh => by
+        simp only
+        rw [zpow_mul]
+        exact (D5.gamma G 2).zpow_mem (C.x1_order_power_mem_gamma2 h) _)
+      hk hj
+    refine hc.trans ?_
+    apply modEq_orderedProductWhere
+    intro h hh
+    simp only
+    rw [zpow_mul]
+    simpa [F, formula34WPrimeExtraFactor] using
+      fourfold_second_zpow_mod_gamma_six hξ
+        (C.x1_order_power_mem_gamma2 h) hk hj (P.w' j h k)
+  have hcollectE : D5.ModGammaSix (F E)
+      (formula35WDoublePrimeBlock C P ξ j k) := by
+    have hc := fourfold_second_orderedProductWhere_mod_gamma_six (k < ·)
+      (fun h => C.x1 h ^ (orderInt C.d h * P.w'' j k h)) hξ
+      (fun h hh => by
+        simp only
+        rw [zpow_mul]
+        exact (D5.gamma G 2).zpow_mem (C.x1_order_power_mem_gamma2 h) _)
+      hk hj
+    refine hc.trans ?_
+    apply modEq_orderedProductWhere
+    intro h hh
+    simp only
+    rw [zpow_mul]
+    simpa [F, formula34WDoublePrimePositiveFactor] using
+      fourfold_second_zpow_mod_gamma_six hξ
+        (C.x1_order_power_mem_gamma2 h) hk hj (P.w'' j k h)
+  simpa [formula33Word, A, B, E, F] using
+    hsplit.trans ((hcollectA.mul hcollectB).mul hcollectE)
+
+theorem orderedProductWhere_three_gammaThree
+    {n : ℕ} (p : Fin n → Prop) [DecidablePred p]
+    (a b c : Fin n → G)
+    (ha : ∀ i, p i → a i ∈ D5.gamma G 3)
+    (hb : ∀ i, p i → b i ∈ D5.gamma G 3)
+    (hc : ∀ i, p i → c i ∈ D5.gamma G 3) :
+    D5.ModGammaSix
+      (orderedProductWhere p fun i => (a i * b i) * c i)
+      ((orderedProductWhere p a * orderedProductWhere p b) *
+        orderedProductWhere p c) := by
+  exact (D5.orderedProductWhere_pointwise_mul_gammaThree p
+    (fun i => a i * b i) c
+    (fun i hi => (D5.gamma G 3).mul_mem (ha i hi) (hb i hi)) hc).trans
+      ((D5.orderedProductWhere_pointwise_mul_gammaThree p a b ha hb).mul
+        (D5.ModEq.refl (D5.gamma G 6) (orderedProductWhere p c)))
+
+theorem orderedProduct_three_gammaThree
+    {n : ℕ} (a b c : Fin n → G)
+    (ha : ∀ i, a i ∈ D5.gamma G 3)
+    (hb : ∀ i, b i ∈ D5.gamma G 3)
+    (hc : ∀ i, c i ∈ D5.gamma G 3) :
+    D5.ModGammaSix
+      (orderedProduct fun i => (a i * b i) * c i)
+      ((orderedProduct a * orderedProduct b) * orderedProduct c) := by
+  exact (D5.orderedProduct_pointwise_mul_gammaThree
+    (fun i => a i * b i) c
+    (fun i => (D5.gamma G 3).mul_mem (ha i) (hb i)) hc).trans
+      ((D5.orderedProduct_pointwise_mul_gammaThree a b ha hb).mul
+        (D5.ModEq.refl (D5.gamma G 6) (orderedProduct c)))
+
+def formula35WProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun j => orderedProductWhere (j < ·) fun k =>
+    formula35WBlock C P ξ j k
+
+def formula35WPrimeProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun j => orderedProductWhere (j < ·) fun k =>
+    formula35WPrimeBlock C P ξ j k
+
+def formula34WDoublePrimePositiveProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun j => orderedProductWhere (j < ·) fun k =>
+    formula35WDoublePrimeBlock C P ξ j k
+
+theorem formula35WBlock_mem_gamma3
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (j k : Fin C.s) : formula35WBlock C P ξ j k ∈ D5.gamma G 3 := by
+  apply orderedProductWhere_mem
+  intro h hh
+  exact formula34WExtraFactor_mem_gamma3 C P ξ h j k
+
+theorem formula35WPrimeBlock_mem_gamma3
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (j k : Fin C.s) : formula35WPrimeBlock C P ξ j k ∈ D5.gamma G 3 := by
+  apply orderedProductWhere_mem
+  intro h hh
+  exact formula34WPrimeExtraFactor_mem_gamma3 C P ξ j h k
+
+theorem formula35WDoublePrimeBlock_mem_gamma3
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (j k : Fin C.s) :
+    formula35WDoublePrimeBlock C P ξ j k ∈ D5.gamma G 3 := by
+  apply orderedProductWhere_mem
+  intro h hh
+  exact formula34WDoublePrimePositiveFactor_mem_gamma3 C P ξ j k h
+
+/-- Formula (35) after expanding all three first-layer words in (33) and
+collecting like factors. -/
+theorem formula35_expanded_product
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula35Product C P ξ)
+      ((formula35WProduct C P ξ * formula35WPrimeProduct C P ξ) *
+        formula34WDoublePrimePositiveProduct C P ξ) := by
+  let A : Fin C.s → Fin C.s → G := formula35WBlock C P ξ
+  let B : Fin C.s → Fin C.s → G := formula35WPrimeBlock C P ξ
+  let E : Fin C.s → Fin C.s → G := formula35WDoublePrimeBlock C P ξ
+  have hA : ∀ j k, A j k ∈ D5.gamma G 3 := fun j k =>
+    formula35WBlock_mem_gamma3 C P ξ j k
+  have hB : ∀ j k, B j k ∈ D5.gamma G 3 := fun j k =>
+    formula35WPrimeBlock_mem_gamma3 C P ξ j k
+  have hE : ∀ j k, E j k ∈ D5.gamma G 3 := fun j k =>
+    formula35WDoublePrimeBlock_mem_gamma3 C P ξ j k
+  have hlocal : D5.ModGammaSix (formula35Product C P ξ)
+      (orderedProduct fun j => orderedProductWhere (j < ·) fun k =>
+        (A j k * B j k) * E j k) := by
+    unfold formula35Product
+    apply modEq_orderedProduct
+    intro j
+    apply modEq_orderedProductWhere
+    intro k hjk
+    exact formula35_factor_expanded C P ξ j k
+  have hsplitK : D5.ModGammaSix
+      (orderedProduct fun j => orderedProductWhere (j < ·) fun k =>
+        (A j k * B j k) * E j k)
+      (orderedProduct fun j =>
+        ((orderedProductWhere (j < ·) fun k => A j k) *
+          (orderedProductWhere (j < ·) fun k => B j k)) *
+          (orderedProductWhere (j < ·) fun k => E j k)) := by
+    apply modEq_orderedProduct
+    intro j
+    exact orderedProductWhere_three_gammaThree (j < ·) (A j) (B j) (E j)
+      (fun k hk => hA j k) (fun k hk => hB j k) (fun k hk => hE j k)
+  let AR : Fin C.s → G := fun j => orderedProductWhere (j < ·) (A j)
+  let BR : Fin C.s → G := fun j => orderedProductWhere (j < ·) (B j)
+  let ER : Fin C.s → G := fun j => orderedProductWhere (j < ·) (E j)
+  have hAR : ∀ j, AR j ∈ D5.gamma G 3 := by
+    intro j; apply orderedProductWhere_mem; intro k hk; exact hA j k
+  have hBR : ∀ j, BR j ∈ D5.gamma G 3 := by
+    intro j; apply orderedProductWhere_mem; intro k hk; exact hB j k
+  have hER : ∀ j, ER j ∈ D5.gamma G 3 := by
+    intro j; apply orderedProductWhere_mem; intro k hk; exact hE j k
+  have hsplitJ := orderedProduct_three_gammaThree AR BR ER hAR hBR hER
+  exact hlocal.trans <| hsplitK.trans <| by
+    simpa [AR, BR, ER, A, B, E, formula35WProduct,
+      formula35WPrimeProduct, formula34WDoublePrimePositiveProduct] using hsplitJ
+
+/-- The expanded three-block product is trivial modulo `γ₆`; this is the
+usable cancellation consequence of (35). -/
+theorem formula35_expanded_product_vanish
+    (C : Context G) (P : Parameters C.s C.t) (h12 : P.Condition12)
+    (ξ : G) :
+    D5.ModGammaSix
+      ((formula35WProduct C P ξ * formula35WPrimeProduct C P ξ) *
+        formula34WDoublePrimePositiveProduct C P ξ) 1 :=
+  (formula35_expanded_product C P ξ).symm.trans
+    (formula35 C P h12 ξ)
+
+/-- Reindex `i ≤ j < k` from the loop order `(j,k,i)` used by the
+first block of (35) to the canonical order `(i,j,k)`. -/
+theorem tripleProduct_reindex_jki_weak_strict
+    {s : ℕ} (f : Fin s → Fin s → Fin s → G)
+    (hf : ∀ i j k, i ≤ j → j < k → f i j k ∈ D5.gamma G 3) :
+    D5.ModGammaSix
+      (orderedProduct fun j => orderedProductWhere (j < ·) fun k =>
+        orderedProductWhere (· ≤ j) fun i => f i j k)
+      (orderedProduct fun i => orderedProductWhere (i ≤ ·) fun j =>
+        orderedProductWhere (j < ·) fun k => f i j k) := by
+  classical
+  let all := List.finRange s
+  let triples :=
+    ((((all ×ˢ all).filter fun ij => ij.1 ≤ ij.2) ×ˢ all).filter fun t =>
+      t.1.2 < t.2)
+  let raw :=
+    ((((all ×ˢ all).filter fun jk => jk.1 < jk.2) ×ˢ all).filter fun t =>
+      t.2 ≤ t.1.1)
+  let rotate : (Fin s × Fin s) × Fin s → (Fin s × Fin s) × Fin s :=
+    fun t => ((t.2, t.1.1), t.1.2)
+  let unrotate : (Fin s × Fin s) × Fin s → (Fin s × Fin s) × Fin s :=
+    fun t => ((t.1.2, t.2), t.1.1)
+  let reordered := raw.map rotate
+  have hall : all.Nodup := by simpa [all] using List.nodup_finRange s
+  have hrotate : Function.Injective rotate := by
+    intro a b h
+    apply_fun unrotate at h
+    simpa [rotate, unrotate] using h
+  have htriples : triples.Nodup :=
+    (((hall.product hall).filter _).product hall).filter _
+  have hraw : raw.Nodup :=
+    (((hall.product hall).filter _).product hall).filter _
+  have hreordered : reordered.Nodup := hraw.map hrotate
+  have hperm : triples.Perm reordered := by
+    apply (List.perm_ext_iff_of_nodup htriples hreordered).2
+    intro t
+    constructor
+    · intro ht
+      have hp := List.mem_filter.mp ht
+      have hpij := List.mem_product.mp hp.1
+      have hij := of_decide_eq_true (List.mem_filter.mp hpij.1).2
+      have hjk := of_decide_eq_true hp.2
+      apply List.mem_map.mpr
+      refine ⟨unrotate t, ?_, by simp [rotate, unrotate]⟩
+      apply List.mem_filter.mpr
+      refine ⟨List.mem_product.mpr ⟨?_, by simp [all]⟩, ?_⟩
+      · apply List.mem_filter.mpr
+        exact ⟨List.mem_product.mpr ⟨by simp [all], by simp [all]⟩,
+          by simpa [unrotate] using hjk⟩
+      · simpa [unrotate] using hij
+    · intro ht
+      rcases List.mem_map.mp ht with ⟨u, hu, rfl⟩
+      have hp := List.mem_filter.mp hu
+      have hpjk := List.mem_product.mp hp.1
+      have hjk := of_decide_eq_true (List.mem_filter.mp hpjk.1).2
+      have hij := of_decide_eq_true hp.2
+      apply List.mem_filter.mpr
+      refine ⟨List.mem_product.mpr ⟨?_, by simp [all]⟩, ?_⟩
+      · apply List.mem_filter.mpr
+        exact ⟨List.mem_product.mpr ⟨by simp [all], by simp [all]⟩,
+          by simpa [rotate] using hij⟩
+      · simpa [rotate] using hjk
+  have flattenFiltered : ∀ {α β : Type} (is : List α) (js : List β)
+      (p : α → β → Prop) [DecidableRel p] (g : α → β → G),
+      (is.map fun i => ((js.filter (p i)).map (g i)).prod).prod =
+        (((is ×ˢ js).filter fun ij => p ij.1 ij.2).map
+          fun ij => g ij.1 ij.2).prod := by
+    intro α β is js p inst g
+    induction is with
+    | nil => simp
+    | cons i is ih =>
+        rw [List.map_cons, List.prod_cons, List.product_cons,
+          List.filter_append, List.map_append, List.prod_append, ih]
+        congr 1
+        have hlist :
+            (js.filter (p i)).map (g i) =
+              ((js.map fun b => (i, b)).filter fun ij => p ij.1 ij.2).map
+                fun ij => g ij.1 ij.2 := by
+          simp only [List.filter_map, List.map_map]
+          rfl
+        exact congrArg List.prod hlist
+  have hcanonical :
+      (orderedProduct fun i => orderedProductWhere (i ≤ ·) fun j =>
+        orderedProductWhere (j < ·) fun k => f i j k) =
+      (triples.map fun t => f t.1.1 t.1.2 t.2).prod := by
+    unfold orderedProduct orderedProductWhere
+    have h1 := flattenFiltered all all (fun i j => i ≤ j)
+      (fun i j => ((all.filter (j < ·)).map fun k => f i j k).prod)
+    have h2 := flattenFiltered
+      ((all ×ˢ all).filter fun ij => ij.1 ≤ ij.2) all
+      (fun ij k => ij.2 < k) (fun ij k => f ij.1 ij.2 k)
+    simpa [triples, all] using h1.trans h2
+  have hleft :
+      (orderedProduct fun j => orderedProductWhere (j < ·) fun k =>
+        orderedProductWhere (· ≤ j) fun i => f i j k) =
+      (reordered.map fun t => f t.1.1 t.1.2 t.2).prod := by
+    unfold orderedProduct orderedProductWhere
+    have h1 := flattenFiltered all all (fun j k => j < k)
+      (fun j k => ((all.filter (· ≤ j)).map fun i => f i j k).prod)
+    have h2 := flattenFiltered
+      ((all ×ˢ all).filter fun jk => jk.1 < jk.2) all
+      (fun jk i => i ≤ jk.1) (fun jk i => f i jk.1 jk.2)
+    simpa [reordered, raw, rotate, all, List.map_map] using h1.trans h2
+  rw [hleft, hcanonical]
+  apply D5.listProd_perm_gammaThree (hperm.symm.map _)
+  intro x hx
+  rcases List.mem_map.mp hx with ⟨t, ht, rfl⟩
+  have ht' : t ∈ triples := hperm.mem_iff.mpr ht
+  have hp := List.mem_filter.mp ht'
+  have hpij := List.mem_product.mp hp.1
+  exact hf t.1.1 t.1.2 t.2
+    (of_decide_eq_true (List.mem_filter.mp hpij.1).2)
+    (of_decide_eq_true hp.2)
+
+def formula34WExtraOffDiagonalProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun i => orderedProductWhere (i ≤ ·) fun j =>
+    orderedProductWhere (j < ·) fun k =>
+      formula34WExtraFactor C P ξ i j k
+
+theorem formula35WProduct_reindexed
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula35WProduct C P ξ)
+      (formula34WExtraOffDiagonalProduct C P ξ) := by
+  simpa [formula35WProduct, formula35WBlock,
+    formula34WExtraOffDiagonalProduct] using
+      tripleProduct_reindex_jki_weak_strict
+        (formula34WExtraFactor C P ξ)
+        (fun i j k hij hjk => formula34WExtraFactor_mem_gamma3 C P ξ i j k)
+
+/-- Reindex `i < j ≤ k` from `(i,k,j)` to `(i,j,k)`. -/
+theorem tripleProduct_reindex_ikj_strict_weak
+    {s : ℕ} (f : Fin s → Fin s → Fin s → G)
+    (hf : ∀ i j k, i < j → j ≤ k → f i j k ∈ D5.gamma G 3) :
+    D5.ModGammaSix
+      (orderedProduct fun i => orderedProductWhere (i < ·) fun k =>
+        orderedProductWhere (fun j => i < j ∧ j ≤ k) fun j => f i j k)
+      (orderedProduct fun i => orderedProductWhere (i < ·) fun j =>
+        orderedProductWhere (j ≤ ·) fun k => f i j k) := by
+  classical
+  let all := List.finRange s
+  let triples :=
+    ((((all ×ˢ all).filter fun ij => ij.1 < ij.2) ×ˢ all).filter fun t =>
+      t.1.2 ≤ t.2)
+  let raw :=
+    ((((all ×ˢ all).filter fun ik => ik.1 < ik.2) ×ˢ all).filter fun t =>
+      t.1.1 < t.2 ∧ t.2 ≤ t.1.2)
+  let rotate : (Fin s × Fin s) × Fin s → (Fin s × Fin s) × Fin s :=
+    fun t => ((t.1.1, t.2), t.1.2)
+  let unrotate : (Fin s × Fin s) × Fin s → (Fin s × Fin s) × Fin s :=
+    fun t => ((t.1.1, t.2), t.1.2)
+  let reordered := raw.map rotate
+  have hall : all.Nodup := by simpa [all] using List.nodup_finRange s
+  have hrotate : Function.Injective rotate := by
+    intro a b h
+    apply_fun unrotate at h
+    simpa [rotate, unrotate] using h
+  have htriples : triples.Nodup :=
+    (((hall.product hall).filter _).product hall).filter _
+  have hraw : raw.Nodup :=
+    (((hall.product hall).filter _).product hall).filter _
+  have hreordered : reordered.Nodup := hraw.map hrotate
+  have hperm : triples.Perm reordered := by
+    apply (List.perm_ext_iff_of_nodup htriples hreordered).2
+    intro t
+    constructor
+    · intro ht
+      have hp := List.mem_filter.mp ht
+      have hpij := List.mem_product.mp hp.1
+      have hij := of_decide_eq_true (List.mem_filter.mp hpij.1).2
+      have hjk := of_decide_eq_true hp.2
+      apply List.mem_map.mpr
+      refine ⟨unrotate t, ?_, by simp [rotate, unrotate]⟩
+      apply List.mem_filter.mpr
+      refine ⟨List.mem_product.mpr ⟨?_, by simp [all]⟩, ?_⟩
+      · apply List.mem_filter.mpr
+        exact ⟨List.mem_product.mpr ⟨by simp [all], by simp [all]⟩,
+          by simpa [unrotate] using lt_of_lt_of_le hij hjk⟩
+      · simpa [unrotate] using And.intro hij hjk
+    · intro ht
+      rcases List.mem_map.mp ht with ⟨u, hu, rfl⟩
+      have hp := List.mem_filter.mp hu
+      have hpik := List.mem_product.mp hp.1
+      have hijk := of_decide_eq_true hp.2
+      apply List.mem_filter.mpr
+      refine ⟨List.mem_product.mpr ⟨?_, by simp [all]⟩, ?_⟩
+      · apply List.mem_filter.mpr
+        exact ⟨List.mem_product.mpr ⟨by simp [all], by simp [all]⟩,
+          by simpa [rotate] using hijk.1⟩
+      · simpa [rotate] using hijk.2
+  have flattenFiltered : ∀ {α β : Type} (is : List α) (js : List β)
+      (p : α → β → Prop) [DecidableRel p] (g : α → β → G),
+      (is.map fun i => ((js.filter (p i)).map (g i)).prod).prod =
+        (((is ×ˢ js).filter fun ij => p ij.1 ij.2).map
+          fun ij => g ij.1 ij.2).prod := by
+    intro α β is js p inst g
+    induction is with
+    | nil => simp
+    | cons i is ih =>
+        rw [List.map_cons, List.prod_cons, List.product_cons,
+          List.filter_append, List.map_append, List.prod_append, ih]
+        congr 1
+        have hlist :
+            (js.filter (p i)).map (g i) =
+              ((js.map fun b => (i, b)).filter fun ij => p ij.1 ij.2).map
+                fun ij => g ij.1 ij.2 := by
+          simp only [List.filter_map, List.map_map]
+          rfl
+        exact congrArg List.prod hlist
+  have hcanonical :
+      (orderedProduct fun i => orderedProductWhere (i < ·) fun j =>
+        orderedProductWhere (j ≤ ·) fun k => f i j k) =
+      (triples.map fun t => f t.1.1 t.1.2 t.2).prod := by
+    unfold orderedProduct orderedProductWhere
+    have h1 := flattenFiltered all all (fun i j => i < j)
+      (fun i j => ((all.filter (j ≤ ·)).map fun k => f i j k).prod)
+    have h2 := flattenFiltered
+      ((all ×ˢ all).filter fun ij => ij.1 < ij.2) all
+      (fun ij k => ij.2 ≤ k) (fun ij k => f ij.1 ij.2 k)
+    simpa [triples, all] using h1.trans h2
+  have hleft :
+      (orderedProduct fun i => orderedProductWhere (i < ·) fun k =>
+        orderedProductWhere (fun j => i < j ∧ j ≤ k) fun j => f i j k) =
+      (reordered.map fun t => f t.1.1 t.1.2 t.2).prod := by
+    unfold orderedProduct orderedProductWhere
+    have h1 := flattenFiltered all all (fun i k => i < k)
+      (fun i k => ((all.filter fun j => i < j ∧ j ≤ k).map
+        fun j => f i j k).prod)
+    have h2 := flattenFiltered
+      ((all ×ˢ all).filter fun ik => ik.1 < ik.2) all
+      (fun ik j => ik.1 < j ∧ j ≤ ik.2) (fun ik j => f ik.1 j ik.2)
+    simpa [reordered, raw, rotate, all, List.map_map] using h1.trans h2
+  rw [hleft, hcanonical]
+  apply D5.listProd_perm_gammaThree (hperm.symm.map _)
+  intro x hx
+  rcases List.mem_map.mp hx with ⟨t, ht, rfl⟩
+  have ht' : t ∈ triples := hperm.mem_iff.mpr ht
+  have hp := List.mem_filter.mp ht'
+  have hpij := List.mem_product.mp hp.1
+  exact hf t.1.1 t.1.2 t.2
+    (of_decide_eq_true (List.mem_filter.mp hpij.1).2)
+    (of_decide_eq_true hp.2)
+
+theorem formula35WPrimeProduct_reindexed
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula35WPrimeProduct C P ξ)
+      (formula34WPrimeExtraProduct C P ξ) := by
+  simpa [formula35WPrimeProduct, formula35WPrimeBlock,
+    formula34WPrimeExtraProduct] using
+      tripleProduct_reindex_ikj_strict_weak
+        (formula34WPrimeExtraFactor C P ξ)
+        (fun i j k hij hjk =>
+          formula34WPrimeExtraFactor_mem_gamma3 C P ξ i j k)
+
+/-- Formula (35), now with its first two blocks in the indexing convention
+of formula (34). -/
+theorem formula35_reindexed_vanish
+    (C : Context G) (P : Parameters C.s C.t) (h12 : P.Condition12)
+    (ξ : G) :
+    D5.ModGammaSix
+      ((formula34WExtraOffDiagonalProduct C P ξ *
+          formula34WPrimeExtraProduct C P ξ) *
+        formula34WDoublePrimePositiveProduct C P ξ) 1 := by
+  have hreindex : D5.ModGammaSix
+      ((formula35WProduct C P ξ * formula35WPrimeProduct C P ξ) *
+        formula34WDoublePrimePositiveProduct C P ξ)
+      ((formula34WExtraOffDiagonalProduct C P ξ *
+          formula34WPrimeExtraProduct C P ξ) *
+        formula34WDoublePrimePositiveProduct C P ξ) :=
+    ((formula35WProduct_reindexed C P ξ).mul
+      (formula35WPrimeProduct_reindexed C P ξ)).mul
+        (D5.ModEq.refl (D5.gamma G 6)
+          (formula34WDoublePrimePositiveProduct C P ξ))
+  exact hreindex.symm.trans (formula35_expanded_product_vanish C P h12 ξ)
+
+theorem orderedProductWhere_zpow_gammaThree
+    {n : ℕ} (p : Fin n → Prop) [DecidablePred p]
+    (f : Fin n → G) (hf : ∀ i, p i → f i ∈ D5.gamma G 3)
+    (v : ℤ) :
+    D5.ModGammaSix (orderedProductWhere p f ^ v)
+      (orderedProductWhere p fun i => f i ^ v) := by
+  unfold orderedProductWhere
+  simpa [List.map_map] using D5.listProd_zpow_gammaThree
+    (((List.finRange n).filter p).map f)
+    (fun x hx => by
+      rcases List.mem_map.mp hx with ⟨i, hi, rfl⟩
+      exact hf i (of_decide_eq_true (List.mem_filter.mp hi).2)) v
+
+def formula34WDoublePrimeMainFactor
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (j k h : Fin C.s) : G :=
+  D5.paperComm (D5.paperComm
+    (D5.paperComm ξ (C.x1 h ^ orderInt C.d h)) (C.x1 k))
+      (C.x1 j) ^ (-P.w'' j k h)
+
+def formula34WDoublePrimeMainBlock
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (j k : Fin C.s) : G :=
+  orderedProductWhere (k < ·) fun h =>
+    formula34WDoublePrimeMainFactor C P ξ j k h
+
+/-- The third principal product displayed in (34). -/
+def formula34WDoublePrimeMainProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun j => orderedProductWhere (j < ·) fun k =>
+    formula34WDoublePrimeMainBlock C P ξ j k
+
+theorem formula34WDoublePrimeMainFactor_mem_gamma3
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (j k h : Fin C.s) :
+    formula34WDoublePrimeMainFactor C P ξ j k h ∈ D5.gamma G 3 := by
+  simpa [formula34WDoublePrimeMainFactor,
+    formula34WDoublePrimePositiveFactor] using
+      (D5.gamma G 3).inv_mem
+        (formula34WDoublePrimePositiveFactor_mem_gamma3 C P ξ j k h)
+
+/-- In the abelian weight-five layer, negating every `w''` coefficient is
+the inverse of the positive product obtained from (35). -/
+theorem formula34_wdoubleprime_positive_inv
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula34WDoublePrimePositiveProduct C P ξ)⁻¹
+      (formula34WDoublePrimeMainProduct C P ξ) := by
+  let Pos : Fin C.s → Fin C.s → Fin C.s → G :=
+    formula34WDoublePrimePositiveFactor C P ξ
+  let Neg : Fin C.s → Fin C.s → Fin C.s → G :=
+    formula34WDoublePrimeMainFactor C P ξ
+  let PB : Fin C.s → Fin C.s → G := fun j k =>
+    orderedProductWhere (k < ·) (Pos j k)
+  let NB : Fin C.s → Fin C.s → G := fun j k =>
+    orderedProductWhere (k < ·) (Neg j k)
+  let PR : Fin C.s → G := fun j => orderedProductWhere (j < ·) (PB j)
+  let NR : Fin C.s → G := fun j => orderedProductWhere (j < ·) (NB j)
+  have hPos : ∀ j k h, Pos j k h ∈ D5.gamma G 3 := fun j k h =>
+    formula34WDoublePrimePositiveFactor_mem_gamma3 C P ξ j k h
+  have hPB : ∀ j k, PB j k ∈ D5.gamma G 3 := by
+    intro j k; apply orderedProductWhere_mem; intro h hkh; exact hPos j k h
+  have hPR : ∀ j, PR j ∈ D5.gamma G 3 := by
+    intro j; apply orderedProductWhere_mem; intro k hjk; exact hPB j k
+  have hblock : ∀ j k, D5.ModGammaSix (PB j k)⁻¹ (NB j k) := by
+    intro j k
+    have hp := orderedProductWhere_zpow_gammaThree (k < ·) (Pos j k)
+      (fun h hkh => hPos j k h) (-1)
+    have hr : D5.ModGammaSix
+        (orderedProductWhere (k < ·) fun h => Pos j k h ^ (-1 : ℤ))
+        (orderedProductWhere (k < ·) (Neg j k)) := by
+      apply modEq_orderedProductWhere
+      intro h hkh
+      simpa [Pos, Neg, formula34WDoublePrimePositiveFactor,
+        formula34WDoublePrimeMainFactor, zpow_neg] using
+          D5.ModEq.refl (D5.gamma G 6) (Neg j k h)
+    simpa [PB, NB, zpow_neg] using hp.trans hr
+  have hrow : ∀ j, D5.ModGammaSix (PR j)⁻¹ (NR j) := by
+    intro j
+    have hp := orderedProductWhere_zpow_gammaThree (j < ·) (PB j)
+      (fun k hjk => hPB j k) (-1)
+    have hr : D5.ModGammaSix
+        (orderedProductWhere (j < ·) fun k => PB j k ^ (-1 : ℤ))
+        (orderedProductWhere (j < ·) (NB j)) := by
+      apply modEq_orderedProductWhere
+      intro k hjk
+      simpa [zpow_neg] using hblock j k
+    simpa [PR, NR, zpow_neg] using hp.trans hr
+  have hp := D5.orderedProduct_zpow_gammaThree PR hPR (-1)
+  have hr : D5.ModGammaSix
+      (orderedProduct fun j => PR j ^ (-1 : ℤ))
+      (orderedProduct NR) := by
+    apply modEq_orderedProduct
+    intro j
+    simpa [zpow_neg] using hrow j
+  simpa [formula34WDoublePrimePositiveProduct,
+    formula35WDoublePrimeBlock, formula34WDoublePrimeMainProduct,
+    formula34WDoublePrimeMainBlock, Pos, Neg, PB, NB, PR, NR, zpow_neg] using
+      hp.trans hr
+
+/-- The off-diagonal `w` correction and the `w'` correction are exactly
+the third principal product in (34). -/
+theorem formula35_yields_wdoubleprime_main
+    (C : Context G) (P : Parameters C.s C.t) (h12 : P.Condition12)
+    (ξ : G) :
+    D5.ModGammaSix
+      (formula34WExtraOffDiagonalProduct C P ξ *
+        formula34WPrimeExtraProduct C P ξ)
+      (formula34WDoublePrimeMainProduct C P ξ) := by
+  let A := formula34WExtraOffDiagonalProduct C P ξ *
+    formula34WPrimeExtraProduct C P ξ
+  let Q := formula34WDoublePrimePositiveProduct C P ξ
+  have hv : D5.ModGammaSix (A * Q) 1 := by
+    simpa [A, Q] using formula35_reindexed_vanish C P h12 ξ
+  have hsolve : D5.ModGammaSix A Q⁻¹ := by
+    have hm := hv.mul (D5.ModEq.refl (D5.gamma G 6) Q⁻¹)
+    simpa [mul_assoc] using hm
+  exact hsolve.trans (formula34_wdoubleprime_positive_inv C P ξ)
+
+/-! ## Separating the diagonal correction -/
+
+/-- Split a weak final interval into its initial point and the strict final
+interval.  Only commutativity modulo `γ₆` is used, so the statement is
+independent of the concrete enumeration of `Fin n`. -/
+theorem orderedProductWhere_le_split_lt
+    {n : ℕ} (j : Fin n) (f : Fin n → G)
+    (hf : ∀ k, j ≤ k → f k ∈ D5.gamma G 3) :
+    D5.ModGammaSix (orderedProductWhere (j ≤ ·) f)
+      (f j * orderedProductWhere (j < ·) f) := by
+  classical
+  let all := List.finRange n
+  let weak := all.filter (j ≤ ·)
+  let strict := all.filter (j < ·)
+  have hweak : weak.Nodup := (List.nodup_finRange n).filter _
+  have hstrict : strict.Nodup := (List.nodup_finRange n).filter _
+  have hjnot : j ∉ strict := by simp [strict]
+  have hperm : weak.Perm (j :: strict) := by
+    apply (List.perm_ext_iff_of_nodup hweak (hstrict.cons hjnot)).2
+    intro k
+    simp only [weak, strict, List.mem_filter, List.mem_cons]
+    constructor
+    · rintro ⟨hkall, hle⟩
+      rcases eq_or_lt_of_le (of_decide_eq_true hle) with heq | hlt
+      · exact Or.inl heq.symm
+      · exact Or.inr ⟨hkall, by simpa using hlt⟩
+    · rintro (heq | ⟨hkall, hlt⟩)
+      · subst k
+        exact ⟨by simp [all], by simp⟩
+      · exact ⟨hkall, by
+          exact decide_eq_true (le_of_lt (of_decide_eq_true hlt))⟩
+  unfold orderedProductWhere
+  simpa [weak, strict] using D5.listProd_perm_gammaThree (hperm.map f)
+    (fun x hx => by
+      rcases List.mem_map.mp hx with ⟨k, hk, rfl⟩
+      exact hf k (of_decide_eq_true (List.mem_filter.mp hk).2))
+
+def formula34WExtraDiagonalProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun i => orderedProductWhere (i ≤ ·) fun j =>
+    formula34WExtraFactor C P ξ i j j
+
+/-- Split the additional `w` stream into its diagonal part `j = k` and
+the off-diagonal part already eliminated by (35). -/
+theorem formula34WExtraProduct_split_diagonal
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula34WExtraProduct C P ξ)
+      (formula34WExtraDiagonalProduct C P ξ *
+        formula34WExtraOffDiagonalProduct C P ξ) := by
+  let E : Fin C.s → Fin C.s → Fin C.s → G :=
+    formula34WExtraFactor C P ξ
+  let D : Fin C.s → Fin C.s → G := fun i j => E i j j
+  let O : Fin C.s → Fin C.s → G := fun i j =>
+    orderedProductWhere (j < ·) (E i j)
+  have hE : ∀ i j k, E i j k ∈ D5.gamma G 3 := fun i j k =>
+    formula34WExtraFactor_mem_gamma3 C P ξ i j k
+  have hD : ∀ i j, D i j ∈ D5.gamma G 3 := fun i j => hE i j j
+  have hO : ∀ i j, O i j ∈ D5.gamma G 3 := by
+    intro i j; apply orderedProductWhere_mem; intro k hjk; exact hE i j k
+  have hsplitK : D5.ModGammaSix (formula34WExtraProduct C P ξ)
+      (orderedProduct fun i => orderedProductWhere (i ≤ ·) fun j =>
+        D i j * O i j) := by
+    unfold formula34WExtraProduct
+    apply modEq_orderedProduct
+    intro i
+    apply modEq_orderedProductWhere
+    intro j hij
+    exact orderedProductWhere_le_split_lt j (E i j)
+      (fun k hjk => hE i j k)
+  have hsplitJ : D5.ModGammaSix
+      (orderedProduct fun i => orderedProductWhere (i ≤ ·) fun j =>
+        D i j * O i j)
+      (orderedProduct fun i =>
+        (orderedProductWhere (i ≤ ·) (D i)) *
+          (orderedProductWhere (i ≤ ·) (O i))) := by
+    apply modEq_orderedProduct
+    intro i
+    exact D5.orderedProductWhere_pointwise_mul_gammaThree (i ≤ ·)
+      (D i) (O i) (fun j hij => hD i j) (fun j hij => hO i j)
+  let DB : Fin C.s → G := fun i => orderedProductWhere (i ≤ ·) (D i)
+  let OB : Fin C.s → G := fun i => orderedProductWhere (i ≤ ·) (O i)
+  have hDB : ∀ i, DB i ∈ D5.gamma G 3 := by
+    intro i; apply orderedProductWhere_mem; intro j hij; exact hD i j
+  have hOB : ∀ i, OB i ∈ D5.gamma G 3 := by
+    intro i; apply orderedProductWhere_mem; intro j hij; exact hO i j
+  have hsplitI := D5.orderedProduct_pointwise_mul_gammaThree DB OB hDB hOB
+  exact hsplitK.trans <| hsplitJ.trans <| by
+    simpa [formula34WExtraDiagonalProduct,
+      formula34WExtraOffDiagonalProduct, E, D, O, DB, OB] using hsplitI
+
 end
 
 end D5.Tahara

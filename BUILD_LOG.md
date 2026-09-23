@@ -146,3 +146,12 @@ Run the current verification with:
 - Full build after the reindexing stage: successful (`3130` jobs); the
   axiom audit again contains no mathematical assumption beyond the accepted
   commutator-weight background theorem.
+- Formula (35) is now expanded back into the three explicit words of (33).
+  Two checked finite permutations identify its first two blocks with the
+  off-diagonal additional `w` stream and the complete additional `w'`
+  stream.  Solving the resulting product identity and distributing the
+  inverse through the finite product gives the third principal `w''` stream
+  for all `i ≤ j < k`, with its negative exponent exactly as in (34).
+- The complete additional `w` product is split into diagonal `j = k` and
+  off-diagonal `j < k` pieces.  The remaining Section 11 obligation is now
+  only the diagonal identity involving line 7 and formula (36).

@@ -130,6 +130,14 @@
         combine all three source streams pointwise.
       - [ ] Combine the additional `w` and `w'` streams with (35)--(36),
         producing the third principal `w''` product.
+        - [x] Expand every factor of (35) into its three finite blocks,
+          verify the two required strict/weak triple reindexings, and derive
+          the off-diagonal `w''` principal product with the printed negative
+          exponent.
+        - [x] Split the complete additional `w` stream into its diagonal and
+          off-diagonal parts by an explicit finite-list permutation.
+        - [ ] Identify line 7 with the diagonal word from (32) and finish the
+          diagonal cancellation using (36).
   - [ ] Formalize Sections 12–25 (`κ ≡ 1 mod γ₆`).
 
 ## Phase 4 — finite-group theorem and audit
