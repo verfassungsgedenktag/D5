@@ -138,3 +138,11 @@ Run the current verification with:
 - Full build at this checkpoint: successful (`3130` jobs).  The new local,
   powered, and finite-product theorems depend only on Lean's standard
   logical axioms and `D5.Background.commutator_gamma_le_gamma_add`.
+- Formula (34), finite reindexing: explicit permutations identify the
+  `(j,i,k)` and `(k,i,j)` loop orders of lines 9 and 10 with the canonical
+  triangle `(i,j,k)`.  Lines 9, 10 and 12 are then combined pointwise and
+  transformed into the additional `w` stream and the first principal
+  product of (34).
+- Full build after the reindexing stage: successful (`3130` jobs); the
+  axiom audit again contains no mathematical assumption beyond the accepted
+  commutator-weight background theorem.

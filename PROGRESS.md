@@ -126,8 +126,10 @@
         additional stream and the second principal product of (34).
       - [x] Collect the powered `w` identity over the canonical triangle
         `i ≤ j ≤ k`, separating its additional and principal products.
-      - [ ] Reindex lines 9, 10 and 12 into the canonical `w` triangle,
-        then combine the additional streams with (35)--(36).
+      - [x] Reindex lines 9, 10 and 12 into the canonical `w` triangle and
+        combine all three source streams pointwise.
+      - [ ] Combine the additional `w` and `w'` streams with (35)--(36),
+        producing the third principal `w''` product.
   - [ ] Formalize Sections 12–25 (`κ ≡ 1 mod γ₆`).
 
 ## Phase 4 — finite-group theorem and audit
