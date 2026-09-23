@@ -93,3 +93,6 @@ Run the current verification with:
 - Section 10 triangular collection: the local result is lifted to every
   pair `i < j`, and Lean checks the eight-factor reordering and its finite
   product collection into the correction product and `formula21MainPairProduct`.
+- Section 10 assembly: formula (21) is now inserted into the transformed
+  first block while the original weight-two and weight-four blocks of (18)
+  remain explicit; this is checked by `formula18_after_formula19_to_21`.

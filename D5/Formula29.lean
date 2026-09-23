@@ -556,6 +556,46 @@ theorem formula19_and_20_first_product_to_formula21
     (formula19_and_20_first_product_collected C P hP ξ).trans <| by
       rw [formula29_main_product_eq_formula21]
 
+/-- The first completed assembly step of Section 10.  It applies formulas
+(19)--(21) to the first block of formula (18), retaining the untouched
+second- and third-weight blocks in their original order. -/
+theorem formula18_after_formula19_to_21
+    (C : Context G) (P : Parameters C.s C.t) (hP : P.Satisfies)
+    (ξ : G) :
+    D5.ModGammaSix (formula18Expansion C P ξ)
+      ((orderedProduct fun i => orderedProductWhere (i < ·) fun j =>
+          formula29PairCorrections C P ξ i j) *
+        (formula21WeightTwoPowerProduct C P ξ *
+          formula21FinalThirdGrouped C P ξ) *
+        (orderedProduct fun i => orderedProduct fun p =>
+          orderedProductWhere (p < ·) fun q =>
+            D5.paperComm (D5.paperComm (C.x2 q) (C.x2 p)) ξ ^
+              (C.b i q * P.v i p)) *
+        orderedProduct fun i => orderedProductWhere (i ≤ ·) fun j =>
+          orderedProductWhere (j ≤ ·) fun k =>
+            D5.paperComm
+              (D5.leftComm (C.x1 i ^ orderInt C.d i) [C.x1 j, C.x1 k]) ξ ^
+                P.w i j k) := by
+  have hfirst := formula19_and_20_first_product_to_formula21 C P hP ξ
+  have h21 := structural_expansion21 C P hP.2.2.2.2.1 ξ
+  let Q := orderedProduct fun i => orderedProductWhere (i < ·) fun j =>
+    formula29PairCorrections C P ξ i j
+  let S := orderedProduct fun i => orderedProduct fun p =>
+    orderedProductWhere (p < ·) fun q =>
+      D5.paperComm (D5.paperComm (C.x2 q) (C.x2 p)) ξ ^
+        (C.b i q * P.v i p)
+  let T := orderedProduct fun i => orderedProductWhere (i ≤ ·) fun j =>
+    orderedProductWhere (j ≤ ·) fun k =>
+      D5.paperComm
+        (D5.leftComm (C.x1 i ^ orderInt C.d i) [C.x1 j, C.x1 k]) ξ ^ P.w i j k
+  have hfirst' : D5.ModGammaSix (formula18Expansion C P ξ)
+      ((Q * formula21MainPairProduct C P ξ) * (S * T)) := by
+    simpa [formula18Expansion, formula18FirstPairProduct, Q, S, T] using
+      hfirst.mul (D5.ModEq.refl (D5.gamma G 6) (S * T))
+  simpa only [mul_assoc] using hfirst'.trans <|
+    ((D5.ModEq.refl (D5.gamma G 6) Q).mul h21).mul
+      (D5.ModEq.refl (D5.gamma G 6) (S * T))
+
 end
 
 end D5.Tahara

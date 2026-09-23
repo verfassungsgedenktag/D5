@@ -99,6 +99,8 @@
     - [x] Lift that calculation to the full triangular product and use a
       checked eight-factor permutation in `γ₃/γ₆` to separate its six
       correction factors from the two main streams of formula (21).
+    - [x] Insert the verified formula (21), so the transformed first block
+      is now connected to all three original blocks of formula (18).
     - [ ] Collect the local outputs and formulas (21)--(28) into the twelve
       displayed finite-product streams.
 - [ ] Formalize Sections 15–25 (`κ ≡ 1 mod γ₆`).

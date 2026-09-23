@@ -66,4 +66,5 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula19_and_20_pair_collected
 #print axioms D5.Tahara.formula19_and_20_first_product_collected
 #print axioms D5.Tahara.formula19_and_20_first_product_to_formula21
+#print axioms D5.Tahara.formula18_after_formula19_to_21
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise
