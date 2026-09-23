@@ -596,6 +596,63 @@ theorem formula18_after_formula19_to_21
     ((D5.ModEq.refl (D5.gamma G 6) Q).mul h21).mul
       (D5.ModEq.refl (D5.gamma G 6) (S * T))
 
+/-- The seventh displayed stream of formula (29), obtained as the correction
+term in formula (22). -/
+def formula29LineSeven
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun j =>
+    D5.paperComm
+      (D5.paperComm (D5.paperComm (formula22WeightTwoWord C P j) ξ)
+        (C.x1 j)) (C.x1 j) ^ TaharaArithmetic.binom2 (C.d j)
+
+theorem formula22_correction_mem_gamma3
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) (j : Fin C.s) :
+    D5.paperComm
+      (D5.paperComm (D5.paperComm (formula22WeightTwoWord C P j) ξ)
+        (C.x1 j)) (C.x1 j) ^ TaharaArithmetic.binom2 (C.d j) ∈
+      D5.gamma G 3 := by
+  have hW := formula22WeightTwoWord_mem_gamma2 C P j
+  have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hx : C.x1 j ∈ D5.gamma G 1 := by simp [D5.gamma]
+  apply D5.gamma_antitone G (by norm_num : 3 ≤ 5)
+  apply (D5.gamma G 5).zpow_mem
+  exact D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+    (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+      (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hW hξ) hx) hx
+
+/-- Formula (22) collected over all first-layer indices. -/
+theorem formula21_weight_two_to_formula23_and_line_seven
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula21WeightTwoPowerProduct C P ξ)
+      (formula23Source C P ξ * formula29LineSeven C P ξ) := by
+  let A : Fin C.s → G := fun j => formula23LocalSource C P ξ j
+  let B : Fin C.s → G := fun j =>
+    D5.paperComm
+      (D5.paperComm (D5.paperComm (formula22WeightTwoWord C P j) ξ)
+        (C.x1 j)) (C.x1 j) ^ TaharaArithmetic.binom2 (C.d j)
+  have hA : ∀ j, A j ∈ D5.gamma G 3 := by
+    intro j
+    have hW := formula22WeightTwoWord_mem_gamma2 C P j
+    have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+    have hx : C.x1 j ^ orderInt C.d j ∈ D5.gamma G 2 :=
+      C.x1_order_power_mem_gamma2 j
+    simpa [A, formula23LocalSource] using D5.gamma_antitone G
+      (by norm_num : 3 ≤ 5)
+      (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+        (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hξ hW) hx)
+  have hB : ∀ j, B j ∈ D5.gamma G 3 := by
+    intro j
+    simpa [B] using formula22_correction_mem_gamma3 C P ξ j
+  have hlocal : D5.ModGammaSix (formula21WeightTwoPowerProduct C P ξ)
+      (orderedProduct fun j => A j * B j) := by
+    unfold formula21WeightTwoPowerProduct
+    apply modEq_orderedProduct
+    intro j
+    simpa [A, B, formula23LocalSource] using transfer_formula22 C P ξ j
+  exact hlocal.trans <| by
+    simpa [formula23Source, formula29LineSeven, A, B] using
+      D5.orderedProduct_pointwise_mul_gammaThree A B hA hB
+
 end
 
 end D5.Tahara
