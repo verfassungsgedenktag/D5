@@ -106,3 +106,19 @@ Run the current verification with:
   Lean's standard logical axioms and the explicitly accepted background
   theorem `D5.Background.commutator_gamma_le_gamma_add`; no new project
   axiom enters the calculation.
+- Section 11, formulas (30)--(33): full build successful (`3129` jobs).
+  Conditions (11)--(12) are converted to their exact coordinate sums, and
+  an explicit Bezout construction proves membership of both displayed
+  words in `γ₂(G)^{d(j)}γ₃(G)` without adding an axiom.
+- Formula (35): the strict-pair product is proved trivial modulo `γ₆` by a
+  checked fourfold commutator power-transfer lemma applied to formula (33).
+- Formula (36): both displayed congruences compile.  Lean checks the
+  multilinear replacement supplied by (32), the identity
+  `2 * binom(d(j),2) = d(j) * (d(j)-1)`, and the final power transfer.
+- Formula (34), local `w'` step: the printed Jacobi transformation is proved
+  from the existing Hall--Witt rotation and weight-controlled collection.
+- Full build after formulas (35)--(36) and the local formula-(34) step:
+  successful (`3129` jobs).  The axiom audit reports only Lean's standard
+  logical axioms and `D5.Background.commutator_gamma_le_gamma_add` for every
+  new theorem; the source scan remains free of `sorry`, `admit`, and
+  `sorryAx`.

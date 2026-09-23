@@ -72,4 +72,13 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula29_first_six_collected
 #print axioms D5.Tahara.formula18_to_formula29_grouped
 #print axioms D5.Tahara.formula29
+#print axioms D5.Tahara.coordinateProduct_is_gammaTwoPower_mod_gammaThree
+#print axioms D5.Tahara.formula32
+#print axioms D5.Tahara.formula33
+#print axioms D5.Tahara.fourfold_second_gammaTwoPower_vanish
+#print axioms D5.Tahara.formula35
+#print axioms D5.Tahara.formula36_factor_congruent
+#print axioms D5.Tahara.formula36_middle_factor_vanish
+#print axioms D5.Tahara.formula36
+#print axioms D5.Tahara.formula34_wprime_jacobi
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

@@ -107,7 +107,22 @@
       triangular streams by checked finite-product collection.
     - [x] Collect formulas (21)--(28) into all twelve displayed products,
       preserving every index domain, sign, exponent, and product order.
-- [ ] Formalize Sections 15–25 (`κ ≡ 1 mod γ₆`).
+  - [ ] Formalize Section 11 (formulas (30)--(36)).
+    - [x] Derive the coordinate congruences (30)--(31) from conditions
+      (11)--(12), with their exact filtered sums.
+    - [x] Prove the Bezout coordinate lemma for
+      `gcd(d(j),e(p))` and use it to verify the group statements (32)--(33)
+      as membership in `γ₂(G)^{d(j)}γ₃(G)`.
+    - [x] Prove the weight-transfer lemma behind (35) and eliminate its
+      entire strict-pair product using (33).
+    - [x] Eliminate the diagonal additional product by (32), including both
+      displayed congruences and the binomial exponent calculation in (36).
+    - [ ] Transform lines 7 and 9--12 of (29) into (34).
+      - [x] Prove the local Jacobi transformation printed for every
+        `w' i j k` term.
+      - [ ] Prove the five-factor local Jacobi transformation for every
+        `w i j k` term and collect all three global streams.
+  - [ ] Formalize Sections 12–25 (`κ ≡ 1 mod γ₆`).
 
 ## Phase 4 — finite-group theorem and audit
 
