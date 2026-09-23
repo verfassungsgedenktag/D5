@@ -122,3 +122,19 @@ Run the current verification with:
   logical axioms and `D5.Background.commutator_gamma_le_gamma_add` for every
   new theorem; the source scan remains free of `sorry`, `admit`, and
   `sorryAx`.
+
+## 2026-09-24
+
+- Formula (34), local `w` step: the complete five-factor Jacobi identity is
+  proved from three weight-controlled Hall--Witt rotations.  Its arbitrary
+  integer-powered specialization compiles with all signs explicit.
+- Formula (34), global `w'` stream: the full finite triangular product from
+  line 11 of (29) is transformed and separated into the additional stream
+  and the second principal product of (34).
+- Formula (34), canonical `w` stream: all powered local identities are
+  collected over `i ≤ j ≤ k` and separated into their additional and first
+  principal products.  Reindexing lines 9, 10 and 12 to this common triangle
+  remains the next step.
+- Full build at this checkpoint: successful (`3130` jobs).  The new local,
+  powered, and finite-product theorems depend only on Lean's standard
+  logical axioms and `D5.Background.commutator_gamma_le_gamma_add`.

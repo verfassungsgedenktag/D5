@@ -81,4 +81,9 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula36_middle_factor_vanish
 #print axioms D5.Tahara.formula36
 #print axioms D5.Tahara.formula34_wprime_jacobi
+#print axioms D5.Tahara.formula34_w_jacobi
+#print axioms D5.Tahara.formula34_w_powered
+#print axioms D5.Tahara.formula34_wprime_powered
+#print axioms D5.Tahara.formula34_wprime_stream
+#print axioms D5.Tahara.formula34_w_canonical_product
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

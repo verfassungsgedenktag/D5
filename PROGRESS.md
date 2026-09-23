@@ -120,8 +120,14 @@
     - [ ] Transform lines 7 and 9--12 of (29) into (34).
       - [x] Prove the local Jacobi transformation printed for every
         `w' i j k` term.
-      - [ ] Prove the five-factor local Jacobi transformation for every
-        `w i j k` term and collect all three global streams.
+      - [x] Prove the five-factor local Jacobi transformation for every
+        `w i j k` term, including its arbitrary integer power.
+      - [x] Transform and collect the complete finite `w'` stream into its
+        additional stream and the second principal product of (34).
+      - [x] Collect the powered `w` identity over the canonical triangle
+        `i ≤ j ≤ k`, separating its additional and principal products.
+      - [ ] Reindex lines 9, 10 and 12 into the canonical `w` triangle,
+        then combine the additional streams with (35)--(36).
   - [ ] Formalize Sections 12–25 (`κ ≡ 1 mod γ₆`).
 
 ## Phase 4 — finite-group theorem and audit
