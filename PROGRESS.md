@@ -92,7 +92,7 @@
     - [x] Collect the ordered coordinate products and their global exponent
       sums, apply condition (4.3.6), and expand the `e(p)v'` contribution
       with relation (2).
-  - [ ] Formalize Section 10 (formula (29)).
+  - [x] Formalize Section 10 (formula (29)).
     - [x] For each `i < j`, derive all six formula-(19) factors, distribute
       the outer integer power, normalize the first main factor by the
       cyclic-order ratio, and apply reduced formula (20) to the second.
@@ -101,8 +101,12 @@
       correction factors from the two main streams of formula (21).
     - [x] Insert the verified formula (21), so the transformed first block
       is now connected to all three original blocks of formula (18).
-    - [ ] Collect the local outputs and formulas (21)--(28) into the twelve
-      displayed finite-product streams.
+    - [x] Reverse and collect the original second product of (18), then
+      prove its exact cancellation with the correction produced by (26).
+    - [x] Split the six local pair corrections into the first six global
+      triangular streams by checked finite-product collection.
+    - [x] Collect formulas (21)--(28) into all twelve displayed products,
+      preserving every index domain, sign, exponent, and product order.
 - [ ] Formalize Sections 15–25 (`κ ≡ 1 mod γ₆`).
 
 ## Phase 4 — finite-group theorem and audit

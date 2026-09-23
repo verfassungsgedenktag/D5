@@ -96,3 +96,13 @@ Run the current verification with:
 - Section 10 assembly: formula (21) is now inserted into the transformed
   first block while the original weight-two and weight-four blocks of (18)
   remain explicit; this is checked by `formula18_after_formula19_to_21`.
+- Section 10, formula (29): full build successful (`3128` jobs).  Lean
+  reverses and collects the second product of (18), cancels it against the
+  formula-(26) correction, separates the six pairwise corrections into six
+  global streams, and inserts formulas (27)--(28).  The theorem `formula29`
+  has exactly the twelve displayed products and all their printed index
+  restrictions, signs, and exponents.
+- Formula-(29) axiom audit: `#print axioms D5.Tahara.formula29` reports only
+  Lean's standard logical axioms and the explicitly accepted background
+  theorem `D5.Background.commutator_gamma_le_gamma_add`; no new project
+  axiom enters the calculation.

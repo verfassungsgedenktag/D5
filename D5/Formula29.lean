@@ -653,6 +653,493 @@ theorem formula21_weight_two_to_formula23_and_line_seven
     simpa [formula23Source, formula29LineSeven, A, B] using
       D5.orderedProduct_pointwise_mul_gammaThree A B hA hB
 
+/-- The second product in formula (18), retained with its printed order of
+indices.  It cancels the correction produced by formula (26). -/
+def formula18SecondProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun i => orderedProduct fun p =>
+    orderedProductWhere (p < ·) fun q =>
+      D5.paperComm (D5.paperComm (C.x2 q) (C.x2 p)) ξ ^
+        (C.b i q * P.v i p)
+
+/-- The same second product after reversing its inner commutator, applying
+finite Fubini, and collecting the exponent at every pair `p < q`. -/
+theorem formula18_second_collected
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula18SecondProduct C P ξ)
+      (strictPairProduct fun p q =>
+        D5.paperComm (D5.paperComm (C.x2 p) (C.x2 q)) ξ ^
+          (-formula23Coefficient C P p q)) := by
+  let A : Fin C.t → Fin C.t → G := fun p q =>
+    D5.paperComm (D5.paperComm (C.x2 p) (C.x2 q)) ξ
+  let F : Fin C.s → Fin C.t → Fin C.t → G := fun i p q =>
+    A p q ^ (-(C.b i q * P.v i p))
+  have hA : ∀ p q, A p q ∈ D5.gamma G 3 := by
+    intro p q
+    have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+    exact D5.gamma_antitone G (by norm_num) <|
+      D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+        (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+          (C.x2_mem_gamma2 p) (C.x2_mem_gamma2 q)) hξ
+  have hF : ∀ i p q, F i p q ∈ D5.gamma G 3 := by
+    intro i p q
+    exact (D5.gamma G 3).zpow_mem (hA p q) _
+  have hreverse : D5.ModGammaSix (formula18SecondProduct C P ξ)
+      (orderedProduct fun i => orderedProduct fun p =>
+        orderedProductWhere (p < ·) fun q => F i p q) := by
+    unfold formula18SecondProduct
+    apply modEq_orderedProduct
+    intro i
+    apply modEq_orderedProduct
+    intro p
+    apply modEq_orderedProductWhere
+    intro q hpq
+    have hinner : D5.paperComm (C.x2 p) (C.x2 q) ∈ D5.gamma G 4 :=
+      D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+        (C.x2_mem_gamma2 p) (C.x2_mem_gamma2 q)
+    have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+    have hinv := D5.paperComm_inv_left_mod_gamma
+      (n := 6) (r := 4) (s := 1)
+      (by norm_num) (by norm_num) (by norm_num) hinner hξ
+    rw [D5.paperComm_swap (C.x2 p) (C.x2 q)]
+    change D5.ModGammaSix
+      (D5.paperComm (D5.paperComm (C.x2 p) (C.x2 q))⁻¹ ξ ^
+        (C.b i q * P.v i p))
+      (A p q ^ (-(C.b i q * P.v i p)))
+    have hp := hinv.zpow (C.b i q * P.v i p)
+    change D5.ModGammaSix
+      (D5.paperComm (D5.paperComm (C.x2 p) (C.x2 q))⁻¹ ξ ^
+        (C.b i q * P.v i p))
+      ((A p q)⁻¹ ^ (C.b i q * P.v i p)) at hp
+    exact hp.trans <| by
+      rw [inv_zpow, zpow_neg]
+  have hswapIP : D5.ModGammaSix
+      (orderedProduct fun i => orderedProduct fun p =>
+        orderedProductWhere (p < ·) fun q => F i p q)
+      (orderedProduct fun p => orderedProduct fun i =>
+        orderedProductWhere (p < ·) fun q => F i p q) := by
+    exact D5.orderedProduct_orderedProduct_swap_gammaThree
+      (fun i p => orderedProductWhere (p < ·) fun q => F i p q)
+      (fun i p => by
+        apply orderedProductWhere_mem
+        intro q hpq
+        exact hF i p q)
+  have hswapIQ : D5.ModGammaSix
+      (orderedProduct fun p => orderedProduct fun i =>
+        orderedProductWhere (p < ·) fun q => F i p q)
+      (orderedProduct fun p => orderedProductWhere (p < ·) fun q =>
+        orderedProduct fun i => F i p q) := by
+    apply modEq_orderedProduct
+    intro p
+    exact (D5.orderedProductWhere_orderedProduct_swap_gammaThree
+      (p < ·) (fun q i => F i p q)
+      (fun q hpq i => hF i p q)).symm
+  have hcollect : D5.ModGammaSix
+      (orderedProduct fun p => orderedProductWhere (p < ·) fun q =>
+        orderedProduct fun i => F i p q)
+      (strictPairProduct fun p q =>
+        A p q ^ (-formula23Coefficient C P p q)) := by
+    unfold strictPairProduct
+    apply modEq_orderedProduct
+    intro p
+    apply modEq_orderedProductWhere
+    intro q hpq
+    unfold F
+    rw [D5.orderedProduct_zpow_same_base]
+    have he : (∑ i, -(C.b i q * P.v i p)) =
+        -formula23Coefficient C P p q := by
+      simp only [formula23Coefficient, Finset.sum_neg_distrib]
+      congr 1
+      apply Finset.sum_congr rfl
+      intro i hi
+      ring
+    rw [he]
+  exact hreverse.trans <| hswapIP.trans <| hswapIQ.trans <| by
+    simpa [A] using hcollect
+
+/-- Formula (26) cancels the second product of formula (18), including the
+sign coming from `[x₂q,x₂p] = [x₂p,x₂q]⁻¹`. -/
+theorem formula26_cancels_formula18_second
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix
+      (formula26Correction C P ξ * formula18SecondProduct C P ξ) 1 := by
+  let A : Fin C.t → Fin C.t → G := fun p q =>
+    D5.paperComm (D5.paperComm (C.x2 p) (C.x2 q)) ξ
+  let F : Fin C.t → Fin C.t → G := fun p q =>
+    A p q ^ formula23Coefficient C P p q
+  let H : Fin C.t → Fin C.t → G := fun p q =>
+    A p q ^ (-formula23Coefficient C P p q)
+  have hA : ∀ p q, A p q ∈ D5.gamma G 3 := by
+    intro p q
+    have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+    exact D5.gamma_antitone G (by norm_num) <|
+      D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+        (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+          (C.x2_mem_gamma2 p) (C.x2_mem_gamma2 q)) hξ
+  have hF : ∀ p q, p < q → F p q ∈ D5.gamma G 3 := by
+    intro p q hpq
+    exact (D5.gamma G 3).zpow_mem (hA p q) _
+  have hH : ∀ p q, p < q → H p q ∈ D5.gamma G 3 := by
+    intro p q hpq
+    exact (D5.gamma G 3).zpow_mem (hA p q) _
+  have hsecond := formula18_second_collected C P ξ
+  refine ((D5.ModEq.refl (D5.gamma G 6) (formula26Correction C P ξ)).mul
+    hsecond).trans ?_
+  have hcombine := strictPairProduct_pointwise_gammaThree F H hF hH
+  have hone : strictPairProduct (fun p q => F p q * H p q) = (1 : G) := by
+    unfold strictPairProduct orderedProduct orderedProductWhere
+    simp [F, H]
+  have hcombine' : D5.ModGammaSix
+      (formula26Correction C P ξ * strictPairProduct H)
+      (strictPairProduct fun p q => F p q * H p q) := by
+    simpa [formula26Correction, A, F] using hcombine
+  rw [hone] at hcombine'
+  simpa [A, H] using hcombine'
+
+def formula29PairLineOne
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (i j : Fin C.s) : G :=
+  D5.paperComm
+    (D5.paperComm (D5.paperComm (C.x1 i ^ orderInt C.d j) (C.x1 j))
+      (C.x1 j)) ξ ^ P.u i j
+
+def formula29PairLineTwo
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (i j : Fin C.s) : G :=
+  D5.paperComm
+    (D5.paperComm (D5.paperComm (C.x1 i ^ orderInt C.d j) (C.x1 j)) ξ)
+      (C.x1 j) ^ (-P.u i j)
+
+def formula29PairLineThree
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (i j : Fin C.s) : G :=
+  D5.paperComm
+    (D5.paperComm (D5.paperComm (C.x1 j) ξ) ξ)
+      (C.x1 i ^ orderInt C.d j) ^ P.u i j
+
+def formula29PairLineFour
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (i j : Fin C.s) : G :=
+  D5.paperComm
+    (D5.paperComm (D5.paperComm (C.x1 j) ξ)
+      (C.x1 i ^ orderInt C.d j)) ξ ^ (-P.u i j)
+
+def formula29PairLineFive
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (i j : Fin C.s) : G :=
+  D5.paperComm
+    (D5.paperComm (D5.paperComm (C.x1 j) ξ) (C.x1 j)) (C.x1 i) ^
+      (P.u i j * TaharaArithmetic.binom2 (C.d j))
+
+def formula29PairLineSix
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (i j : Fin C.s) : G :=
+  D5.paperComm
+    (D5.paperComm (D5.paperComm (C.x1 j) ξ) (C.x1 i)) (C.x1 i) ^
+      (-P.u i j * TaharaArithmetic.binom2 (C.d j))
+
+theorem formula29_pair_lines_mem_gamma3
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    {i j : Fin C.s} (hij : i < j) :
+    formula29PairLineOne C P ξ i j ∈ D5.gamma G 3 ∧
+    formula29PairLineTwo C P ξ i j ∈ D5.gamma G 3 ∧
+    formula29PairLineThree C P ξ i j ∈ D5.gamma G 3 ∧
+    formula29PairLineFour C P ξ i j ∈ D5.gamma G 3 ∧
+    formula29PairLineFive C P ξ i j ∈ D5.gamma G 3 ∧
+    formula29PairLineSix C P ξ i j ∈ D5.gamma G 3 := by
+  have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hxi : C.x1 i ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hxj : C.x1 j ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hijpow : C.x1 i ^ orderInt C.d j ∈ D5.gamma G 2 :=
+    C.x1_later_order_power_mem_gamma2 hij.le
+  have hxjξ : D5.paperComm (C.x1 j) ξ ∈ D5.gamma G 2 :=
+    D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hxj hξ
+  have hipowj : D5.paperComm (C.x1 i ^ orderInt C.d j) (C.x1 j) ∈
+      D5.gamma G 3 :=
+    D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hijpow hxj
+  constructor
+  · apply D5.gamma_antitone G (by norm_num : 3 ≤ 5)
+    apply (D5.gamma G 5).zpow_mem
+    exact D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+      (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hipowj hxj) hξ
+  constructor
+  · apply D5.gamma_antitone G (by norm_num : 3 ≤ 5)
+    apply (D5.gamma G 5).zpow_mem
+    exact D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+      (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hipowj hξ) hxj
+  constructor
+  · apply D5.gamma_antitone G (by norm_num : 3 ≤ 5)
+    apply (D5.gamma G 5).zpow_mem
+    exact D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+      (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hxjξ hξ) hijpow
+  constructor
+  · apply D5.gamma_antitone G (by norm_num : 3 ≤ 5)
+    apply (D5.gamma G 5).zpow_mem
+    exact D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+      (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hxjξ hijpow) hξ
+  constructor
+  · apply D5.gamma_antitone G (by norm_num : 3 ≤ 4)
+    apply (D5.gamma G 4).zpow_mem
+    exact D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+      (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hxjξ hxj) hxi
+  · apply D5.gamma_antitone G (by norm_num : 3 ≤ 4)
+    apply (D5.gamma G 4).zpow_mem
+    exact D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+      (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hxjξ hxi) hxi
+
+def formula29LineOne (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  strictPairProduct (formula29PairLineOne C P ξ)
+
+def formula29LineTwo (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  strictPairProduct (formula29PairLineTwo C P ξ)
+
+def formula29LineThree (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  strictPairProduct (formula29PairLineThree C P ξ)
+
+def formula29LineFour (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  strictPairProduct (formula29PairLineFour C P ξ)
+
+def formula29LineFive (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  strictPairProduct (formula29PairLineFive C P ξ)
+
+def formula29LineSix (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  strictPairProduct (formula29PairLineSix C P ξ)
+
+/-- The first six displayed products of formula (29), in their printed
+order rather than grouped one pair at a time. -/
+def formula29FirstSixDisplayed
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  ((formula29LineOne C P ξ * formula29LineTwo C P ξ) *
+    (formula29LineThree C P ξ * formula29LineFour C P ξ)) *
+  (formula29LineFive C P ξ * formula29LineSix C P ξ)
+
+theorem formula29_first_six_collected
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix
+      (strictPairProduct (formula29PairCorrections C P ξ))
+      (formula29FirstSixDisplayed C P ξ) := by
+  let L1 := formula29PairLineOne C P ξ
+  let L2 := formula29PairLineTwo C P ξ
+  let L3 := formula29PairLineThree C P ξ
+  let L4 := formula29PairLineFour C P ξ
+  let L5 := formula29PairLineFive C P ξ
+  let L6 := formula29PairLineSix C P ξ
+  have hm : ∀ i j, i < j →
+      L1 i j ∈ D5.gamma G 3 ∧ L2 i j ∈ D5.gamma G 3 ∧
+      L3 i j ∈ D5.gamma G 3 ∧ L4 i j ∈ D5.gamma G 3 ∧
+      L5 i j ∈ D5.gamma G 3 ∧ L6 i j ∈ D5.gamma G 3 := by
+    intro i j hij
+    simpa [L1, L2, L3, L4, L5, L6] using
+      formula29_pair_lines_mem_gamma3 C P ξ hij
+  have h12 := strictPairProduct_pointwise_gammaThree L1 L2
+    (fun i j hij => (hm i j hij).1)
+    (fun i j hij => (hm i j hij).2.1)
+  have h34 := strictPairProduct_pointwise_gammaThree L3 L4
+    (fun i j hij => (hm i j hij).2.2.1)
+    (fun i j hij => (hm i j hij).2.2.2.1)
+  have h56 := strictPairProduct_pointwise_gammaThree L5 L6
+    (fun i j hij => (hm i j hij).2.2.2.2.1)
+    (fun i j hij => (hm i j hij).2.2.2.2.2)
+  have h1234 := strictPairProduct_pointwise_gammaThree
+    (fun i j => L1 i j * L2 i j) (fun i j => L3 i j * L4 i j)
+    (fun i j hij => (D5.gamma G 3).mul_mem (hm i j hij).1 (hm i j hij).2.1)
+    (fun i j hij => (D5.gamma G 3).mul_mem
+      (hm i j hij).2.2.1 (hm i j hij).2.2.2.1)
+  have hall := strictPairProduct_pointwise_gammaThree
+    (fun i j => (L1 i j * L2 i j) * (L3 i j * L4 i j))
+    (fun i j => L5 i j * L6 i j)
+    (fun i j hij => (D5.gamma G 3).mul_mem
+      ((D5.gamma G 3).mul_mem (hm i j hij).1 (hm i j hij).2.1)
+      ((D5.gamma G 3).mul_mem (hm i j hij).2.2.1
+        (hm i j hij).2.2.2.1))
+    (fun i j hij => (D5.gamma G 3).mul_mem
+      (hm i j hij).2.2.2.2.1 (hm i j hij).2.2.2.2.2)
+  have hsplit := hall.symm.trans <|
+    h1234.symm.mul h56.symm |>.trans <| (h12.symm.mul h34.symm).mul
+      (D5.ModEq.refl (D5.gamma G 6)
+        (strictPairProduct L5 * strictPairProduct L6))
+  simpa [formula29PairCorrections, formula29FirstSixDisplayed,
+    formula29LineOne, formula29LineTwo, formula29LineThree,
+    formula29LineFour, formula29LineFive, formula29LineSix,
+    L1, L2, L3, L4, L5, L6] using hsplit
+
+/-- The twelfth and final displayed product of formula (29). -/
+def formula29LineTwelve
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun i => orderedProductWhere (i ≤ ·) fun j =>
+    orderedProductWhere (j ≤ ·) fun k =>
+      D5.paperComm
+        (D5.leftComm (C.x1 i ^ orderInt C.d i) [C.x1 j, C.x1 k]) ξ ^
+          P.w i j k
+
+/-- All twelve products on the right hand side of formula (29), with the
+parentheses made explicit. -/
+def formula29DisplayedProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  ((formula29FirstSixDisplayed C P ξ * formula29LineSeven C P ξ) *
+    formula28DisplayedProduct C P ξ) * formula29LineTwelve C P ξ
+
+/-- Formulas (22)--(28) inserted into formula (18).  The formula-(26)
+correction is moved next to the second product of (18) by one checked
+finite permutation and then cancelled. -/
+theorem formula18_to_formula29_grouped
+    (C : Context G) (P : Parameters C.s C.t) (hP : P.Satisfies)
+    (ξ : G) :
+    D5.ModGammaSix (formula18Expansion C P ξ)
+      (((strictPairProduct (formula29PairCorrections C P ξ) *
+          formula29LineSeven C P ξ) *
+        formula21FinalThirdGrouped C P ξ) * formula29LineTwelve C P ξ) := by
+  rcases hP with ⟨h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12,
+    h13, h14, h15⟩
+  have hSat : P.Satisfies :=
+    ⟨h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15⟩
+  let Q := strictPairProduct (formula29PairCorrections C P ξ)
+  let W := formula21WeightTwoPowerProduct C P ξ
+  let R := formula21FinalThirdGrouped C P ξ
+  let K := formula26Correction C P ξ
+  let L := formula29LineSeven C P ξ
+  let S := formula18SecondProduct C P ξ
+  let T := formula29LineTwelve C P ξ
+  have hstart : D5.ModGammaSix (formula18Expansion C P ξ)
+      ((Q * (W * R)) * S * T) := by
+    simpa [Q, W, R, S, T, strictPairProduct, formula18SecondProduct,
+      formula29LineTwelve, mul_assoc] using
+        formula18_after_formula19_to_21 C P hSat ξ
+  have hW : D5.ModGammaSix W (K * L) := by
+    exact (formula21_weight_two_to_formula23_and_line_seven C P ξ).trans <|
+      ((transfer_formula23 C P ξ).trans
+        (weight_two_block_cancels26 C P h14 h15 ξ)).mul
+          (D5.ModEq.refl (D5.gamma G 6) (formula29LineSeven C P ξ))
+  have hreplaced : D5.ModGammaSix (formula18Expansion C P ξ)
+      ((Q * ((K * L) * R)) * S * T) :=
+    hstart.trans <| (((D5.ModEq.refl (D5.gamma G 6) Q).mul
+      (hW.mul (D5.ModEq.refl (D5.gamma G 6) R))).mul
+        (D5.ModEq.refl (D5.gamma G 6) S)).mul
+          (D5.ModEq.refl (D5.gamma G 6) T)
+  have hQ : Q ∈ D5.gamma G 3 := by
+    dsimp [Q]
+    unfold strictPairProduct
+    apply orderedProduct_mem
+    intro i
+    apply orderedProductWhere_mem
+    intro j hij
+    exact formula29_pair_corrections_mem_gamma3 C P ξ hij
+  have hK : K ∈ D5.gamma G 3 := by
+    dsimp [K]
+    unfold formula26Correction strictPairProduct
+    apply orderedProduct_mem
+    intro p
+    apply orderedProductWhere_mem
+    intro q hpq
+    apply (D5.gamma G 3).zpow_mem
+    have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+    exact D5.gamma_antitone G (by norm_num) <|
+      D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+        (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+          (C.x2_mem_gamma2 p) (C.x2_mem_gamma2 q)) hξ
+  have hL : L ∈ D5.gamma G 3 := by
+    dsimp [L]
+    unfold formula29LineSeven
+    apply orderedProduct_mem
+    intro j
+    exact formula22_correction_mem_gamma3 C P ξ j
+  have hR : R ∈ D5.gamma G 3 := by
+    dsimp [R]
+    unfold formula21FinalThirdGrouped
+    apply orderedProduct_mem
+    intro i
+    exact formula21ThirdCoordinateBlock_mem_gamma3 C ξ i _
+  have hS : S ∈ D5.gamma G 3 := by
+    dsimp [S]
+    unfold formula18SecondProduct
+    apply orderedProduct_mem
+    intro i
+    apply orderedProduct_mem
+    intro p
+    apply orderedProductWhere_mem
+    intro q hpq
+    apply (D5.gamma G 3).zpow_mem
+    have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+    exact D5.gamma_antitone G (by norm_num) <|
+      D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+        (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+          (C.x2_mem_gamma2 q) (C.x2_mem_gamma2 p)) hξ
+  have hT : T ∈ D5.gamma G 3 := by
+    dsimp [T]
+    unfold formula29LineTwelve
+    apply orderedProduct_mem
+    intro i
+    apply orderedProductWhere_mem
+    intro j hij
+    apply orderedProductWhere_mem
+    intro k hjk
+    apply D5.gamma_antitone G (by norm_num : 3 ≤ 5)
+    apply (D5.gamma G 5).zpow_mem
+    have hinner : D5.leftComm (C.x1 i ^ orderInt C.d i)
+        [C.x1 j, C.x1 k] ∈ D5.gamma G 4 := by
+      simpa using D5.leftComm_mem_gamma_of_first (r := 2) (by norm_num)
+        (C.x1_order_power_mem_gamma2 i) [C.x1 j, C.x1 k]
+    have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+    exact D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hinner hξ
+  have hp : [Q, K, L, R, S, T].Perm [Q, L, R, K, S, T] := by
+    apply List.Perm.cons Q
+    have hswap : ([K] ++ [L, R]).Perm ([L, R] ++ [K]) :=
+      List.perm_append_comm
+    simpa only [List.append_assoc] using hswap.append_right [S, T]
+  have hperm := D5.listProd_perm_gammaThree hp (fun x hx => by
+    simp only [List.mem_cons] at hx
+    rcases hx with rfl | rfl | rfl | rfl | rfl | hx
+    · exact hQ
+    · exact hK
+    · exact hL
+    · exact hR
+    · exact hS
+    · rcases hx with rfl | hx
+      · exact hT
+      · simpa using hx)
+  have hcancel := formula26_cancels_formula18_second C P ξ
+  have hfinish : D5.ModGammaSix ([Q, L, R, K, S, T].prod)
+      ([Q, L, R, T].prod) := by
+    simpa [List.prod_cons, List.prod_nil, mul_assoc] using
+      (((D5.ModEq.refl (D5.gamma G 6) ((Q * L) * R)).mul hcancel).mul
+        (D5.ModEq.refl (D5.gamma G 6) T))
+  exact hreplaced.trans <| by
+    simpa [List.prod_cons, List.prod_nil, mul_assoc, Q, K, L, R, S, T] using
+      hperm.trans hfinish
+
+/-- Formula (29) exactly as twelve finite products.  Every exponent, sign,
+index restriction and reordering in Section 10 is included in the checked
+term. -/
+theorem formula29
+    (C : Context G) (P : Parameters C.s C.t) (hP : P.Satisfies)
+    (ξ : G) :
+    D5.ModGammaSix (D5.paperComm (word C P) ξ)
+      (formula29DisplayedProduct C P ξ) := by
+  rcases hP with ⟨h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12,
+    h13, h14, h15⟩
+  have hSat : P.Satisfies :=
+    ⟨h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15⟩
+  have hgrouped := (commutator_representative_formula18 C P ξ).trans
+    (formula18_to_formula29_grouped C P hSat ξ)
+  have hthird := (formula27 C P h13 ξ).trans (formula28 C P ξ)
+  have hreplace : D5.ModGammaSix
+      (((strictPairProduct (formula29PairCorrections C P ξ) *
+          formula29LineSeven C P ξ) * formula21FinalThirdGrouped C P ξ) *
+        formula29LineTwelve C P ξ)
+      (((strictPairProduct (formula29PairCorrections C P ξ) *
+          formula29LineSeven C P ξ) * formula28DisplayedProduct C P ξ) *
+        formula29LineTwelve C P ξ) :=
+    (((D5.ModEq.refl (D5.gamma G 6)
+      (strictPairProduct (formula29PairCorrections C P ξ) *
+        formula29LineSeven C P ξ)).mul hthird).mul
+          (D5.ModEq.refl (D5.gamma G 6) (formula29LineTwelve C P ξ)))
+  exact hgrouped.trans <| hreplace.trans <| by
+    simpa [formula29DisplayedProduct] using
+      ((formula29_first_six_collected C P ξ).mul
+        (D5.ModEq.refl (D5.gamma G 6) (formula29LineSeven C P ξ))).mul
+          (D5.ModEq.refl (D5.gamma G 6) (formula28DisplayedProduct C P ξ)) |>.mul
+            (D5.ModEq.refl (D5.gamma G 6) (formula29LineTwelve C P ξ))
+
 end
 
 end D5.Tahara
