@@ -155,3 +155,14 @@ Run the current verification with:
 - The complete additional `w` product is split into diagonal `j = k` and
   off-diagonal `j < k` pieces.  The remaining Section 11 obligation is now
   only the diagonal identity involving line 7 and formula (36).
+- Section 11 and formula (34) are complete.  Line 7 is identified with the
+  unsquared first-layer word from (32), including the negative-coordinate
+  inversion and commutator swap.  Formula (36) kills its square together
+  with the diagonal `w` and `w''` blocks.  The diagonal and strict `w''`
+  products are then joined into the exact domain `i ≤ j < k`, and theorem
+  `formula34` transforms lines 7 and 9--12 of (29) into all three displayed
+  principal products.
+- Full build after completing formula (34): successful (`3130` jobs).
+  `#print axioms D5.Tahara.formula34` reports only Lean's standard logical
+  axioms and the accepted commutator-weight background theorem; no new
+  mathematical axiom, `sorry`, or `admit` is used.

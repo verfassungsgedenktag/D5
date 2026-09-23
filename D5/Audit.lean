@@ -95,4 +95,8 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula35_reindexed_vanish
 #print axioms D5.Tahara.formula35_yields_wdoubleprime_main
 #print axioms D5.Tahara.formula34WExtraProduct_split_diagonal
+#print axioms D5.Tahara.formula29_line_seven_to_formula32_firstLayer
+#print axioms D5.Tahara.formula36_yields_wdoubleprime_diagonal_main
+#print axioms D5.Tahara.formula34_transformed_streams
+#print axioms D5.Tahara.formula34
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

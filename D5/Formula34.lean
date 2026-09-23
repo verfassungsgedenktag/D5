@@ -1921,6 +1921,634 @@ theorem formula34WExtraProduct_split_diagonal
     simpa [formula34WExtraDiagonalProduct,
       formula34WExtraOffDiagonalProduct, E, D, O, DB, OB] using hsplitI
 
+/-- Reversing the first two entries and inverting the weight-two entry
+cancel each other after two further commutators. -/
+theorem fourfold_first_inverse_swap_mod_gamma_six
+    {ξ a x z : G} (hξ : ξ ∈ D5.gamma G 1) (ha : a ∈ D5.gamma G 2)
+    (hx : x ∈ D5.gamma G 1) (hz : z ∈ D5.gamma G 1) :
+    D5.ModGammaSix
+      (D5.paperComm (D5.paperComm (D5.paperComm a⁻¹ ξ) x) z)
+      (D5.paperComm (D5.paperComm (D5.paperComm ξ a) x) z) := by
+  have hi : D5.ModEq (D5.gamma G 4)
+      (D5.paperComm ξ a⁻¹) (D5.paperComm ξ a)⁻¹ := by
+    exact D5.paperComm_inv_right_mod_gamma
+      (n := 4) (r := 1) (s := 2)
+      (by norm_num) (by norm_num) (by norm_num) hξ ha
+  have hbase : D5.ModEq (D5.gamma G 4)
+      (D5.paperComm a⁻¹ ξ) (D5.paperComm ξ a) := by
+    rw [D5.paperComm_swap ξ a⁻¹]
+    simpa only [inv_inv] using hi.inv
+  have hx' := D5.paperComm_left_of_modEq_gamma
+    (r := 4) (s := 1) (by norm_num) (by norm_num) hbase hx
+  exact D5.paperComm_left_of_modEq_gamma
+    (r := 5) (s := 1) (by norm_num) (by norm_num) hx' hz
+
+theorem formula22WeightTwoWord_mod_positive_inverse
+    (C : Context G) (P : Parameters C.s C.t) (j : Fin C.s) :
+    D5.ModEq (D5.gamma G 3) (formula22WeightTwoWord C P j)
+      (formula32WeightTwoWord C P j)⁻¹ := by
+  have hp := coordinateProduct_zpow_mod_gamma3 C (P.v j) (-1)
+  simpa [formula22WeightTwoWord, formula32WeightTwoWord, zpow_neg] using hp.symm
+
+/-- A local factor of line 7, after replacing the negative coordinate word
+by the inverse positive word and swapping the first two entries. -/
+theorem formula29_line_seven_factor_to_positive
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) (j : Fin C.s) :
+    D5.ModGammaSix
+      (D5.paperComm
+        (D5.paperComm (D5.paperComm (formula22WeightTwoWord C P j) ξ)
+          (C.x1 j)) (C.x1 j) ^ TaharaArithmetic.binom2 (C.d j))
+      (D5.paperComm
+        (D5.paperComm (D5.paperComm ξ (formula32WeightTwoWord C P j))
+          (C.x1 j)) (C.x1 j) ^ TaharaArithmetic.binom2 (C.d j)) := by
+  let A := formula22WeightTwoWord C P j
+  let B := formula32WeightTwoWord C P j
+  let x := C.x1 j
+  have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hB : B ∈ D5.gamma G 2 := formula32WeightTwoWord_mem_gamma2 C P j
+  have hx : x ∈ D5.gamma G 1 := by simp [x, D5.gamma]
+  have hAB : D5.ModEq (D5.gamma G 3) A B⁻¹ := by
+    simpa [A, B] using formula22WeightTwoWord_mod_positive_inverse C P j
+  have h1 := D5.paperComm_left_of_modEq_gamma
+    (r := 3) (s := 1) (by norm_num) (by norm_num) hAB hξ
+  have h2 := D5.paperComm_left_of_modEq_gamma
+    (r := 4) (s := 1) (by norm_num) (by norm_num) h1 hx
+  have h3 := D5.paperComm_left_of_modEq_gamma
+    (r := 5) (s := 1) (by norm_num) (by norm_num) h2 hx
+  have hswap := fourfold_first_inverse_swap_mod_gamma_six hξ hB hx hx
+  simpa [A, B, x] using
+    (h3.trans hswap).zpow (TaharaArithmetic.binom2 (C.d j))
+
+/-- The unsquared local congruence underlying formula (36). -/
+theorem formula32_fourfold_congruent
+    (C : Context G) (P : Parameters C.s C.t) (h11 : P.Condition11)
+    (ξ : G) (j : Fin C.s) :
+    D5.ModGammaSix
+      (D5.paperComm (D5.paperComm
+        (D5.paperComm ξ (formula32FirstLayerWord C P j)) (C.x1 j))
+          (C.x1 j))
+      (D5.paperComm (D5.paperComm
+        (D5.paperComm ξ (formula32WeightTwoWord C P j)) (C.x1 j))
+          (C.x1 j) ^ TaharaArithmetic.binom2 (C.d j)) := by
+  let A := formula32FirstLayerWord C P j
+  let B := formula32WeightTwoWord C P j
+  let F : G → G := fun a =>
+    D5.paperComm (D5.paperComm (D5.paperComm ξ a) (C.x1 j)) (C.x1 j)
+  have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hx : C.x1 j ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hA : A ∈ D5.gamma G 2 := formula32FirstLayerWord_mem_gamma2 C P j
+  have hB : B ∈ D5.gamma G 2 := formula32WeightTwoWord_mem_gamma2 C P j
+  have hw : IsGammaTwoPowerModGammaThree (orderInt C.d j)
+      (B ^ TaharaArithmetic.binom2 (C.d j) * A⁻¹) := by
+    simpa [formula32Word, formula32WeightTwoWord, A, B] using
+      formula32 C P h11 j
+  have hvanish : D5.ModGammaSix
+      (F (B ^ TaharaArithmetic.binom2 (C.d j) * A⁻¹)) 1 :=
+    fourfold_second_gammaTwoPower_vanish hξ hx hx
+      (C.x1_order_power_mem_gamma2 j) hw
+  have hsplit := fourfold_second_mul_mod_gamma_six hξ
+    ((D5.gamma G 2).zpow_mem hB (TaharaArithmetic.binom2 (C.d j)))
+    ((D5.gamma G 2).inv_mem hA) hx hx
+  have hBpow := fourfold_second_zpow_mod_gamma_six hξ hB hx hx
+    (TaharaArithmetic.binom2 (C.d j))
+  have hAinv := fourfold_second_inv_mod_gamma_six hξ hA hx hx
+  have hprod : D5.ModGammaSix
+      (F B ^ TaharaArithmetic.binom2 (C.d j) * (F A)⁻¹) 1 := by
+    have hs : D5.ModGammaSix
+        (F (B ^ TaharaArithmetic.binom2 (C.d j) * A⁻¹))
+        (F B ^ TaharaArithmetic.binom2 (C.d j) * (F A)⁻¹) := by
+      simpa [F] using hsplit.trans (hBpow.mul hAinv)
+    exact hs.symm.trans hvanish
+  change D5.ModGammaSix (F A)
+    (F B ^ TaharaArithmetic.binom2 (C.d j))
+  change (F B ^ TaharaArithmetic.binom2 (C.d j) * (F A)⁻¹ :
+    G ⧸ D5.gamma G 6) = 1 at hprod
+  have heq : (F B ^ TaharaArithmetic.binom2 (C.d j) :
+      G ⧸ D5.gamma G 6) = (F A : G ⧸ D5.gamma G 6) := by
+    have h := congrArg (fun q : G ⧸ D5.gamma G 6 =>
+      q * (F A : G ⧸ D5.gamma G 6)) hprod
+    simpa [mul_assoc] using h
+  exact heq.symm
+
+def formula32FirstLayerFourfoldProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun j =>
+    D5.paperComm (D5.paperComm
+      (D5.paperComm ξ (formula32FirstLayerWord C P j)) (C.x1 j))
+        (C.x1 j)
+
+/-- Line 7 is the unsquared diagonal word whose square occurs in (36). -/
+theorem formula29_line_seven_to_formula32_firstLayer
+    (C : Context G) (P : Parameters C.s C.t) (h11 : P.Condition11)
+    (ξ : G) :
+    D5.ModGammaSix (formula29LineSeven C P ξ)
+      (formula32FirstLayerFourfoldProduct C P ξ) := by
+  unfold formula29LineSeven formula32FirstLayerFourfoldProduct
+  apply modEq_orderedProduct
+  intro j
+  exact (formula29_line_seven_factor_to_positive C P ξ j).trans
+    (formula32_fourfold_congruent C P h11 ξ j).symm
+
+/-- Exchange the two loops over the weak upper triangle. -/
+theorem weakPairProduct_swap
+    {s : ℕ} (f : Fin s → Fin s → G)
+    (hf : ∀ i j, i ≤ j → f i j ∈ D5.gamma G 3) :
+    D5.ModGammaSix
+      (orderedProduct fun j => orderedProductWhere (· ≤ j) fun i => f i j)
+      (orderedProduct fun i => orderedProductWhere (i ≤ ·) fun j => f i j) := by
+  classical
+  let all := List.finRange s
+  let rows := (all ×ˢ all).filter fun ij => ij.1 ≤ ij.2
+  let cols := ((all ×ˢ all).filter fun ji => ji.2 ≤ ji.1).map
+    fun ji => (ji.2, ji.1)
+  have hall : all.Nodup := by simpa [all] using List.nodup_finRange s
+  have hswapInj : Function.Injective (fun ij : Fin s × Fin s => (ij.2, ij.1)) := by
+    intro a b h
+    exact Prod.ext (congrArg Prod.snd h) (congrArg Prod.fst h)
+  have hrows : rows.Nodup := (hall.product hall).filter _
+  have hcols : cols.Nodup := ((hall.product hall).filter _).map hswapInj
+  have hpairs : rows.Perm cols := by
+    apply (List.perm_ext_iff_of_nodup hrows hcols).2
+    intro ij
+    constructor
+    · intro hij
+      have hp := List.mem_filter.mp hij
+      have hle := of_decide_eq_true hp.2
+      apply List.mem_map.mpr
+      refine ⟨(ij.2, ij.1), ?_, by simp⟩
+      apply List.mem_filter.mpr
+      exact ⟨List.mem_product.mpr ⟨by simp [all], by simp [all]⟩,
+        by simpa using hle⟩
+    · intro hij
+      rcases List.mem_map.mp hij with ⟨ji, hji, rfl⟩
+      have hp := List.mem_filter.mp hji
+      have hle := of_decide_eq_true hp.2
+      apply List.mem_filter.mpr
+      exact ⟨List.mem_product.mpr ⟨by simp [all], by simp [all]⟩,
+        by simpa using hle⟩
+  have flattenFiltered : ∀ {α β : Type} (is : List α) (js : List β)
+      (p : α → β → Prop) [DecidableRel p] (g : α → β → G),
+      (is.map fun i => ((js.filter (p i)).map (g i)).prod).prod =
+        (((is ×ˢ js).filter fun ij => p ij.1 ij.2).map
+          fun ij => g ij.1 ij.2).prod := by
+    intro α β is js p inst g
+    induction is with
+    | nil => simp
+    | cons i is ih =>
+        rw [List.map_cons, List.prod_cons, List.product_cons,
+          List.filter_append, List.map_append, List.prod_append, ih]
+        congr 1
+        have hlist :
+            (js.filter (p i)).map (g i) =
+              ((js.map fun b => (i, b)).filter fun ij => p ij.1 ij.2).map
+                fun ij => g ij.1 ij.2 := by
+          simp only [List.filter_map, List.map_map]
+          rfl
+        exact congrArg List.prod hlist
+  have hright :
+      (orderedProduct fun i => orderedProductWhere (i ≤ ·) fun j => f i j) =
+      (rows.map fun ij => f ij.1 ij.2).prod := by
+    unfold orderedProduct orderedProductWhere
+    simpa [rows, all] using
+      flattenFiltered all all (fun i j => i ≤ j) f
+  have hleft :
+      (orderedProduct fun j => orderedProductWhere (· ≤ j) fun i => f i j) =
+      (cols.map fun ij => f ij.1 ij.2).prod := by
+    unfold orderedProduct orderedProductWhere
+    have h := flattenFiltered all all (fun j i => i ≤ j) (fun j i => f i j)
+    simpa [cols, all, List.map_map] using h
+  rw [hleft, hright]
+  apply D5.listProd_perm_gammaThree (hpairs.symm.map _)
+  intro x hx
+  rcases List.mem_map.mp hx with ⟨ij, hij, rfl⟩
+  have hij' : ij ∈ rows := hpairs.mem_iff.mpr hij
+  exact hf ij.1 ij.2
+    (of_decide_eq_true (List.mem_filter.mp hij').2)
+
+def formula32WDiagonalBlock
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) (j : Fin C.s) : G :=
+  orderedProductWhere (· ≤ j) fun h =>
+    formula34WExtraFactor C P ξ h j j
+
+def formula32WDoublePrimeDiagonalBlock
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) (j : Fin C.s) : G :=
+  orderedProductWhere (j < ·) fun h =>
+    formula34WDoublePrimePositiveFactor C P ξ j j h
+
+def formula34WDoublePrimeDiagonalPositiveProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun j => formula32WDoublePrimeDiagonalBlock C P ξ j
+
+def formula34WDoublePrimeDiagonalMainProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun j => orderedProductWhere (j < ·) fun h =>
+    formula34WDoublePrimeMainFactor C P ξ j j h
+
+theorem formula32_firstLayer_factor_expanded
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) (j : Fin C.s) :
+    D5.ModGammaSix
+      (D5.paperComm (D5.paperComm
+        (D5.paperComm ξ (formula32FirstLayerWord C P j)) (C.x1 j))
+          (C.x1 j))
+      (formula32WDiagonalBlock C P ξ j *
+        formula32WDoublePrimeDiagonalBlock C P ξ j) := by
+  let L : G := orderedProductWhere (· ≤ j) fun h =>
+    C.x1 h ^ (orderInt C.d h * P.w h j j)
+  let H : G := orderedProductWhere (j < ·) fun h =>
+    C.x1 h ^ (orderInt C.d h * P.w'' j j h)
+  let F : G → G := fun a =>
+    D5.paperComm (D5.paperComm (D5.paperComm ξ a) (C.x1 j)) (C.x1 j)
+  have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hx : C.x1 j ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hL : L ∈ D5.gamma G 2 := by
+    apply orderedProductWhere_mem
+    intro h hh
+    rw [zpow_mul]
+    exact (D5.gamma G 2).zpow_mem (C.x1_order_power_mem_gamma2 h) _
+  have hH : H ∈ D5.gamma G 2 := by
+    apply orderedProductWhere_mem
+    intro h hh
+    rw [zpow_mul]
+    exact (D5.gamma G 2).zpow_mem (C.x1_order_power_mem_gamma2 h) _
+  have hsplit : D5.ModGammaSix (F (L * H)) (F L * F H) :=
+    fourfold_second_mul_mod_gamma_six hξ hL hH hx hx
+  have hlow : D5.ModGammaSix (F L) (formula32WDiagonalBlock C P ξ j) := by
+    have hc := fourfold_second_orderedProductWhere_mod_gamma_six (· ≤ j)
+      (fun h => C.x1 h ^ (orderInt C.d h * P.w h j j)) hξ
+      (fun h hh => by
+        simp only
+        rw [zpow_mul]
+        exact (D5.gamma G 2).zpow_mem (C.x1_order_power_mem_gamma2 h) _)
+      hx hx
+    refine hc.trans ?_
+    apply modEq_orderedProductWhere
+    intro h hh
+    simp only
+    rw [zpow_mul]
+    simpa [F, formula34WExtraFactor] using
+      fourfold_second_zpow_mod_gamma_six hξ
+        (C.x1_order_power_mem_gamma2 h) hx hx (P.w h j j)
+  have hhigh : D5.ModGammaSix (F H)
+      (formula32WDoublePrimeDiagonalBlock C P ξ j) := by
+    have hc := fourfold_second_orderedProductWhere_mod_gamma_six (j < ·)
+      (fun h => C.x1 h ^ (orderInt C.d h * P.w'' j j h)) hξ
+      (fun h hh => by
+        simp only
+        rw [zpow_mul]
+        exact (D5.gamma G 2).zpow_mem (C.x1_order_power_mem_gamma2 h) _)
+      hx hx
+    refine hc.trans ?_
+    apply modEq_orderedProductWhere
+    intro h hh
+    simp only
+    rw [zpow_mul]
+    simpa [F, formula34WDoublePrimePositiveFactor] using
+      fourfold_second_zpow_mod_gamma_six hξ
+        (C.x1_order_power_mem_gamma2 h) hx hx (P.w'' j j h)
+  simpa [formula32FirstLayerWord, L, H, F] using
+    hsplit.trans (hlow.mul hhigh)
+
+theorem formula32_firstLayer_product_expanded
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula32FirstLayerFourfoldProduct C P ξ)
+      (formula34WExtraDiagonalProduct C P ξ *
+        formula34WDoublePrimeDiagonalPositiveProduct C P ξ) := by
+  let L : Fin C.s → G := formula32WDiagonalBlock C P ξ
+  let H : Fin C.s → G := formula32WDoublePrimeDiagonalBlock C P ξ
+  have hL : ∀ j, L j ∈ D5.gamma G 3 := by
+    intro j; apply orderedProductWhere_mem; intro h hh
+    exact formula34WExtraFactor_mem_gamma3 C P ξ h j j
+  have hH : ∀ j, H j ∈ D5.gamma G 3 := by
+    intro j; apply orderedProductWhere_mem; intro h hh
+    exact formula34WDoublePrimePositiveFactor_mem_gamma3 C P ξ j j h
+  have hlocal : D5.ModGammaSix (formula32FirstLayerFourfoldProduct C P ξ)
+      (orderedProduct fun j => L j * H j) := by
+    unfold formula32FirstLayerFourfoldProduct
+    apply modEq_orderedProduct
+    intro j
+    exact formula32_firstLayer_factor_expanded C P ξ j
+  have hsplit := D5.orderedProduct_pointwise_mul_gammaThree L H hL hH
+  have hreindex : D5.ModGammaSix (orderedProduct L)
+      (formula34WExtraDiagonalProduct C P ξ) := by
+    simpa [L, formula32WDiagonalBlock, formula34WExtraDiagonalProduct] using
+      weakPairProduct_swap (fun i j => formula34WExtraFactor C P ξ i j j)
+        (fun i j hij => formula34WExtraFactor_mem_gamma3 C P ξ i j j)
+  exact hlocal.trans <| hsplit.trans <| by
+    simpa [H, formula34WDoublePrimeDiagonalPositiveProduct] using
+      hreindex.mul (D5.ModEq.refl (D5.gamma G 6) (orderedProduct H))
+
+theorem formula32FirstLayerFourfoldFactor_mem_gamma3
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) (j : Fin C.s) :
+    D5.paperComm (D5.paperComm
+      (D5.paperComm ξ (formula32FirstLayerWord C P j)) (C.x1 j))
+        (C.x1 j) ∈ D5.gamma G 3 := by
+  have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+  have hA := formula32FirstLayerWord_mem_gamma2 C P j
+  have hx : C.x1 j ∈ D5.gamma G 1 := by simp [D5.gamma]
+  exact D5.gamma_antitone G (by norm_num : 3 ≤ 5) <|
+    D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+      (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+        (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hξ hA) hx) hx
+
+/-- Formula (36) says precisely that the square of the unsquared diagonal
+word is trivial modulo `γ₆`. -/
+theorem formula32_firstLayer_product_squared_vanish
+    (C : Context G) (P : Parameters C.s C.t) (h11 : P.Condition11)
+    (ξ : G) :
+    D5.ModGammaSix (formula32FirstLayerFourfoldProduct C P ξ ^ (2 : ℤ)) 1 := by
+  let F : Fin C.s → G := fun j =>
+    D5.paperComm (D5.paperComm
+      (D5.paperComm ξ (formula32FirstLayerWord C P j)) (C.x1 j))
+        (C.x1 j)
+  have hF : ∀ j, F j ∈ D5.gamma G 3 := fun j =>
+    formula32FirstLayerFourfoldFactor_mem_gamma3 C P ξ j
+  have hp := D5.orderedProduct_zpow_gammaThree F hF (2 : ℤ)
+  have h36 := formula36 C P h11 ξ
+  have hleft : D5.ModGammaSix
+      (orderedProduct fun j => F j ^ (2 : ℤ)) 1 := by
+    simpa [formula36LeftProduct, F] using h36.1.trans h36.2
+  simpa [formula32FirstLayerFourfoldProduct, F] using hp.trans hleft
+
+theorem formula34_wdoubleprime_diagonal_positive_inv
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula34WDoublePrimeDiagonalPositiveProduct C P ξ)⁻¹
+      (formula34WDoublePrimeDiagonalMainProduct C P ξ) := by
+  let Pos : Fin C.s → Fin C.s → G := fun j h =>
+    formula34WDoublePrimePositiveFactor C P ξ j j h
+  let Neg : Fin C.s → Fin C.s → G := fun j h =>
+    formula34WDoublePrimeMainFactor C P ξ j j h
+  let PR : Fin C.s → G := fun j => orderedProductWhere (j < ·) (Pos j)
+  let NR : Fin C.s → G := fun j => orderedProductWhere (j < ·) (Neg j)
+  have hPos : ∀ j h, Pos j h ∈ D5.gamma G 3 := fun j h =>
+    formula34WDoublePrimePositiveFactor_mem_gamma3 C P ξ j j h
+  have hPR : ∀ j, PR j ∈ D5.gamma G 3 := by
+    intro j; apply orderedProductWhere_mem; intro h hjh; exact hPos j h
+  have hrow : ∀ j, D5.ModGammaSix (PR j)⁻¹ (NR j) := by
+    intro j
+    have hp := orderedProductWhere_zpow_gammaThree (j < ·) (Pos j)
+      (fun h hjh => hPos j h) (-1)
+    have hr : D5.ModGammaSix
+        (orderedProductWhere (j < ·) fun h => Pos j h ^ (-1 : ℤ))
+        (orderedProductWhere (j < ·) (Neg j)) := by
+      apply modEq_orderedProductWhere
+      intro h hjh
+      simpa [Pos, Neg, formula34WDoublePrimePositiveFactor,
+        formula34WDoublePrimeMainFactor, zpow_neg] using
+          D5.ModEq.refl (D5.gamma G 6) (Neg j h)
+    simpa [PR, NR, zpow_neg] using hp.trans hr
+  have hp := D5.orderedProduct_zpow_gammaThree PR hPR (-1)
+  have hr : D5.ModGammaSix
+      (orderedProduct fun j => PR j ^ (-1 : ℤ)) (orderedProduct NR) := by
+    apply modEq_orderedProduct
+    intro j
+    simpa [zpow_neg] using hrow j
+  simpa [formula34WDoublePrimeDiagonalPositiveProduct,
+    formula32WDoublePrimeDiagonalBlock,
+    formula34WDoublePrimeDiagonalMainProduct, Pos, Neg, PR, NR, zpow_neg] using
+      hp.trans hr
+
+/-- The diagonal additional `w` stream together with line 7 gives the
+diagonal part of the third principal `w''` stream. -/
+theorem formula36_yields_wdoubleprime_diagonal_main
+    (C : Context G) (P : Parameters C.s C.t) (h11 : P.Condition11)
+    (ξ : G) :
+    D5.ModGammaSix
+      (formula29LineSeven C P ξ * formula34WExtraDiagonalProduct C P ξ)
+      (formula34WDoublePrimeDiagonalMainProduct C P ξ) := by
+  let L := formula29LineSeven C P ξ
+  let D := formula34WExtraDiagonalProduct C P ξ
+  let H := formula34WDoublePrimeDiagonalPositiveProduct C P ξ
+  let X := formula32FirstLayerFourfoldProduct C P ξ
+  have hL : D5.ModGammaSix L X := by
+    simpa [L, X] using formula29_line_seven_to_formula32_firstLayer C P h11 ξ
+  have hX : D5.ModGammaSix X (D * H) := by
+    simpa [X, D, H] using formula32_firstLayer_product_expanded C P ξ
+  have hsq : D5.ModGammaSix (X * X) 1 := by
+    simpa [zpow_two] using formula32_firstLayer_product_squared_vanish C P h11 ξ
+  have hv : D5.ModGammaSix ((L * D) * H) 1 := by
+    have hfirst : D5.ModGammaSix ((L * D) * H) ((X * D) * H) :=
+      (hL.mul (D5.ModEq.refl (D5.gamma G 6) D)).mul
+        (D5.ModEq.refl (D5.gamma G 6) H)
+    have hsecond : D5.ModGammaSix ((X * D) * H) (X * X) := by
+      simpa only [mul_assoc] using
+        ((D5.ModEq.refl (D5.gamma G 6) X).mul hX).symm
+    exact hfirst.trans (hsecond.trans hsq)
+  have hsolve : D5.ModGammaSix (L * D) H⁻¹ := by
+    have hm := hv.mul (D5.ModEq.refl (D5.gamma G 6) H⁻¹)
+    simpa [mul_assoc] using hm
+  exact hsolve.trans (formula34_wdoubleprime_diagonal_positive_inv C P ξ)
+
+/-- The full third principal product of (34), including both `i = j < k`
+and `i < j < k`. -/
+def formula34WDoublePrimeFullMainProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun i => orderedProductWhere (i ≤ ·) fun j =>
+    orderedProductWhere (j < ·) fun k =>
+      formula34WDoublePrimeMainFactor C P ξ i j k
+
+theorem formula34_wdoubleprime_join_diagonal_strict
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix
+      (formula34WDoublePrimeDiagonalMainProduct C P ξ *
+        formula34WDoublePrimeMainProduct C P ξ)
+      (formula34WDoublePrimeFullMainProduct C P ξ) := by
+  let B : Fin C.s → Fin C.s → G := fun i j =>
+    orderedProductWhere (j < ·) fun k =>
+      formula34WDoublePrimeMainFactor C P ξ i j k
+  have hB : ∀ i j, B i j ∈ D5.gamma G 3 := by
+    intro i j
+    apply orderedProductWhere_mem
+    intro k hjk
+    exact formula34WDoublePrimeMainFactor_mem_gamma3 C P ξ i j k
+  have hsplitJ : D5.ModGammaSix
+      (formula34WDoublePrimeFullMainProduct C P ξ)
+      (orderedProduct fun i =>
+        B i i * orderedProductWhere (i < ·) (B i)) := by
+    unfold formula34WDoublePrimeFullMainProduct
+    apply modEq_orderedProduct
+    intro i
+    exact orderedProductWhere_le_split_lt i (B i)
+      (fun j hij => hB i j)
+  let D : Fin C.s → G := fun i => B i i
+  let S : Fin C.s → G := fun i => orderedProductWhere (i < ·) (B i)
+  have hD : ∀ i, D i ∈ D5.gamma G 3 := fun i => hB i i
+  have hS : ∀ i, S i ∈ D5.gamma G 3 := by
+    intro i; apply orderedProductWhere_mem; intro j hij; exact hB i j
+  have hsplitI := D5.orderedProduct_pointwise_mul_gammaThree D S hD hS
+  have hcollect : D5.ModGammaSix
+      (formula34WDoublePrimeDiagonalMainProduct C P ξ *
+        formula34WDoublePrimeMainProduct C P ξ)
+      (orderedProduct fun i => D i * S i) := by
+    simpa [D, S, B, formula34WDoublePrimeDiagonalMainProduct,
+      formula34WDoublePrimeMainProduct, formula34WDoublePrimeMainBlock] using
+        hsplitI.symm
+  exact hcollect.trans hsplitJ.symm
+
+/-- Once the two Jacobi streams have been separated, formulas (35) and
+(36) remove all additional factors and leave the three principal products
+of (34). -/
+theorem formula34_transformed_streams
+    (C : Context G) (P : Parameters C.s C.t)
+    (h11 : P.Condition11) (h12 : P.Condition12) (ξ : G) :
+    D5.ModGammaSix
+      ((formula29LineSeven C P ξ *
+          (formula34WExtraProduct C P ξ * formula34WMainProduct C P ξ)) *
+        (formula34WPrimeExtraProduct C P ξ *
+          formula34WPrimeMainProduct C P ξ))
+      ((formula34WMainProduct C P ξ * formula34WPrimeMainProduct C P ξ) *
+        formula34WDoublePrimeFullMainProduct C P ξ) := by
+  let L := formula29LineSeven C P ξ
+  let D := formula34WExtraDiagonalProduct C P ξ
+  let O := formula34WExtraOffDiagonalProduct C P ξ
+  let M := formula34WMainProduct C P ξ
+  let E := formula34WPrimeExtraProduct C P ξ
+  let N := formula34WPrimeMainProduct C P ξ
+  let HD := formula34WDoublePrimeDiagonalMainProduct C P ξ
+  let HS := formula34WDoublePrimeMainProduct C P ξ
+  have hL : L ∈ D5.gamma G 3 := by
+    dsimp [L]
+    apply orderedProduct_mem
+    intro j
+    exact formula22_correction_mem_gamma3 C P ξ j
+  have hD : D ∈ D5.gamma G 3 := by
+    dsimp [D, formula34WExtraDiagonalProduct]
+    apply orderedProduct_mem; intro i
+    apply orderedProductWhere_mem; intro j hij
+    exact formula34WExtraFactor_mem_gamma3 C P ξ i j j
+  have hO : O ∈ D5.gamma G 3 := by
+    dsimp [O, formula34WExtraOffDiagonalProduct]
+    apply orderedProduct_mem; intro i
+    apply orderedProductWhere_mem; intro j hij
+    apply orderedProductWhere_mem; intro k hjk
+    exact formula34WExtraFactor_mem_gamma3 C P ξ i j k
+  have hM : M ∈ D5.gamma G 3 := by
+    dsimp [M, formula34WMainProduct]
+    apply orderedProduct_mem; intro i
+    apply orderedProductWhere_mem; intro j hij
+    apply orderedProductWhere_mem; intro k hjk
+    exact formula34WMainFactor_mem_gamma3 C P ξ i j k
+  have hE : E ∈ D5.gamma G 3 := by
+    dsimp [E, formula34WPrimeExtraProduct]
+    apply orderedProduct_mem; intro i
+    apply orderedProductWhere_mem; intro j hij
+    apply orderedProductWhere_mem; intro k hjk
+    exact formula34WPrimeExtraFactor_mem_gamma3 C P ξ i j k
+  have hN : N ∈ D5.gamma G 3 := by
+    dsimp [N, formula34WPrimeMainProduct]
+    apply orderedProduct_mem; intro i
+    apply orderedProductWhere_mem; intro j hij
+    apply orderedProductWhere_mem; intro k hjk
+    exact formula34WPrimeMainFactor_mem_gamma3 C P ξ i j k
+  have hHD : HD ∈ D5.gamma G 3 := by
+    dsimp [HD, formula34WDoublePrimeDiagonalMainProduct]
+    apply orderedProduct_mem; intro i
+    apply orderedProductWhere_mem; intro k hik
+    exact formula34WDoublePrimeMainFactor_mem_gamma3 C P ξ i i k
+  have hHS : HS ∈ D5.gamma G 3 := by
+    dsimp [HS, formula34WDoublePrimeMainProduct,
+      formula34WDoublePrimeMainBlock]
+    apply orderedProduct_mem; intro i
+    apply orderedProductWhere_mem; intro j hij
+    apply orderedProductWhere_mem; intro k hjk
+    exact formula34WDoublePrimeMainFactor_mem_gamma3 C P ξ i j k
+  have hsplit : D5.ModGammaSix
+      ((L * (formula34WExtraProduct C P ξ * M)) * (E * N))
+      ((L * ((D * O) * M)) * (E * N)) :=
+    ((D5.ModEq.refl (D5.gamma G 6) L).mul
+      ((formula34WExtraProduct_split_diagonal C P ξ).mul
+        (D5.ModEq.refl (D5.gamma G 6) M))).mul
+          (D5.ModEq.refl (D5.gamma G 6) (E * N))
+  have hp : [L, D, O, M, E, N].Perm [L, D, O, E, M, N] :=
+    List.Perm.cons L <| List.Perm.cons D <| List.Perm.cons O <|
+      (List.Perm.swap M E [N]).symm
+  have hperm : D5.ModGammaSix
+      ((L * ((D * O) * M)) * (E * N))
+      (((L * D) * (O * E)) * (M * N)) := by
+    simpa [List.prod_cons, List.prod_nil, mul_assoc] using
+      D5.listProd_perm_gammaThree hp (fun x hx => by
+        simp only [List.mem_cons] at hx
+        rcases hx with rfl | rfl | rfl | rfl | rfl | hx
+        · exact hL
+        · exact hD
+        · exact hO
+        · exact hM
+        · exact hE
+        · rcases hx with rfl | hx
+          · exact hN
+          · simp at hx)
+  have hcancel : D5.ModGammaSix
+      (((L * D) * (O * E)) * (M * N))
+      ((HD * HS) * (M * N)) :=
+    ((formula36_yields_wdoubleprime_diagonal_main C P h11 ξ).mul
+      (formula35_yields_wdoubleprime_main C P h12 ξ)).mul
+        (D5.ModEq.refl (D5.gamma G 6) (M * N))
+  have hcomm : D5.ModGammaSix ((HD * HS) * (M * N))
+      ((M * N) * (HD * HS)) :=
+    D5.mul_comm_mod_gamma (n := 6) (r := 3) (s := 3)
+      (by norm_num) (by norm_num) (by norm_num)
+      ((D5.gamma G 3).mul_mem hHD hHS) ((D5.gamma G 3).mul_mem hM hN)
+  have hjoin := formula34_wdoubleprime_join_diagonal_strict C P ξ
+  simpa [L, D, O, M, E, N, HD, HS] using
+    hsplit.trans (hperm.trans (hcancel.trans (hcomm.trans
+      ((D5.ModEq.refl (D5.gamma G 6) (M * N)).mul hjoin))))
+
+/-- Lines 7 and 9--12 of formula (29), in their displayed order. -/
+def formula34LastFiveDisplayedProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  ((((formula29LineSeven C P ξ * formula28WLeftDisplayedStream C P ξ) *
+      formula28WRightDisplayedStream C P ξ) *
+    formula28WPrimeDisplayedStream C P ξ) * formula29LineTwelve C P ξ)
+
+/-- Formula (34): the five relevant streams of (29) are transformed into
+the three displayed principal products, with all finite index domains. -/
+theorem formula34
+    (C : Context G) (P : Parameters C.s C.t)
+    (h11 : P.Condition11) (h12 : P.Condition12) (ξ : G) :
+    D5.ModGammaSix (formula34LastFiveDisplayedProduct C P ξ)
+      ((formula34WMainProduct C P ξ * formula34WPrimeMainProduct C P ξ) *
+        formula34WDoublePrimeFullMainProduct C P ξ) := by
+  let L := formula29LineSeven C P ξ
+  let A := formula28WLeftDisplayedStream C P ξ
+  let B := formula28WRightDisplayedStream C P ξ
+  let E := formula28WPrimeDisplayedStream C P ξ
+  let T := formula29LineTwelve C P ξ
+  have hE : E ∈ D5.gamma G 3 := by
+    dsimp [E, formula28WPrimeDisplayedStream]
+    apply orderedProduct_mem; intro i
+    apply orderedProductWhere_mem; intro j hij
+    apply orderedProductWhere_mem; intro k hjk
+    have hj : C.x1 j ^ orderInt C.d j ∈ D5.gamma G 2 :=
+      C.x1_order_power_mem_gamma2 j
+    have hk : C.x1 k ∈ D5.gamma G 1 := by simp [D5.gamma]
+    have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+    have hi : C.x1 i ∈ D5.gamma G 1 := by simp [D5.gamma]
+    apply D5.gamma_antitone G (by norm_num : 3 ≤ 5)
+    apply (D5.gamma G 5).zpow_mem
+    exact D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+      (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+        (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hj hk) hξ) hi
+  have hT : T ∈ D5.gamma G 3 := by
+    dsimp [T, formula29LineTwelve]
+    apply orderedProduct_mem; intro i
+    apply orderedProductWhere_mem; intro j hij
+    apply orderedProductWhere_mem; intro k hjk
+    simpa [formula34WLineTwelveFactor] using
+      (formula34_w_line_factors_mem_gamma3 C P ξ i j k).2.2
+  have hreorder : D5.ModGammaSix
+      ((((L * A) * B) * E) * T) ((L * ((A * B) * T)) * E) := by
+    simpa only [mul_assoc, mul_one] using
+      D5.gammaThree_interchange (a := (L * A) * B) (d := (1 : G)) hE hT
+  have hreplace : D5.ModGammaSix ((L * ((A * B) * T)) * E)
+      ((L * (formula34WExtraProduct C P ξ *
+          formula34WMainProduct C P ξ)) *
+        (formula34WPrimeExtraProduct C P ξ *
+          formula34WPrimeMainProduct C P ξ)) :=
+    ((D5.ModEq.refl (D5.gamma G 6) L).mul
+      (formula34_w_streams C P ξ)).mul
+        (formula34_wprime_stream C P ξ)
+  simpa [formula34LastFiveDisplayedProduct, L, A, B, E, T] using
+    hreorder.trans (hreplace.trans (formula34_transformed_streams C P h11 h12 ξ))
+
 end
 
 end D5.Tahara

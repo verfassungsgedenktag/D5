@@ -107,7 +107,7 @@
       triangular streams by checked finite-product collection.
     - [x] Collect formulas (21)--(28) into all twelve displayed products,
       preserving every index domain, sign, exponent, and product order.
-  - [ ] Formalize Section 11 (formulas (30)--(36)).
+  - [x] Formalize Section 11 (formulas (30)--(36)).
     - [x] Derive the coordinate congruences (30)--(31) from conditions
       (11)--(12), with their exact filtered sums.
     - [x] Prove the Bezout coordinate lemma for
@@ -117,7 +117,7 @@
       entire strict-pair product using (33).
     - [x] Eliminate the diagonal additional product by (32), including both
       displayed congruences and the binomial exponent calculation in (36).
-    - [ ] Transform lines 7 and 9--12 of (29) into (34).
+    - [x] Transform lines 7 and 9--12 of (29) into (34).
       - [x] Prove the local Jacobi transformation printed for every
         `w' i j k` term.
       - [x] Prove the five-factor local Jacobi transformation for every
@@ -128,7 +128,7 @@
         `i ≤ j ≤ k`, separating its additional and principal products.
       - [x] Reindex lines 9, 10 and 12 into the canonical `w` triangle and
         combine all three source streams pointwise.
-      - [ ] Combine the additional `w` and `w'` streams with (35)--(36),
+      - [x] Combine the additional `w` and `w'` streams with (35)--(36),
         producing the third principal `w''` product.
         - [x] Expand every factor of (35) into its three finite blocks,
           verify the two required strict/weak triple reindexings, and derive
@@ -136,7 +136,7 @@
           exponent.
         - [x] Split the complete additional `w` stream into its diagonal and
           off-diagonal parts by an explicit finite-list permutation.
-        - [ ] Identify line 7 with the diagonal word from (32) and finish the
+        - [x] Identify line 7 with the diagonal word from (32) and finish the
           diagonal cancellation using (36).
   - [ ] Formalize Sections 12–25 (`κ ≡ 1 mod γ₆`).
 
