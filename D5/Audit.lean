@@ -130,4 +130,13 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula53
 #print axioms D5.Tahara.formula46_first_two_vanish
 #print axioms D5.Tahara.formula54
+#print axioms D5.Tahara.formula55_factor_mem_gamma5
+#print axioms D5.Tahara.kappa_mem_gamma5
+#print axioms D5.Tahara.formula54_kappa
+#print axioms D5.Tahara.formula56_mul_left
+#print axioms D5.Tahara.formula56_mul_right
+#print axioms D5.Tahara.formula56_zpow
+#print axioms D5.Tahara.formula56_replace_left
+#print axioms D5.Tahara.formula56_replace_right
+#print axioms D5.Tahara.formula56_gammaFour_commute
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

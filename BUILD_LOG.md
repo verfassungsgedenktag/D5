@@ -213,3 +213,10 @@ Run the current verification with:
   audit for formulas (47)--(54), the Hall--Petresco helper for (50), and the
   global cancellation contains only Lean's standard logical axioms and the
   accepted commutator-weight background theorem.
+- Section 15 is formalized in `D5/Section15.lean`.  Formula (55) names the
+  exact remaining product from (54), and every local factor is proved to
+  lie in `γ₅`.  Formula (56) is represented by checked multiplication,
+  integer-power, modulo-`γ₄` replacement, and `γ₄` reordering lemmas.
+- Full build after Section 15: successful (`3134` jobs).  The axiom audit
+  reports only Lean's standard logical axioms and the accepted
+  commutator-weight background theorem; no proof placeholders occur.

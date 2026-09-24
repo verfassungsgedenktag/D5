@@ -179,6 +179,11 @@
       - [x] Prove formula (52), with both corrections killed by (17).
       - [x] Prove (53) directly by two checked power transfers, cancel the
         first two products of (46), and derive formula (54).
+    - [x] Formalize Section 15 (the remainder `κ` and collection rules).
+      - [x] Record formula (55), prove that every factor of `κ` lies in
+        `γ₅`, and restate (54) using the named remainder.
+      - [x] Verify all bilinearity, power, replacement, and reordering rules
+        in (56) with their explicit weight bounds.
 
 ## Phase 4 — finite-group theorem and audit
 
