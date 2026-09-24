@@ -195,6 +195,15 @@
       - [x] Expand the proposed relation (62) into the three lines of (63).
       - [x] Use conditions (7), (8) and formula (58) to remove both
         correction streams and prove (62).
+    - [x] Formalize Section 18 (coordinates in `γ₃/γ₄`).
+      - [x] Choose the actual cyclic-basis coordinates `λ` and `η` and
+        prove formulas (64)--(65).
+      - [x] Derive both coordinate divisibilities in (66) from uniqueness
+        of the normal form, the order relations, and formula (58).
+      - [x] Expand the order-power commutators into formulas (67)--(68) and
+        prove the stated `γ₃` membership consequence of (68).
+      - [x] Collect all three finite products in (62) coordinatewise and
+        prove formula (69), including both filtered index ranges.
 
 ## Phase 4 — finite-group theorem and audit
 

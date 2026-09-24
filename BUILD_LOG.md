@@ -235,3 +235,16 @@ Run the current verification with:
   both streams trivial and yields formula (62).
 - Full build after Section 17: successful (`3136` jobs).  The complete
   Section 17 chain is included in the axiom audit.
+- Section 18 is formalized in `D5/Section18.lean`.  The definitions of
+  `lambda` and `eta` use the unique normal form of the original `x3` cyclic
+  basis.  Lean verifies formulas (64)--(65), proves the two divisibilities
+  in (66) by reducing arbitrary integer coordinates modulo their orders,
+  and checks the complete exponent sums in formulas (67)--(69).
+- Formula (68) is derived from the rearranged formula (57), formula (67),
+  and the coordinate form (65).  Its left side is then proved to lie in
+  `gamma G 3`.  Formula (69) separately expands and collects the ordinary,
+  upper-triangular, and lower-triangular products in formula (62).
+- Full build after Section 18: successful (`3137` jobs).  The axiom audit
+  for formulas (64)--(69) contains only Lean's standard logical axioms and
+  the accepted commutator-weight background theorem; no new mathematical
+  axiom was introduced.

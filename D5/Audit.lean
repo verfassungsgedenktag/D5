@@ -155,4 +155,13 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula62_inner_expand
 #print axioms D5.Tahara.formula63
 #print axioms D5.Tahara.formula62
+#print axioms D5.Tahara.Context.x3_coordinate_dvd_of_product_mem
+#print axioms D5.Tahara.formula64
+#print axioms D5.Tahara.formula65
+#print axioms D5.Tahara.formula66_lambda
+#print axioms D5.Tahara.formula66_eta
+#print axioms D5.Tahara.formula67
+#print axioms D5.Tahara.formula68
+#print axioms D5.Tahara.formula68_mem_gamma3
+#print axioms D5.Tahara.formula69
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise
