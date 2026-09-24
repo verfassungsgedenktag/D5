@@ -234,6 +234,15 @@
         (83), including conversion of the complete formula-(68) word.
       - [x] Expand the full formula-(62) word in the new basis and prove
         the complete coordinate congruence (84).
+    - [x] Formalize Section 23 (expansion in the commutators `[yₐ,y_b]`).
+      - [x] Expand both coordinate words, collect the full square of
+        commutators, remove its diagonal, and combine the two orientations
+        of each strict pair to prove formula (85).
+      - [x] Prove the order relation (86) directly from
+        `yₐ ^ n(a) ∈ γ₄(G)` and the checked power-transfer rule.
+      - [x] Verify the exact triangular reindexing and both coordinate
+        congruences in formula (87), including the weakening
+        `n(a) ∣ n(b)` for `a < b`.
 
 ## Phase 4 — finite-group theorem and audit
 

@@ -294,3 +294,14 @@ Run the current verification with:
   exactly one new accepted background axiom,
   `D5.Background.gammaTwoFourBasis_exists`; formulas (81)--(84) themselves
   are derived from the selected basis and the earlier checked calculation.
+- Section 23 is formalized in `D5/Section23.lean`.  Formula (85) is obtained
+  by a checked bilinear expansion of both coordinate words, finite-product
+  reordering in `γ₃/γ₆`, diagonal removal, and collection of reversed
+  pairs.  Formula (86) follows from the basis order relation.
+- Lean verifies every integer operation in formula (87): the lower-triangular
+  sum is reindexed exactly, formula (84) gives the first congruence after
+  transfer along `n(a) ∣ n(b)`, and formula (83) gives the second congruence.
+  Section 23 introduces no new axiom.
+- Full build after Section 23: successful (`3142` jobs).  The axiom audit for
+  formulas (85)--(87) reports only Lean's standard logical axioms and the
+  previously accepted commutator-weight background theorem.
