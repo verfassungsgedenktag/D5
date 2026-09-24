@@ -202,11 +202,14 @@ Run the current verification with:
   removes both weight-five corrections using the two divisibilities in
   (17).  A direct pairwise power-transfer proof of (53) yields the global
   cancellation of the first two products in (46) and formula (54).
-- Formula (51) is now recorded with its printed three-factor right side and
-  checked against formulas (52)--(53).  The lower-weight intermediate
-  congruence (50) remains to be recorded; it is not used by the direct proof
-  of (53).
-- Full build at this Section 14 checkpoint: successful (`3133` jobs).  The
-  audit for formulas (47)--(49), (52)--(54), and the global cancellation
-  contains only Lean's standard logical axioms and the accepted
-  commutator-weight background theorem.
+- Formula (51) is recorded with its printed three-factor right side and
+  checked against formulas (52)--(53).
+- Formula (50) is proved modulo `γ₄`.  Lean checks the two-term
+  Hall--Petresco expansion for a power in the first commutator entry, moves
+  the `d(i)`-power through each triple commutator, applies both divisibilities
+  in (17), and verifies the final exponent cancellation from
+  `d(j) = d(i) * (d(j) / d(i))`.  This completes Section 14.
+- Full build after completing Section 14: successful (`3133` jobs).  The
+  audit for formulas (47)--(54), the Hall--Petresco helper for (50), and the
+  global cancellation contains only Lean's standard logical axioms and the
+  accepted commutator-weight background theorem.

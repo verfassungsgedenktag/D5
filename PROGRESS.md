@@ -168,10 +168,12 @@
       pair factors with the source of (45), and derive the finite-group
       theorem `section13_finite` ending at formula (46).
   - [ ] Formalize Sections 14–25 (`κ ≡ 1 mod γ₆`).
-    - [ ] Complete Section 14 (cancellation of the first two products).
+    - [x] Complete Section 14 (cancellation of the first two products).
       - [x] Prove formulas (47)--(49) by expanding the multiplicative form
         of condition (6), including all finite-product reindexing.
-      - [ ] Record the paper's intermediate formula (50).
+      - [x] Prove the paper's intermediate formula (50) modulo `γ₄`,
+        including both Hall--Petresco corrections and their disappearance
+        by (17).
       - [x] Verify the three-factor congruence (51) from the checked
         cancellation (52) and the direct transfer identity (53).
       - [x] Prove formula (52), with both corrections killed by (17).

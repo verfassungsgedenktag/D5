@@ -430,6 +430,219 @@ theorem formula49
   have hfinal := hmul.trans hreplace
   simpa [mul_assoc] using hfinal
 
+/-! ## The pairwise congruence in formula (50) -/
+
+/-- The two-term Hall--Petresco formula for a power in the first entry,
+truncated modulo `γ₄`. -/
+theorem paperComm_zpow_left_hallPetresco_mod_gamma_four
+    {a b : G} (ha : a ∈ D5.gamma G 1) (hb : b ∈ D5.gamma G 1)
+    (n : ℕ) :
+    D5.ModEq (D5.gamma G 4) (D5.paperComm (a ^ (n : ℤ)) b)
+      (D5.paperComm a b ^ (n : ℤ) *
+        D5.paperComm (D5.paperComm a b) a ^
+          TaharaArithmetic.binom2 n) := by
+  let c := D5.paperComm a b
+  let d := D5.paperComm c a
+  have hc : c ∈ D5.gamma G 2 :=
+    D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) ha hb
+  have hd : d ∈ D5.gamma G 3 :=
+    D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hc ha
+  have hp0 := (D5.paperComm_zpow_right_hallPetresco_of_weight
+    (r := 1) (by norm_num) hb ha n).mono
+      (D5.gamma_antitone G (by norm_num : 4 ≤ 5))
+  have hthird : D5.ModEq (D5.gamma G 4)
+      (D5.paperComm (D5.paperComm (D5.paperComm b a) a) a ^
+        TaharaArithmetic.binom3 n) 1 := by
+    apply D5.modEq_one_iff_mem.mpr
+    apply (D5.gamma G 4).zpow_mem
+    exact D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+      (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+        (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hb ha) ha) ha
+  have hp : D5.ModEq (D5.gamma G 4) (D5.paperComm b (a ^ (n : ℤ)))
+      (D5.paperComm b a ^ (n : ℤ) *
+        D5.paperComm (D5.paperComm b a) a ^ TaharaArithmetic.binom2 n) := by
+    have h := hp0.trans <|
+      (D5.ModEq.refl (D5.gamma G 4)
+        (D5.paperComm b a ^ (n : ℤ) *
+          D5.paperComm (D5.paperComm b a) a ^ TaharaArithmetic.binom2 n)).mul
+            hthird
+    simpa using h
+  have hinner : D5.ModEq (D5.gamma G 4)
+      (D5.paperComm (D5.paperComm b a) a) d⁻¹ := by
+    rw [D5.paperComm_swap a b]
+    simpa [d, c] using D5.paperComm_inv_left_mod_gamma
+      (n := 4) (r := 2) (s := 1)
+      (by norm_num) (by norm_num) (by norm_num) hc ha
+  have hnormalize : D5.ModEq (D5.gamma G 4)
+      (D5.paperComm b a ^ (n : ℤ) *
+        D5.paperComm (D5.paperComm b a) a ^ TaharaArithmetic.binom2 n)
+      ((c⁻¹) ^ (n : ℤ) * (d⁻¹) ^ TaharaArithmetic.binom2 n) := by
+    have hbase : D5.ModEq (D5.gamma G 4)
+        (D5.paperComm b a ^ (n : ℤ)) ((c⁻¹) ^ (n : ℤ)) := by
+      rw [D5.paperComm_swap a b]
+    exact hbase.mul (hinner.zpow (TaharaArithmetic.binom2 n))
+  have hinv0 := (hp.trans hnormalize).inv
+  have hinv : D5.ModEq (D5.gamma G 4)
+      (D5.paperComm b (a ^ (n : ℤ)))⁻¹
+      (d ^ TaharaArithmetic.binom2 n * c ^ (n : ℤ)) := by
+    simpa only [mul_inv_rev, inv_zpow, inv_inv] using hinv0
+  have hcomm : D5.ModEq (D5.gamma G 4)
+      (d ^ TaharaArithmetic.binom2 n * c ^ (n : ℤ))
+      (c ^ (n : ℤ) * d ^ TaharaArithmetic.binom2 n) :=
+    D5.mul_comm_mod_gamma (n := 4) (r := 3) (s := 2)
+      (by norm_num) (by norm_num) (by norm_num)
+      ((D5.gamma G 3).zpow_mem hd _) ((D5.gamma G 2).zpow_mem hc _)
+  rw [D5.paperComm_swap (a ^ (n : ℤ)) b] at hinv
+  simpa [c, d] using hinv.trans hcomm
+
+/-- Powers of commuting weight-two and weight-three factors may be split
+modulo `γ₄`. -/
+theorem gammaTwoThree_mul_zpow_mod_gamma_four
+    {a b : G} (ha : a ∈ D5.gamma G 2) (hb : b ∈ D5.gamma G 3)
+    (z : ℤ) :
+    D5.ModEq (D5.gamma G 4) ((a * b) ^ z) (a ^ z * b ^ z) := by
+  change (((a * b) ^ z : G) : G ⧸ D5.gamma G 4) =
+    ((a ^ z * b ^ z : G) : G ⧸ D5.gamma G 4)
+  rw [QuotientGroup.mk_zpow, QuotientGroup.mk_mul, QuotientGroup.mk_mul,
+    QuotientGroup.mk_zpow, QuotientGroup.mk_zpow]
+  apply Commute.mul_zpow
+  show (a : G ⧸ D5.gamma G 4) * b = b * a
+  exact D5.mul_comm_mod_gamma (n := 4) (r := 2) (s := 3)
+    (by norm_num) (by norm_num) (by norm_num) ha hb
+
+/-- If a `d`th power is trivial modulo `γ₄`, every exponent divisible by
+`d` is trivial there as well. -/
+theorem modGammaFour_zpow_eq_one_of_dvd
+    {g : G} {d m : ℤ}
+    (hd : D5.ModEq (D5.gamma G 4) (g ^ d) 1) (hdiv : d ∣ m) :
+    D5.ModEq (D5.gamma G 4) (g ^ m) 1 := by
+  rcases hdiv with ⟨k, rfl⟩
+  rw [zpow_mul]
+  simpa using hd.zpow k
+
+/-- Formula (50): the two transferred power commutators cancel modulo
+`γ₄`; the two Hall--Petresco corrections vanish by (17). -/
+def formula50Left
+    (C : Context G) (P : Parameters C.s C.t) (i j : Fin C.s) : G :=
+  D5.paperComm (C.x1 i ^ orderInt C.d i) (C.x1 j) ^
+      (P.u i j * orderRatio C.d i j) *
+    D5.paperComm (C.x1 j ^ orderInt C.d j) (C.x1 i) ^ P.u i j
+
+theorem formula50
+    (C : Context G) (P : Parameters C.s C.t) (hP : P.Satisfies)
+    {i j : Fin C.s} (hij : i < j) :
+    D5.ModEq (D5.gamma G 4) (formula50Left C P i j) 1 := by
+  let X := C.x1 i
+  let Y := C.x1 j
+  let c := D5.paperComm X Y
+  let I := D5.paperComm c X
+  let J := D5.paperComm c Y
+  let d := orderInt C.d i
+  let e := orderInt C.d j
+  let q := orderRatio C.d i j
+  let u := P.u i j
+  let b2d := TaharaArithmetic.binom2 (C.d i)
+  let b2e := TaharaArithmetic.binom2 (C.d j)
+  have hX : X ∈ D5.gamma G 1 := by simp [X, D5.gamma]
+  have hY : Y ∈ D5.gamma G 1 := by simp [Y, D5.gamma]
+  have hc : c ∈ D5.gamma G 2 :=
+    D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hX hY
+  have hI : I ∈ D5.gamma G 3 :=
+    D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hc hX
+  have hJ : J ∈ D5.gamma G 3 :=
+    D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hc hY
+  have hIord : D5.ModEq (D5.gamma G 4) (I ^ d) 1 := by
+    have htransfer := D5.paperComm_zpow_right_mod_gamma
+      (n := 4) (r := 2) (s := 1)
+      (by norm_num) (by norm_num) (by norm_num) (by norm_num) hc hX d
+    exact htransfer.symm.trans <| D5.modEq_one_iff_mem.mpr <|
+      D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hc
+        (C.x1_order_power_mem_gamma2 i)
+  have hJord : D5.ModEq (D5.gamma G 4) (J ^ d) 1 := by
+    have hpower := D5.paperComm_zpow_left_mod_gamma
+      (n := 3) (r := 1) (s := 1)
+      (by norm_num) (by norm_num) (by norm_num) hX hY d
+    have hlift := D5.paperComm_left_of_modEq_gamma
+      (r := 3) (s := 1) (by norm_num) (by norm_num) hpower.symm hY
+    have htransfer := D5.paperComm_zpow_left_mod_gamma
+      (n := 4) (r := 2) (s := 1)
+      (by norm_num) (by norm_num) (by norm_num) hc hY d
+    have hzero : D5.ModEq (D5.gamma G 4)
+        (D5.paperComm (D5.paperComm (X ^ d) Y) Y) 1 :=
+      D5.modEq_one_iff_mem.mpr <|
+        D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+          (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+            (C.x1_order_power_mem_gamma2 i) hY) hY
+    exact htransfer.symm.trans (hlift.trans hzero)
+  have hpairs := pairConsequences C P hP hij
+  have hIdiv : d ∣ b2d * (u * q) := by
+    simpa [d, b2d, u, q, mul_assoc, mul_left_comm, mul_comm] using
+      hpairs.dvd17_left
+  have hJdiv : d ∣ (-b2e) * u := by
+    have hneg := dvd_neg.mpr hpairs.dvd17_right
+    simpa [d, b2e, u, mul_comm] using hneg
+  have hIv := modGammaFour_zpow_eq_one_of_dvd hIord hIdiv
+  have hJv := modGammaFour_zpow_eq_one_of_dvd hJord hJdiv
+  have hleft0 := paperComm_zpow_left_hallPetresco_mod_gamma_four
+    hX hY (C.d i)
+  have hleft1 := (hleft0.zpow (u * q)).trans <|
+    gammaTwoThree_mul_zpow_mod_gamma_four
+      ((D5.gamma G 2).zpow_mem hc d)
+      ((D5.gamma G 3).zpow_mem hI b2d) (u * q)
+  have hleft : D5.ModEq (D5.gamma G 4)
+      (D5.paperComm (X ^ d) Y ^ (u * q)) (c ^ (d * (u * q))) := by
+    have hIv' : D5.ModEq (D5.gamma G 4) ((I ^ b2d) ^ (u * q)) 1 := by
+      simpa [zpow_mul] using hIv
+    have hkill := (D5.ModEq.refl (D5.gamma G 4) ((c ^ d) ^ (u * q))).mul
+      hIv'
+    have h := hleft1.trans hkill
+    simpa only [mul_one, zpow_mul] using h
+  have hright0 := paperComm_zpow_left_hallPetresco_mod_gamma_four
+    hY hX (C.d j)
+  have hK : D5.ModEq (D5.gamma G 4)
+      (D5.paperComm (D5.paperComm Y X) Y) J⁻¹ := by
+    rw [D5.paperComm_swap X Y]
+    simpa [J, c] using D5.paperComm_inv_left_mod_gamma
+      (n := 4) (r := 2) (s := 1)
+      (by norm_num) (by norm_num) (by norm_num) hc hY
+  have hrightNorm : D5.ModEq (D5.gamma G 4)
+      (D5.paperComm (Y ^ e) X)
+      (c ^ (-e) * J ^ (-b2e)) := by
+    have hreplace : D5.ModEq (D5.gamma G 4)
+        (D5.paperComm Y X ^ e *
+          D5.paperComm (D5.paperComm Y X) Y ^ b2e)
+        (c ^ (-e) * J ^ (-b2e)) := by
+      have hbase : D5.ModEq (D5.gamma G 4)
+          (D5.paperComm Y X ^ e) ((c⁻¹) ^ e) := by
+        rw [D5.paperComm_swap X Y]
+      have h := hbase.mul (hK.zpow b2e)
+      simpa only [inv_zpow, zpow_neg] using h
+    change D5.ModEq (D5.gamma G 4) (D5.paperComm (Y ^ e) X)
+      (c ^ (-e) * J ^ (-b2e))
+    simpa [e, b2e, orderInt] using hright0.trans hreplace
+  have hright1 := (hrightNorm.zpow u).trans <|
+    gammaTwoThree_mul_zpow_mod_gamma_four
+      ((D5.gamma G 2).zpow_mem hc (-e))
+      ((D5.gamma G 3).zpow_mem hJ (-b2e)) u
+  have hright : D5.ModEq (D5.gamma G 4)
+      (D5.paperComm (Y ^ e) X ^ u) (c ^ ((-e) * u)) := by
+    have hJv' : D5.ModEq (D5.gamma G 4) ((J ^ (-b2e)) ^ u) 1 := by
+      simpa [zpow_mul] using hJv
+    have hkill := (D5.ModEq.refl (D5.gamma G 4) ((c ^ (-e)) ^ u)).mul
+      hJv'
+    have h := hright1.trans hkill
+    simpa [zpow_mul] using h
+  have he : e = d * q := C.orderInt_eq_mul_ratio hij.le
+  have hcancel : c ^ (d * (u * q)) * c ^ ((-e) * u) = 1 := by
+    rw [← zpow_add]
+    have hz : d * (u * q) + (-e) * u = 0 := by rw [he]; ring
+    rw [hz, zpow_zero]
+  have h := hleft.mul hright
+  change D5.ModEq (D5.gamma G 4)
+    (D5.paperComm (X ^ d) Y ^ (u * q) *
+      D5.paperComm (Y ^ e) X ^ u) 1
+  exact h.trans <| by rw [hcancel]
+
 /-! ## The correction calculation in formula (52) -/
 
 /-- A weight-four commutator followed by an entry whose `d`th power has

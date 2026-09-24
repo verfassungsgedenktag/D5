@@ -123,6 +123,8 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula47
 #print axioms D5.Tahara.formula48
 #print axioms D5.Tahara.formula49
+#print axioms D5.Tahara.paperComm_zpow_left_hallPetresco_mod_gamma_four
+#print axioms D5.Tahara.formula50
 #print axioms D5.Tahara.formula51
 #print axioms D5.Tahara.formula52
 #print axioms D5.Tahara.formula53
