@@ -171,7 +171,9 @@
     - [ ] Complete Section 14 (cancellation of the first two products).
       - [x] Prove formulas (47)--(49) by expanding the multiplicative form
         of condition (6), including all finite-product reindexing.
-      - [ ] Record the paper's intermediate route (50)--(51).
+      - [ ] Record the paper's intermediate formula (50).
+      - [x] Verify the three-factor congruence (51) from the checked
+        cancellation (52) and the direct transfer identity (53).
       - [x] Prove formula (52), with both corrections killed by (17).
       - [x] Prove (53) directly by two checked power transfers, cancel the
         first two products of (46), and derive formula (54).

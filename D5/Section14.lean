@@ -729,6 +729,79 @@ theorem formula53
   rw [hexp] at hleft2
   exact hleft2.trans hright2.symm
 
+def formula51First
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (i j : Fin C.s) : G :=
+  D5.paperComm (D5.paperComm
+    (D5.paperComm ξ (C.x1 i ^ orderInt C.d i)) (C.x1 j)) (C.x1 i) ^
+      (P.u i j * orderRatio C.d i j)
+
+def formula51Third
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (i j : Fin C.s) : G :=
+  D5.paperComm (D5.paperComm
+    (D5.paperComm ξ (C.x1 i)) (C.x1 j ^ orderInt C.d j)) (C.x1 i) ^
+      (-P.u i j)
+
+def formula51Right
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (i j : Fin C.s) : G :=
+  (formula51First C P ξ i j * formula53Right C P ξ i j) *
+    formula51Third C P ξ i j
+
+/-- Formula (51).  Its three-factor right side is checked against (52),
+while the remaining middle factor is identified by the direct transfer
+calculation (53). -/
+theorem formula51
+    (C : Context G) (P : Parameters C.s C.t) (hP : P.Satisfies)
+    (ξ : G) {i j : Fin C.s} (hij : i < j) :
+    D5.ModGammaSix (formula53Left C P ξ i j)
+      (formula51Right C P ξ i j) := by
+  let A := formula51First C P ξ i j
+  let B := formula53Right C P ξ i j
+  let C' := formula51Third C P ξ i j
+  have hA : A ∈ D5.gamma G 3 := by
+    dsimp [A, formula51First]
+    have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+    have hi : C.x1 i ∈ D5.gamma G 1 := by simp [D5.gamma]
+    have hj : C.x1 j ∈ D5.gamma G 1 := by simp [D5.gamma]
+    exact D5.gamma_antitone G (by norm_num) <| (D5.gamma G 5).zpow_mem
+      (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+        (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+          (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hξ
+            (C.x1_order_power_mem_gamma2 i)) hj) hi) _
+  have hB : B ∈ D5.gamma G 3 := by
+    dsimp [B, formula53Right]
+    have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+    have hi : C.x1 i ∈ D5.gamma G 1 := by simp [D5.gamma]
+    exact D5.gamma_antitone G (by norm_num) <| (D5.gamma G 5).zpow_mem
+      (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+        (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+          (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hξ
+            (C.x1_order_power_mem_gamma2 j)) hi) hi) _
+  have hC : C' ∈ D5.gamma G 3 := by
+    dsimp [C', formula51Third]
+    have hξ : ξ ∈ D5.gamma G 1 := by simp [D5.gamma]
+    have hi : C.x1 i ∈ D5.gamma G 1 := by simp [D5.gamma]
+    have hj : C.x1 j ∈ D5.gamma G 1 := by simp [D5.gamma]
+    exact D5.gamma_antitone G (by norm_num) <| (D5.gamma G 5).zpow_mem
+      (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+        (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num)
+          (D5.paperComm_mem_gamma_add (by norm_num) (by norm_num) hξ hi)
+            (C.x1_order_power_mem_gamma2 j)) hi) _
+  have h52 := formula52 C P hP ξ hij
+  have hcancel : D5.ModGammaSix (A * C') 1 := by
+    have hi := h52.inv
+    simpa [formula52Left, formula51First, formula51Third, A, C',
+      inv_zpow, zpow_neg] using hi
+  have hperm : D5.ModGammaSix ((A * B) * C') ((A * C') * B) := by
+    simpa only [mul_one] using
+      D5.gammaThree_interchange (a := A) (b := B) (c := C') (d := (1 : G)) hB hC
+  have hright : D5.ModGammaSix (formula51Right C P ξ i j) B := by
+    simpa [formula51Right, A, B, C'] using hperm.trans <|
+      hcancel.mul (D5.ModEq.refl (D5.gamma G 6) B)
+  exact (formula53 C P hP ξ hij).trans hright.symm
+
 def formula53LeftProduct
     (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
   strictPairProduct (formula53Left C P ξ)
