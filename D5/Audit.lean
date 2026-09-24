@@ -170,4 +170,7 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula70
 #print axioms D5.Tahara.formula71_expansion
 #print axioms D5.Tahara.formula71
+#print axioms D5.Tahara.sum_filter_le_eq_sum_filter_lt_add
+#print axioms D5.Tahara.formula72
+#print axioms D5.Tahara.formula73
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

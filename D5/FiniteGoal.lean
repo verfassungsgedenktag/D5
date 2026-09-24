@@ -26,6 +26,7 @@ import D5.Section16
 import D5.Section17
 import D5.Section18
 import D5.Section19
+import D5.Section20
 import D5.Rotation
 import D5.RotationSix
 import D5.Weight

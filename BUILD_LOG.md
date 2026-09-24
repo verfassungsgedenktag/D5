@@ -256,3 +256,11 @@ Run the current verification with:
 - Full build after Section 19: successful (`3138` jobs).  The new sum
   identities require no project axiom, while formulas (70)--(71) use only
   the already accepted commutator-weight background theorem.
+- Section 20 has begun in `D5/Section20.lean`.  Formula (72) is derived from
+  condition (11) after an explicit finite-sum split removes the diagonal
+  term by condition (2).  Formula (73) is proved for the printed three-part
+  word by expanding it coordinatewise in `γ₂/γ₃` and applying the existing
+  Bezout calculation to every cyclic coordinate.
+- Full build after formulas (72)--(73): successful (`3139` jobs).  Their
+  axiom audit contains only standard logical axioms and the accepted
+  commutator-weight theorem.
