@@ -184,6 +184,11 @@
         `γ₅`, and restate (54) using the named remainder.
       - [x] Verify all bilinearity, power, replacement, and reordering rules
         in (56) with their explicit weight bounds.
+    - [x] Formalize Section 16 (the first expansion of `κ`).
+      - [x] Prove formulas (57)--(58), including the power transfer that
+        places the weight-three correction in `γ₄`.
+      - [x] Derive the two-product expansion (59) pairwise and globally.
+      - [x] Kill its correction product by (17) and prove formula (60).
 
 ## Phase 4 — finite-group theorem and audit
 

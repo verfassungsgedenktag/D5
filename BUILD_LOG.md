@@ -220,3 +220,10 @@ Run the current verification with:
 - Full build after Section 15: successful (`3134` jobs).  The axiom audit
   reports only Lean's standard logical axioms and the accepted
   commutator-weight background theorem; no proof placeholders occur.
+- Section 16 is formalized in `D5/Section16.lean`.  Formula (57) is the
+  checked first-entry Hall--Petresco expansion modulo `γ₄`; formula (58)
+  transfers the order power into the last entry.  Formula (59) is collected
+  over all strict pairs, and its second product is eliminated factor by
+  factor using the first divisibility in (17), yielding formula (60).
+- Full build after Section 16: successful (`3135` jobs), with the new
+  theorems included in the axiom audit.

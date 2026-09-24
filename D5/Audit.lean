@@ -139,4 +139,10 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula56_replace_left
 #print axioms D5.Tahara.formula56_replace_right
 #print axioms D5.Tahara.formula56_gammaFour_commute
+#print axioms D5.Tahara.formula57
+#print axioms D5.Tahara.formula58
+#print axioms D5.Tahara.formula59_pair
+#print axioms D5.Tahara.formula59
+#print axioms D5.Tahara.formula59_second_product_vanish
+#print axioms D5.Tahara.formula60
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise
