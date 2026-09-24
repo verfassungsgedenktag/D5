@@ -1212,11 +1212,588 @@ theorem formula46_pair
   (formula45 C P hP ξ hij).trans
     (formula45_to_formula46_pair C P hP ξ hij)
 
-/-! ## Global pair products in formula (46) -/
+/-! ## Splitting the principal products of formula (34) -/
+
+/-- Split the weak triangle `i ≤ j ≤ k` into its diagonal, the two
+repeated-index faces, and the strict triangle.  This is only finite-product
+bookkeeping in the abelian quotient `γ₃/γ₆`. -/
+theorem weakTripleProduct_split_patterns
+    {n : ℕ} (f : Fin n → Fin n → Fin n → G)
+    (hf : ∀ i j k, f i j k ∈ D5.gamma G 3) :
+    D5.ModGammaSix
+      (orderedProduct fun i => orderedProductWhere (i ≤ ·) fun j =>
+        orderedProductWhere (j ≤ ·) fun k => f i j k)
+      ((orderedProduct (fun i => f i i i) *
+          strictPairProduct (fun i k => f i i k)) *
+        (strictPairProduct (fun i j => f i j j) * strictTripleProduct f)) := by
+  let B : Fin n → Fin n → G := fun i j =>
+    orderedProductWhere (j ≤ ·) fun k => f i j k
+  let D : Fin n → G := fun i => f i i i
+  let A : Fin n → G := fun i =>
+    orderedProductWhere (i < ·) fun k => f i i k
+  let E : Fin n → Fin n → G := fun i j => f i j j
+  let S : Fin n → Fin n → G := fun i j =>
+    orderedProductWhere (j < ·) fun k => f i j k
+  let ER : Fin n → G := fun i => orderedProductWhere (i < ·) (E i)
+  let SR : Fin n → G := fun i => orderedProductWhere (i < ·) (S i)
+  have hB : ∀ i j, B i j ∈ D5.gamma G 3 := by
+    intro i j
+    apply orderedProductWhere_mem
+    intro k hjk
+    exact hf i j k
+  have hD : ∀ i, D i ∈ D5.gamma G 3 := fun i => hf i i i
+  have hA : ∀ i, A i ∈ D5.gamma G 3 := by
+    intro i
+    apply orderedProductWhere_mem
+    intro k hik
+    exact hf i i k
+  have hE : ∀ i j, i < j → E i j ∈ D5.gamma G 3 := by
+    intro i j hij
+    exact hf i j j
+  have hS : ∀ i j, i < j → S i j ∈ D5.gamma G 3 := by
+    intro i j hij
+    apply orderedProductWhere_mem
+    intro k hjk
+    exact hf i j k
+  have hER : ∀ i, ER i ∈ D5.gamma G 3 := by
+    intro i
+    apply orderedProductWhere_mem
+    intro j hij
+    exact hE i j hij
+  have hSR : ∀ i, SR i ∈ D5.gamma G 3 := by
+    intro i
+    apply orderedProductWhere_mem
+    intro j hij
+    exact hS i j hij
+  have hrow : ∀ i, D5.ModGammaSix
+      (orderedProductWhere (i ≤ ·) (B i))
+      ((D i * A i) * (ER i * SR i)) := by
+    intro i
+    have hj := orderedProductWhere_le_split_lt i (B i)
+      (fun j hij => hB i j)
+    have hd := orderedProductWhere_le_split_lt i (f i i)
+      (fun k hik => hf i i k)
+    have hoff0 : D5.ModGammaSix
+        (orderedProductWhere (i < ·) (B i))
+        (orderedProductWhere (i < ·) fun j => E i j * S i j) := by
+      apply modEq_orderedProductWhere
+      intro j hij
+      simpa [B, E, S] using
+        orderedProductWhere_le_split_lt j (f i j) (fun k hjk => hf i j k)
+    have hoff1 := D5.orderedProductWhere_pointwise_mul_gammaThree
+      (i < ·) (E i) (S i) (hE i) (hS i)
+    have hreplace := hd.mul (hoff0.trans hoff1)
+    simpa [B, D, A, ER, SR] using hj.trans hreplace
+  have hrows : D5.ModGammaSix
+      (orderedProduct fun i => orderedProductWhere (i ≤ ·) (B i))
+      (orderedProduct fun i => (D i * A i) * (ER i * SR i)) := by
+    apply modEq_orderedProduct
+    exact hrow
+  have hcollect := D5.orderedProduct_four_gammaThree D A ER SR
+    hD hA hER hSR
+  simpa [B, D, A, E, S, ER, SR, strictPairProduct,
+    strictTripleProduct] using hrows.trans hcollect
+
+/-- Split `i < j ≤ k` into the repeated-index face `i < j = k` and
+the strict triangle. -/
+theorem strictWeakTripleProduct_split_last
+    {n : ℕ} (f : Fin n → Fin n → Fin n → G)
+    (hf : ∀ i j k, f i j k ∈ D5.gamma G 3) :
+    D5.ModGammaSix
+      (orderedProduct fun i => orderedProductWhere (i < ·) fun j =>
+        orderedProductWhere (j ≤ ·) fun k => f i j k)
+      (strictPairProduct (fun i j => f i j j) * strictTripleProduct f) := by
+  let E : Fin n → Fin n → G := fun i j => f i j j
+  let S : Fin n → Fin n → G := fun i j =>
+    orderedProductWhere (j < ·) fun k => f i j k
+  have hE : ∀ i j, i < j → E i j ∈ D5.gamma G 3 := by
+    intro i j hij
+    exact hf i j j
+  have hS : ∀ i j, i < j → S i j ∈ D5.gamma G 3 := by
+    intro i j hij
+    apply orderedProductWhere_mem
+    intro k hjk
+    exact hf i j k
+  have hlocal : D5.ModGammaSix
+      (orderedProduct fun i => orderedProductWhere (i < ·) fun j =>
+        orderedProductWhere (j ≤ ·) fun k => f i j k)
+      (strictPairProduct fun i j => E i j * S i j) := by
+    unfold strictPairProduct
+    apply modEq_orderedProduct
+    intro i
+    apply modEq_orderedProductWhere
+    intro j hij
+    simpa [E, S] using
+      orderedProductWhere_le_split_lt j (f i j) (fun k hjk => hf i j k)
+  have hsplit := strictPairProduct_pointwise_gammaThree E S hE hS
+  simpa [E, S, strictTripleProduct] using hlocal.trans hsplit.symm
+
+def formula34WMainDiagonalProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  orderedProduct fun i => formula34WMainFactor C P ξ i i i
+
+def formula34WMainIIJProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  strictPairProduct fun i j => formula34WMainFactor C P ξ i i j
+
+def formula34WMainIJJProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  strictPairProduct fun i j => formula34WMainFactor C P ξ i j j
+
+def formula34WPrimeIJJProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  strictPairProduct fun i j => formula34WPrimeMainFactor C P ξ i j j
+
+theorem formula34_wmain_split_patterns
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula34WMainProduct C P ξ)
+      ((formula34WMainDiagonalProduct C P ξ *
+          formula34WMainIIJProduct C P ξ) *
+        (formula34WMainIJJProduct C P ξ *
+          formula34WMainStrictProduct C P ξ)) := by
+  simpa [formula34WMainProduct, formula34WMainDiagonalProduct,
+    formula34WMainIIJProduct, formula34WMainIJJProduct,
+    formula34WMainStrictProduct] using
+      weakTripleProduct_split_patterns (formula34WMainFactor C P ξ)
+        (formula34WMainFactor_mem_gamma3 C P ξ)
+
+theorem formula34_wprime_split_patterns
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula34WPrimeMainProduct C P ξ)
+      (formula34WPrimeIJJProduct C P ξ *
+        formula34WPrimeMainStrictProduct C P ξ) := by
+  simpa [formula34WPrimeMainProduct, formula34WPrimeIJJProduct,
+    formula34WPrimeMainStrictProduct] using
+      strictWeakTripleProduct_split_last (formula34WPrimeMainFactor C P ξ)
+        (formula34WPrimeMainFactor_mem_gamma3 C P ξ)
+
+theorem formula34_wmain_diagonal_vanish
+    (C : Context G) (P : Parameters C.s C.t) (h2 : P.Condition2) (ξ : G) :
+    formula34WMainDiagonalProduct C P ξ = 1 := by
+  unfold formula34WMainDiagonalProduct orderedProduct
+  simp [formula34WMainFactor_diagonal_eq_one C P h2 ξ]
+
+def formula40FaceProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  strictPairProduct fun i j =>
+    formula34WMainFactor C P ξ i j j *
+      formula34WPrimeMainFactor C P ξ i j j
+
+def formula41FaceProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  strictPairProduct fun i j =>
+    formula34WMainFactor C P ξ i i j *
+      formula34WDoublePrimeMainFactor C P ξ i i j
+
+/-- After Section 12 removes the diagonal and strict-triple parts, the
+three principal products in (34) consist exactly of their two
+repeated-index faces. -/
+theorem formula34_principal_to_pair_faces
+    (C : Context G) (P : Parameters C.s C.t)
+    (h2 : P.Condition2) (h5 : P.Condition5) (h10 : P.Condition10) (ξ : G) :
+    D5.ModGammaSix
+      ((formula34WMainProduct C P ξ * formula34WPrimeMainProduct C P ξ) *
+        formula34WDoublePrimeFullMainProduct C P ξ)
+      (formula40FaceProduct C P ξ * formula41FaceProduct C P ξ) := by
+  let A := formula34WMainIIJProduct C P ξ
+  let B := formula34WMainIJJProduct C P ξ
+  let S := formula34WMainStrictProduct C P ξ
+  let C' := formula34WPrimeIJJProduct C P ξ
+  let T := formula34WPrimeMainStrictProduct C P ξ
+  let D := formula34WDoublePrimeDiagonalMainProduct C P ξ
+  let U := formula34WDoublePrimeMainStrictProduct C P ξ
+  have hA : A ∈ D5.gamma G 3 := by
+    dsimp [A, formula34WMainIIJProduct, strictPairProduct]
+    apply orderedProduct_mem; intro i
+    apply orderedProductWhere_mem; intro j hij
+    exact formula34WMainFactor_mem_gamma3 C P ξ i i j
+  have hB : B ∈ D5.gamma G 3 := by
+    dsimp [B, formula34WMainIJJProduct, strictPairProduct]
+    apply orderedProduct_mem; intro i
+    apply orderedProductWhere_mem; intro j hij
+    exact formula34WMainFactor_mem_gamma3 C P ξ i j j
+  have hS : S ∈ D5.gamma G 3 := by
+    dsimp [S, formula34WMainStrictProduct, strictTripleProduct]
+    apply orderedProduct_mem; intro i
+    apply orderedProductWhere_mem; intro j hij
+    apply orderedProductWhere_mem; intro k hjk
+    exact formula34WMainFactor_mem_gamma3 C P ξ i j k
+  have hC : C' ∈ D5.gamma G 3 := by
+    dsimp [C', formula34WPrimeIJJProduct, strictPairProduct]
+    apply orderedProduct_mem; intro i
+    apply orderedProductWhere_mem; intro j hij
+    exact formula34WPrimeMainFactor_mem_gamma3 C P ξ i j j
+  have hT : T ∈ D5.gamma G 3 := by
+    dsimp [T, formula34WPrimeMainStrictProduct, strictTripleProduct]
+    apply orderedProduct_mem; intro i
+    apply orderedProductWhere_mem; intro j hij
+    apply orderedProductWhere_mem; intro k hjk
+    exact formula34WPrimeMainFactor_mem_gamma3 C P ξ i j k
+  have hD : D ∈ D5.gamma G 3 := by
+    dsimp [D, formula34WDoublePrimeDiagonalMainProduct]
+    apply orderedProduct_mem; intro i
+    apply orderedProductWhere_mem; intro j hij
+    exact formula34WDoublePrimeMainFactor_mem_gamma3 C P ξ i i j
+  have hU : U ∈ D5.gamma G 3 := by
+    dsimp [U, formula34WDoublePrimeMainStrictProduct, strictTripleProduct]
+    apply orderedProduct_mem; intro i
+    apply orderedProductWhere_mem; intro j hij
+    apply orderedProductWhere_mem; intro k hjk
+    exact formula34WDoublePrimeMainFactor_mem_gamma3 C P ξ i j k
+  have hsplit := ((formula34_wmain_split_patterns C P ξ).mul
+    (formula34_wprime_split_patterns C P ξ)).mul
+      (formula34_wdoubleprime_join_diagonal_strict C P ξ).symm
+  have hdiag := formula34_wmain_diagonal_vanish C P h2 ξ
+  have hsplit' : D5.ModGammaSix
+      ((formula34WMainProduct C P ξ * formula34WPrimeMainProduct C P ξ) *
+        formula34WDoublePrimeFullMainProduct C P ξ)
+      (((A * (B * S)) * (C' * T)) * (D * U)) := by
+    simpa [A, B, S, C', T, D, U, hdiag] using hsplit
+  have hp : [A, B, S, C', T, D, U].Perm [B, C', A, D, S, T, U] := by
+    have h1 : [A, B, S, C', T, D, U].Perm [B, A, S, C', T, D, U] :=
+      (List.Perm.swap A B [S, C', T, D, U]).symm
+    have hmoveC : ([A, S] ++ [C']).Perm ([C'] ++ [A, S]) :=
+      List.perm_append_comm
+    have h2 : [B, A, S, C', T, D, U].Perm [B, C', A, S, T, D, U] := by
+      apply List.Perm.cons B
+      simpa only [List.append_assoc] using hmoveC.append_right [T, D, U]
+    have hmoveD : ([S, T] ++ [D]).Perm ([D] ++ [S, T]) :=
+      List.perm_append_comm
+    have h3 : [B, C', A, S, T, D, U].Perm [B, C', A, D, S, T, U] := by
+      apply List.Perm.cons B
+      apply List.Perm.cons C'
+      apply List.Perm.cons A
+      simpa only [List.append_assoc] using hmoveD.append_right [U]
+    exact h1.trans (h2.trans h3)
+  have hperm : D5.ModGammaSix
+      (((A * (B * S)) * (C' * T)) * (D * U))
+      (((B * C') * (A * D)) * ((S * T) * U)) := by
+    simpa [mul_assoc] using D5.listProd_perm_gammaThree hp (by
+      intro x hx
+      simp only [List.mem_cons] at hx
+      rcases hx with rfl | rfl | rfl | rfl | rfl | rfl | hx
+      · exact hA
+      · exact hB
+      · exact hS
+      · exact hC
+      · exact hT
+      · exact hD
+      · rcases hx with rfl | hx
+        · exact hU
+        · simp at hx)
+  have h40 := strictPairProduct_pointwise_gammaThree
+    (fun i j => formula34WMainFactor C P ξ i j j)
+    (fun i j => formula34WPrimeMainFactor C P ξ i j j)
+    (fun i j hij => formula34WMainFactor_mem_gamma3 C P ξ i j j)
+    (fun i j hij => formula34WPrimeMainFactor_mem_gamma3 C P ξ i j j)
+  have h41 := strictPairProduct_pointwise_gammaThree
+    (fun i j => formula34WMainFactor C P ξ i i j)
+    (fun i j => formula34WDoublePrimeMainFactor C P ξ i i j)
+    (fun i j hij => formula34WMainFactor_mem_gamma3 C P ξ i i j)
+    (fun i j hij => formula34WDoublePrimeMainFactor_mem_gamma3 C P ξ i i j)
+  have hstrict := formula39_strict_principal_streams_vanish C P h5 h10 ξ
+  have hfinish : D5.ModGammaSix
+      (((B * C') * (A * D)) * ((S * T) * U))
+      (formula40FaceProduct C P ξ * formula41FaceProduct C P ξ) := by
+    exact ((h40.mul h41).mul hstrict).trans (by
+      simp only [mul_one]
+      exact D5.ModEq.refl (D5.gamma G 6) _)
+  exact hsplit'.trans (hperm.trans hfinish)
+
+/-! ## Identifying the pair source left by formulas (29) and (34) -/
+
+theorem formula28_u_is_formula29_line_two
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula28URotatedPairStream C P ξ)
+      (formula29LineTwo C P ξ) := by
+  change D5.ModGammaSix
+    (orderedProduct fun j => orderedProductWhere (· < j) fun i =>
+      formula29PairLineTwo C P ξ i j)
+    (strictPairProduct (formula29PairLineTwo C P ξ))
+  exact (strictPairProduct_swap (formula29PairLineTwo C P ξ)
+    (fun i j hij => (formula29_pair_lines_mem_gamma3 C P ξ hij).2.1)).symm
+
+def formula45RawSource
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (i j : Fin C.s) : G :=
+  (formula29PairCorrections C P ξ i j *
+      formula29PairLineTwo C P ξ i j) *
+    ((formula34WMainFactor C P ξ i j j *
+        formula34WPrimeMainFactor C P ξ i j j) *
+      (formula34WMainFactor C P ξ i i j *
+        formula34WDoublePrimeMainFactor C P ξ i i j))
+
+private def formula45PermutedRawSource
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (i j : Fin C.s) : G :=
+  let l1 := formula29PairLineOne C P ξ i j
+  let l2 := formula29PairLineTwo C P ξ i j
+  let l3 := formula29PairLineThree C P ξ i j
+  let l4 := formula29PairLineFour C P ξ i j
+  let l5 := formula29PairLineFive C P ξ i j
+  let l6 := formula29PairLineSix C P ξ i j
+  let w1 := formula34WMainFactor C P ξ i j j
+  let w2 := formula34WPrimeMainFactor C P ξ i j j
+  let w3 := formula34WMainFactor C P ξ i i j
+  let w4 := formula34WDoublePrimeMainFactor C P ξ i i j
+  ((((w2 * w1) * (w4 * w3)) * (l5 * l6)) * (l1 * (l2 * l2))) * (l3 * l4)
+
+private theorem formula45_raw_permute
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    {i j : Fin C.s} (hij : i < j) :
+    D5.ModGammaSix (formula45RawSource C P ξ i j)
+      (formula45PermutedRawSource C P ξ i j) := by
+  let l1 := formula29PairLineOne C P ξ i j
+  let l2 := formula29PairLineTwo C P ξ i j
+  let l3 := formula29PairLineThree C P ξ i j
+  let l4 := formula29PairLineFour C P ξ i j
+  let l5 := formula29PairLineFive C P ξ i j
+  let l6 := formula29PairLineSix C P ξ i j
+  let w1 := formula34WMainFactor C P ξ i j j
+  let w2 := formula34WPrimeMainFactor C P ξ i j j
+  let w3 := formula34WMainFactor C P ξ i i j
+  let w4 := formula34WDoublePrimeMainFactor C P ξ i i j
+  have hl := formula29_pair_lines_mem_gamma3 C P ξ hij
+  have hl1 : l1 ∈ D5.gamma G 3 := hl.1
+  have hl2 : l2 ∈ D5.gamma G 3 := hl.2.1
+  have hl3 : l3 ∈ D5.gamma G 3 := hl.2.2.1
+  have hl4 : l4 ∈ D5.gamma G 3 := hl.2.2.2.1
+  have hl5 : l5 ∈ D5.gamma G 3 := hl.2.2.2.2.1
+  have hl6 : l6 ∈ D5.gamma G 3 := hl.2.2.2.2.2
+  have hw1 : w1 ∈ D5.gamma G 3 :=
+    formula34WMainFactor_mem_gamma3 C P ξ i j j
+  have hw2 : w2 ∈ D5.gamma G 3 :=
+    formula34WPrimeMainFactor_mem_gamma3 C P ξ i j j
+  have hw3 : w3 ∈ D5.gamma G 3 :=
+    formula34WMainFactor_mem_gamma3 C P ξ i i j
+  have hw4 : w4 ∈ D5.gamma G 3 :=
+    formula34WDoublePrimeMainFactor_mem_gamma3 C P ξ i i j
+  have hrotate :
+      ([l1, l2, l3, l4, l5, l6, l2] ++ [w1, w2, w3, w4]).Perm
+        ([w1, w2, w3, w4] ++ [l1, l2, l3, l4, l5, l6, l2]) :=
+    List.perm_append_comm
+  have hw12 : [w1, w2].Perm [w2, w1] :=
+    (List.Perm.swap w1 w2 []).symm
+  have hw34 : [w3, w4].Perm [w4, w3] :=
+    (List.Perm.swap w3 w4 []).symm
+  have hw : [w1, w2, w3, w4].Perm [w2, w1, w4, w3] := by
+    simpa only [List.append_assoc] using hw12.append hw34
+  have hmove56 : ([l1, l2, l3, l4] ++ [l5, l6]).Perm
+      ([l5, l6] ++ [l1, l2, l3, l4]) := List.perm_append_comm
+  have hc1 : [l1, l2, l3, l4, l5, l6, l2].Perm
+      [l5, l6, l1, l2, l3, l4, l2] := by
+    simpa only [List.append_assoc] using hmove56.append_right [l2]
+  have hmove2 : ([l3, l4] ++ [l2]).Perm ([l2] ++ [l3, l4]) :=
+    List.perm_append_comm
+  have hc2 : [l5, l6, l1, l2, l3, l4, l2].Perm
+      [l5, l6, l1, l2, l2, l3, l4] := by
+    simpa only [List.append_assoc] using hmove2.append_left [l5, l6, l1, l2]
+  have hp : [l1, l2, l3, l4, l5, l6, l2, w1, w2, w3, w4].Perm
+      [w2, w1, w4, w3, l5, l6, l1, l2, l2, l3, l4] := by
+    have hr : [l1, l2, l3, l4, l5, l6, l2, w1, w2, w3, w4].Perm
+        [w1, w2, w3, w4, l1, l2, l3, l4, l5, l6, l2] := by
+      simpa only [List.append_assoc] using hrotate
+    exact hr.trans <| (hw.append (hc1.trans hc2))
+  change D5.ModGammaSix
+    ((((l1 * l2) * (l3 * l4)) * (l5 * l6) * l2) *
+      ((w1 * w2) * (w3 * w4)))
+    (((((w2 * w1) * (w4 * w3)) * (l5 * l6)) *
+      (l1 * (l2 * l2))) * (l3 * l4))
+  simpa only [List.prod_cons, List.prod_nil, mul_one, mul_assoc] using
+    D5.listProd_perm_gammaThree hp (by
+      intro x hx
+      simp only [List.mem_cons] at hx
+      rcases hx with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | hx
+      · exact hl1
+      · exact hl2
+      · exact hl3
+      · exact hl4
+      · exact hl5
+      · exact hl6
+      · exact hl2
+      · exact hw1
+      · exact hw2
+      · exact hw3
+      · rcases hx with rfl | hx
+        · exact hw4
+        · simp at hx)
+
+private theorem formula45_permuted_raw_eq_source
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    (i j : Fin C.s) :
+    formula45PermutedRawSource C P ξ i j = formula45Source C P ξ i j := by
+  have h40a : formula34WMainFactor C P ξ i j j =
+      (formula40First C P ξ i j)⁻¹ := by
+    simp [formula34WMainFactor, formula40First, zpow_neg]
+  have h40b : formula34WPrimeMainFactor C P ξ i j j =
+      (formula40Second C P ξ i j)⁻¹ := by
+    simp [formula34WPrimeMainFactor, formula40Second, zpow_neg]
+  have h41a : formula34WMainFactor C P ξ i i j =
+      (formula41First C P ξ i j)⁻¹ := by
+    simp [formula34WMainFactor, formula41First, zpow_neg]
+  have h41b : formula34WDoublePrimeMainFactor C P ξ i i j =
+      (formula41Second C P ξ i j)⁻¹ := by
+    simp [formula34WDoublePrimeMainFactor, formula41Second, zpow_neg]
+  have h43 : formula29PairLineOne C P ξ i j *
+      (formula29PairLineTwo C P ξ i j * formula29PairLineTwo C P ξ i j) =
+      formula43Left C P ξ i j := by
+    unfold formula29PairLineOne formula29PairLineTwo formula43Left
+    rw [← zpow_add]
+    congr 1
+    ring
+  have h40 : (formula40Second C P ξ i j)⁻¹ *
+      (formula40First C P ξ i j)⁻¹ =
+      (formula40First C P ξ i j * formula40Second C P ξ i j)⁻¹ := by
+    rw [mul_inv_rev]
+  have h41 : (formula41Second C P ξ i j)⁻¹ *
+      (formula41First C P ξ i j)⁻¹ =
+      (formula41First C P ξ i j * formula41Second C P ξ i j)⁻¹ := by
+    rw [mul_inv_rev]
+  have h42 : formula29PairLineFive C P ξ i j *
+      formula29PairLineSix C P ξ i j = formula42Left C P ξ i j := rfl
+  have h44 : formula29PairLineThree C P ξ i j *
+      formula29PairLineFour C P ξ i j = formula44Left C P ξ i j := rfl
+  rw [formula45PermutedRawSource, h40a, h40b, h41a, h41b,
+    h40, h41, h42, h43, h44]
+  rfl
+
+theorem formula45_raw_to_source
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G)
+    {i j : Fin C.s} (hij : i < j) :
+    D5.ModGammaSix (formula45RawSource C P ξ i j)
+      (formula45Source C P ξ i j) :=
+  (formula45_raw_permute C P ξ hij).trans <| by
+    rw [formula45_permuted_raw_eq_source]
+
+def formula45RawSourceProduct
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
+  strictPairProduct (formula45RawSource C P ξ)
 
 def formula45SourceProduct
     (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
   strictPairProduct (formula45Source C P ξ)
+
+theorem formula29_pairs_and_faces_to_formula45_source
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix
+      ((strictPairProduct (formula29PairCorrections C P ξ) *
+          formula28URotatedPairStream C P ξ) *
+        (formula40FaceProduct C P ξ * formula41FaceProduct C P ξ))
+      (formula45SourceProduct C P ξ) := by
+  let L2 := formula29PairLineTwo C P ξ
+  let F40 : Fin C.s → Fin C.s → G := fun i j =>
+    formula34WMainFactor C P ξ i j j *
+      formula34WPrimeMainFactor C P ξ i j j
+  let F41 : Fin C.s → Fin C.s → G := fun i j =>
+    formula34WMainFactor C P ξ i i j *
+      formula34WDoublePrimeMainFactor C P ξ i i j
+  let CL2 : Fin C.s → Fin C.s → G := fun i j =>
+    formula29PairCorrections C P ξ i j * L2 i j
+  have hCorr : ∀ i j, i < j →
+      formula29PairCorrections C P ξ i j ∈ D5.gamma G 3 :=
+    fun i j hij => formula29_pair_corrections_mem_gamma3 C P ξ hij
+  have hL2 : ∀ i j, i < j → L2 i j ∈ D5.gamma G 3 := by
+    intro i j hij
+    exact (formula29_pair_lines_mem_gamma3 C P ξ hij).2.1
+  have hF40 : ∀ i j, i < j → F40 i j ∈ D5.gamma G 3 := by
+    intro i j hij
+    exact (D5.gamma G 3).mul_mem
+      (formula34WMainFactor_mem_gamma3 C P ξ i j j)
+      (formula34WPrimeMainFactor_mem_gamma3 C P ξ i j j)
+  have hF41 : ∀ i j, i < j → F41 i j ∈ D5.gamma G 3 := by
+    intro i j hij
+    exact (D5.gamma G 3).mul_mem
+      (formula34WMainFactor_mem_gamma3 C P ξ i i j)
+      (formula34WDoublePrimeMainFactor_mem_gamma3 C P ξ i i j)
+  have hCL2 : ∀ i j, i < j → CL2 i j ∈ D5.gamma G 3 := by
+    intro i j hij
+    exact (D5.gamma G 3).mul_mem (hCorr i j hij) (hL2 i j hij)
+  have hu := formula28_u_is_formula29_line_two C P ξ
+  have hreplace := ((D5.ModEq.refl (D5.gamma G 6)
+    (strictPairProduct (formula29PairCorrections C P ξ))).mul hu).mul
+      (D5.ModEq.refl (D5.gamma G 6)
+        (formula40FaceProduct C P ξ * formula41FaceProduct C P ξ))
+  have h12 := strictPairProduct_pointwise_gammaThree
+    (formula29PairCorrections C P ξ) L2 hCorr hL2
+  have h34 := strictPairProduct_pointwise_gammaThree F40 F41 hF40 hF41
+  have hall := strictPairProduct_pointwise_gammaThree CL2
+    (fun i j => F40 i j * F41 i j) hCL2
+    (fun i j hij => (D5.gamma G 3).mul_mem (hF40 i j hij) (hF41 i j hij))
+  have hcollect : D5.ModGammaSix
+      ((strictPairProduct (formula29PairCorrections C P ξ) *
+          strictPairProduct L2) *
+        (strictPairProduct F40 * strictPairProduct F41))
+      (formula45RawSourceProduct C P ξ) := by
+    simpa [CL2, F40, F41, L2, formula45RawSourceProduct,
+      formula45RawSource] using (h12.mul h34).trans hall
+  have hlocal : D5.ModGammaSix (formula45RawSourceProduct C P ξ)
+      (formula45SourceProduct C P ξ) := by
+    unfold formula45RawSourceProduct formula45SourceProduct strictPairProduct
+    apply modEq_orderedProduct
+    intro i
+    apply modEq_orderedProductWhere
+    intro j hij
+    exact formula45_raw_to_source C P ξ hij
+  simpa [formula40FaceProduct, formula41FaceProduct, F40, F41, L2] using
+    hreplace.trans (hcollect.trans hlocal)
+
+theorem formula29_rearrange_section13_source
+    (C : Context G) (P : Parameters C.s C.t) (ξ : G) :
+    D5.ModGammaSix (formula29DisplayedProduct C P ξ)
+      ((formula29FirstSixDisplayed C P ξ *
+          formula28URotatedPairStream C P ξ) *
+        formula34LastFiveDisplayedProduct C P ξ) := by
+  let F := formula29FirstSixDisplayed C P ξ
+  let L := formula29LineSeven C P ξ
+  let U := formula28URotatedPairStream C P ξ
+  let A := formula28WLeftDisplayedStream C P ξ
+  let B := formula28WRightDisplayedStream C P ξ
+  let E := formula28WPrimeDisplayedStream C P ξ
+  let T := formula29LineTwelve C P ξ
+  have hL : L ∈ D5.gamma G 3 := by
+    dsimp [L, formula29LineSeven]
+    apply orderedProduct_mem
+    intro j
+    exact formula22_correction_mem_gamma3 C P ξ j
+  have hU : U ∈ D5.gamma G 3 := by
+    dsimp [U, formula28URotatedPairStream]
+    apply orderedProduct_mem
+    intro j
+    apply orderedProductWhere_mem
+    intro i hij
+    exact (formula29_pair_lines_mem_gamma3 C P ξ hij).2.1
+  have hinterchange := D5.gammaThree_interchange
+    (a := F) (b := L) (c := U) (d := (A * (B * E)) * T) hL hU
+  simpa [formula29DisplayedProduct, formula28DisplayedProduct,
+    formula34LastFiveDisplayedProduct, F, L, U, A, B, E, T, mul_assoc] using
+      hinterchange
+
+/-- The complete global identification missing after the local formulas
+(40)--(45): the remainder of formulas (29) and (34) is their pair source. -/
+theorem formula29_to_formula45_source
+    (C : Context G) (P : Parameters C.s C.t) (hP : P.Satisfies) (ξ : G) :
+    D5.ModGammaSix (formula29DisplayedProduct C P ξ)
+      (formula45SourceProduct C P ξ) := by
+  rcases hP with ⟨h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12,
+    h13, h14, h15⟩
+  have hrearrange := formula29_rearrange_section13_source C P ξ
+  have hfirst := formula29_first_six_collected C P ξ
+  have hlast := formula34 C P h11 h12 ξ
+  have hprincipal := formula34_principal_to_pair_faces C P h2 h5 h10 ξ
+  have hreplace : D5.ModGammaSix
+      ((formula29FirstSixDisplayed C P ξ *
+          formula28URotatedPairStream C P ξ) *
+        formula34LastFiveDisplayedProduct C P ξ)
+      ((strictPairProduct (formula29PairCorrections C P ξ) *
+          formula28URotatedPairStream C P ξ) *
+        (formula40FaceProduct C P ξ * formula41FaceProduct C P ξ)) :=
+    ((hfirst.symm.mul (D5.ModEq.refl (D5.gamma G 6)
+      (formula28URotatedPairStream C P ξ))).mul
+        (hlast.trans hprincipal))
+  exact hrearrange.trans <| hreplace.trans
+    (formula29_pairs_and_faces_to_formula45_source C P ξ)
+
+/-! ## Global pair products in formula (46) -/
 
 def formula46FirstProduct
     (C : Context G) (P : Parameters C.s C.t) (ξ : G) : G :=
@@ -1309,6 +1886,24 @@ theorem formula46
       hFB.symm.mul (D5.ModEq.refl (D5.gamma G 6) (strictPairProduct E))
   simpa [formula46FirstProduct, formula46SecondProduct,
     formula46ThirdProduct, F, B, E] using hlocal.trans hsplit
+
+/-- Formula (46) as a direct consequence of the complete formula-(29)
+expansion. -/
+theorem formula29_to_formula46
+    (C : Context G) (P : Parameters C.s C.t) (hP : P.Satisfies) (ξ : G) :
+    D5.ModGammaSix (formula29DisplayedProduct C P ξ)
+      ((formula46FirstProduct C P ξ * formula46SecondProduct C P ξ) *
+        formula46ThirdProduct C P ξ) :=
+  (formula29_to_formula45_source C P hP ξ).trans (formula46 C P hP ξ)
+
+/-- Completed Section 13 for the finite-group project: every admissible
+Tahara word has commutator (46) modulo `γ₆`. -/
+theorem section13_finite [Finite G]
+    (C : Context G) (P : Parameters C.s C.t) (hP : P.Satisfies) (ξ : G) :
+    D5.ModGammaSix (D5.paperComm (word C P) ξ)
+      ((formula46FirstProduct C P ξ * formula46SecondProduct C P ξ) *
+        formula46ThirdProduct C P ξ) :=
+  (formula29 C P hP ξ).trans (formula29_to_formula46 C P hP ξ)
 
 end
 

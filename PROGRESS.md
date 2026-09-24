@@ -147,7 +147,7 @@
     - [x] Collect the local calculation over every strict triple and connect
       it to the three separate principal streams of formula (34).
     - [x] Remove the completely diagonal factor using condition (2).
-  - [ ] Formalize Section 13 (repeated-index pairs).
+  - [x] Formalize Section 13 (repeated-index pairs).
     - [x] Prove formulas (40)--(41), including both power transfers and the
       disappearance of their weight-five corrections by (14).
     - [x] Prove formula (42), with its correction divisibility derived from
@@ -158,9 +158,15 @@
       both printed integer exponent identities.
     - [x] Kill the first two factors of (45), obtain the three local factors
       retained in (46), and collect them over every pair `i < j`.
-    - [ ] Identify the Section 13 source product with the exact remainder of
+    - [x] Identify the Section 13 source product with the exact remainder of
       formulas (29) and (34) after the strict and diagonal terms from Section
       12 have been removed.
+    - [x] Split the three principal products of (34) into diagonal,
+      repeated-index, and strict-index parts; remove the first and last parts
+      by conditions (2), (5), and (10).
+    - [x] Reorder the complete formula-(29) product, identify its remaining
+      pair factors with the source of (45), and derive the finite-group
+      theorem `section13_finite` ending at formula (46).
   - [ ] Formalize Sections 14–25 (`κ ≡ 1 mod γ₆`).
 
 ## Phase 4 — finite-group theorem and audit

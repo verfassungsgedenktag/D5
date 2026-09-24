@@ -116,4 +116,8 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula45_second_exponent_identity
 #print axioms D5.Tahara.formula45_to_formula46_pair
 #print axioms D5.Tahara.formula46
+#print axioms D5.Tahara.formula34_principal_to_pair_faces
+#print axioms D5.Tahara.formula29_to_formula45_source
+#print axioms D5.Tahara.formula29_to_formula46
+#print axioms D5.Tahara.section13_finite
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

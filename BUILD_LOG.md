@@ -185,8 +185,15 @@ Run the current verification with:
   Lean verifies both printed integer exponent identities, the order-power
   vanishing of the first two factors, and the resulting local and global
   three-product form (46).
-- Full build at this Section 13 checkpoint: successful (`3132` jobs).  The
-  new axiom audit contains only standard logical axioms and the accepted
-  commutator-weight background theorem.  The remaining Section 13 task is
-  the finite-product identification of its source block with the precise
-  remainder of formulas (29) and (34).
+- Section 13 global bridge completed.  Lean splits the weak index domains in
+  the three principal products of (34), removes the diagonal and strict
+  parts using Section 12, and identifies the two repeated-index faces.
+- The first six streams of (29), the repeated first stream of (28), and the
+  two surviving faces are collected pointwise into the exact source of
+  formula (45).  The resulting theorem `section13_finite` derives formula
+  (46) directly from `[word C P, ξ]` for finite groups.
+- Full build after completing Section 13: successful (`3132` jobs).  The
+  axiom audit for the new global bridge and `section13_finite` contains only
+  Lean's standard logical axioms and the accepted background theorem
+  `D5.Background.commutator_gamma_le_gamma_add`; no new project axiom was
+  introduced.
