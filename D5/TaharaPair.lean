@@ -54,6 +54,14 @@ structure PairConsequences (C : Context G) (P : Parameters C.s C.t)
     P.w' i j j * TaharaArithmetic.binom2 (C.d j)
   dvd14_wijj : orderInt C.d i ∣
     P.w i j j * TaharaArithmetic.binom2 (C.d i)
+  /-- The transferred `w'` correction used in formula (40). -/
+  dvd_q_wpijj_B2d : orderInt C.d i ∣
+    orderRatio C.d i j * P.w' i j j *
+      TaharaArithmetic.binom2 (C.d i)
+  /-- The transferred `w''` correction used in formula (41). -/
+  dvd_q_wppiij_B2d : orderInt C.d i ∣
+    orderRatio C.d i j * P.w'' i i j *
+      TaharaArithmetic.binom2 (C.d i)
   dvd15_left : orderInt C.d i * orderInt C.d i ∣
     P.u i j * TaharaArithmetic.binom2 (C.d j) *
       TaharaArithmetic.binom2 (C.d i)
@@ -159,6 +167,8 @@ theorem pairConsequences (C : Context G) (P : Parameters C.s C.t)
       dvd14_wppiij := hwpp
       dvd14_wpijj := hwp
       dvd14_wijj := hwijj
+      dvd_q_wpijj_B2d := hqwp
+      dvd_q_wppiij_B2d := hqwpp
       dvd15_left := h15left
       dvd15_right := h15right
       dvd16_left := huB3d

@@ -177,3 +177,16 @@ Run the current verification with:
   axiom audit for all new public theorems contains only Lean's standard
   logical axioms and the accepted background theorem
   `D5.Background.commutator_gamma_le_gamma_add`.
+- Section 13 pair calculation: formulas (40)--(44) compile with every
+  cyclic-power transfer and weight-five correction explicit.  Formula (43)
+  is derived from the five-factor Jacobi theorem used in (34), while (44)
+  uses its weight `(2,1,2)` specialization.
+- The seven transformed pair factors are collected into formula (45).
+  Lean verifies both printed integer exponent identities, the order-power
+  vanishing of the first two factors, and the resulting local and global
+  three-product form (46).
+- Full build at this Section 13 checkpoint: successful (`3132` jobs).  The
+  new axiom audit contains only standard logical axioms and the accepted
+  commutator-weight background theorem.  The remaining Section 13 task is
+  the finite-product identification of its source block with the precise
+  remainder of formulas (29) and (34).

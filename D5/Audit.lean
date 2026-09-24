@@ -106,4 +106,14 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula39_strictTripleProduct_vanish
 #print axioms D5.Tahara.formula39_strict_principal_streams_vanish
 #print axioms D5.Tahara.formula34WMainFactor_diagonal_eq_one
+#print axioms D5.Tahara.formula40
+#print axioms D5.Tahara.formula41
+#print axioms D5.Tahara.formula42
+#print axioms D5.Tahara.formula43
+#print axioms D5.Tahara.formula44
+#print axioms D5.Tahara.formula45
+#print axioms D5.Tahara.formula45_first_exponent_identity
+#print axioms D5.Tahara.formula45_second_exponent_identity
+#print axioms D5.Tahara.formula45_to_formula46_pair
+#print axioms D5.Tahara.formula46
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise
