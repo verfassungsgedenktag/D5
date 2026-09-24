@@ -164,4 +164,10 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula68
 #print axioms D5.Tahara.formula68_mem_gamma3
 #print axioms D5.Tahara.formula69
+#print axioms D5.Tahara.sum_product_reindex
+#print axioms D5.Tahara.sum_square_partition
+#print axioms D5.Tahara.formula70_expansion
+#print axioms D5.Tahara.formula70
+#print axioms D5.Tahara.formula71_expansion
+#print axioms D5.Tahara.formula71
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

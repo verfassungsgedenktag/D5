@@ -248,3 +248,11 @@ Run the current verification with:
   for formulas (64)--(69) contains only Lean's standard logical axioms and
   the accepted commutator-weight background theorem; no new mathematical
   axiom was introduced.
+- Section 19 is formalized in `D5/Section19.lean`.  Lean proves the generic
+  finite double-sum reindexing and square partition needed to expand (70)
+  and (71).  Conditions (14)--(15), formula (66), and the cyclic-order
+  divisibility `f(l) ∣ f(m)` then prove both displayed sums divisible by
+  `f(l)`.
+- Full build after Section 19: successful (`3138` jobs).  The new sum
+  identities require no project axiom, while formulas (70)--(71) use only
+  the already accepted commutator-weight background theorem.

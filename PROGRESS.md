@@ -204,6 +204,13 @@
         prove the stated `γ₃` membership consequence of (68).
       - [x] Collect all three finite products in (62) coordinatewise and
         prove formula (69), including both filtered index ranges.
+    - [x] Formalize Section 19 (conditions (14), (15)).
+      - [x] Prove the finite double-sum reindexing and diagonal/strict-pair
+        partition used in both displayed expansions.
+      - [x] Verify the complete polynomial identity and divisibility in
+        formula (70).
+      - [x] Verify the mixed-coordinate identity and divisibility in
+        formula (71), including the transfer along `f(l) ∣ f(m)`.
 
 ## Phase 4 — finite-group theorem and audit
 
