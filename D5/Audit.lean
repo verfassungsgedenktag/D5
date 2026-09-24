@@ -145,4 +145,14 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula59
 #print axioms D5.Tahara.formula59_second_product_vanish
 #print axioms D5.Tahara.formula60
+#print axioms D5.Tahara.formula61
+#print axioms D5.Tahara.formula63_high_exponent
+#print axioms D5.Tahara.formula63_low_exponent
+#print axioms D5.Tahara.formula63_corrections_vanish
+#print axioms D5.Tahara.formula57_rearranged_zpow
+#print axioms D5.Tahara.formula62_high_expand
+#print axioms D5.Tahara.formula62_low_expand
+#print axioms D5.Tahara.formula62_inner_expand
+#print axioms D5.Tahara.formula63
+#print axioms D5.Tahara.formula62
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

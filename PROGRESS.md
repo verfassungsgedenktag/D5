@@ -189,6 +189,12 @@
         places the weight-three correction in `γ₄`.
       - [x] Derive the two-product expansion (59) pairwise and globally.
       - [x] Kill its correction product by (17) and prove formula (60).
+    - [x] Formalize Section 17 (the multiplicative consequence of (6)).
+      - [x] Derive formula (61) by collecting the commutator of the
+        condition-(6) word modulo `γ₄`.
+      - [x] Expand the proposed relation (62) into the three lines of (63).
+      - [x] Use conditions (7), (8) and formula (58) to remove both
+        correction streams and prove (62).
 
 ## Phase 4 — finite-group theorem and audit
 

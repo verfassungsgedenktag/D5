@@ -227,3 +227,11 @@ Run the current verification with:
   factor using the first divisibility in (17), yielding formula (60).
 - Full build after Section 16: successful (`3135` jobs), with the new
   theorems included in the axiom audit.
+- Section 17 is formalized in `D5/Section17.lean`.  Formula (61) is derived
+  directly from the weight-three condition-(6) word by finite-product
+  collection modulo `γ₄`.  Formula (63) records every principal and
+  correction stream from expanding (62); Lean verifies the two correction
+  exponent identities from conditions (7) and (8), then formula (58) makes
+  both streams trivial and yields formula (62).
+- Full build after Section 17: successful (`3136` jobs).  The complete
+  Section 17 chain is included in the axiom audit.
