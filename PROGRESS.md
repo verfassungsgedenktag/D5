@@ -211,12 +211,13 @@
         formula (70).
       - [x] Verify the mixed-coordinate identity and divisibility in
         formula (71), including the transfer along `f(l) ∣ f(m)`.
-    - [ ] Formalize Section 20 (condition (11) mixed corrections).
+    - [x] Formalize Section 20 (condition (11) mixed corrections).
       - [x] Remove the zero diagonal term from condition (11) and prove
         formula (72).
       - [x] Prove the exact group membership statement (73) by expanding
         its three products in the `x₂` basis and applying Bezout.
-      - [ ] Commute (73) with `ξ` and derive formulas (74)--(77).
+      - [x] Commute (73) with `ξ` and derive formulas (74)--(77), including
+        the coordinate witnesses and both finite-sum reindexings.
 
 ## Phase 4 — finite-group theorem and audit
 

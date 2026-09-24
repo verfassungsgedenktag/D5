@@ -173,4 +173,15 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.sum_filter_le_eq_sum_filter_lt_add
 #print axioms D5.Tahara.formula72
 #print axioms D5.Tahara.formula73
+#print axioms D5.Tahara.formula74_expansion
+#print axioms D5.Tahara.formula74
+#print axioms D5.Tahara.formula74_coordinates
+#print axioms D5.Tahara.x3Coordinate_modEq_dvd
+#print axioms D5.Tahara.formula75
+#print axioms D5.Tahara.formula75_weighted_dvd
+#print axioms D5.Tahara.sum_lower_reindex
+#print axioms D5.Tahara.formula76_expansion
+#print axioms D5.Tahara.formula76
+#print axioms D5.Tahara.formula77_expansion
+#print axioms D5.Tahara.formula77
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

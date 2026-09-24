@@ -264,3 +264,15 @@ Run the current verification with:
 - Full build after formulas (72)--(73): successful (`3139` jobs).  Their
   axiom audit contains only standard logical axioms and the accepted
   commutator-weight theorem.
+- Section 20 is complete.  Formula (74) is obtained by commuting all three
+  factors of (73), collecting modulo `γ₄`, and transferring the `d(i)`
+  power from `γ₂` to `γ₃`.  Formula (75) uses the actual normal-form
+  coordinates in `γ₃/γ₄`; coordinate uniqueness supplies explicit integer
+  witnesses `q(i,l)`.
+- The proofs of (76)--(77) multiply (75) by the stated `eta` coordinates,
+  eliminate every witness using (66), and formally reindex the lower
+  triangular sums as upper triangular sums.  All displayed exponents use
+  the full sums in `b`, `lambda`, `v`, `w`, and `w''`.
+- Full build after completing Section 20: successful (`3139` jobs).  The
+  audit of formulas (74)--(77) reports only Lean's standard logical axioms
+  and the accepted commutator-weight background theorem.
