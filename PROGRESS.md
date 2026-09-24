@@ -168,6 +168,13 @@
       pair factors with the source of (45), and derive the finite-group
       theorem `section13_finite` ending at formula (46).
   - [ ] Formalize Sections 14–25 (`κ ≡ 1 mod γ₆`).
+    - [ ] Complete Section 14 (cancellation of the first two products).
+      - [x] Prove formulas (47)--(49) by expanding the multiplicative form
+        of condition (6), including all finite-product reindexing.
+      - [ ] Record the paper's intermediate route (50)--(51).
+      - [x] Prove formula (52), with both corrections killed by (17).
+      - [x] Prove (53) directly by two checked power transfers, cancel the
+        first two products of (46), and derive formula (54).
 
 ## Phase 4 — finite-group theorem and audit
 

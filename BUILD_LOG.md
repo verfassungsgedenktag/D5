@@ -197,3 +197,14 @@ Run the current verification with:
   Lean's standard logical axioms and the accepted background theorem
   `D5.Background.commutator_gamma_le_gamma_add`; no new project axiom was
   introduced.
+- Section 14 started in `D5/Section14.lean`.  Formulas (47)--(49) expand
+  condition (6) through all finite products.  Formula (52) retains and then
+  removes both weight-five corrections using the two divisibilities in
+  (17).  A direct pairwise power-transfer proof of (53) yields the global
+  cancellation of the first two products in (46) and formula (54).
+- The literal intermediate route through formulas (50)--(51) remains to be
+  recorded; it is not used by the direct proof of (53).
+- Full build at this Section 14 checkpoint: successful (`3133` jobs).  The
+  audit for formulas (47)--(49), (52)--(54), and the global cancellation
+  contains only Lean's standard logical axioms and the accepted
+  commutator-weight background theorem.

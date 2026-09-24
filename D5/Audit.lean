@@ -120,4 +120,11 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula29_to_formula45_source
 #print axioms D5.Tahara.formula29_to_formula46
 #print axioms D5.Tahara.section13_finite
+#print axioms D5.Tahara.formula47
+#print axioms D5.Tahara.formula48
+#print axioms D5.Tahara.formula49
+#print axioms D5.Tahara.formula52
+#print axioms D5.Tahara.formula53
+#print axioms D5.Tahara.formula46_first_two_vanish
+#print axioms D5.Tahara.formula54
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise
