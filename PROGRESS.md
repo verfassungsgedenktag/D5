@@ -243,6 +243,15 @@
       - [x] Verify the exact triangular reindexing and both coordinate
         congruences in formula (87), including the weakening
         `n(a) ∣ n(b)` for `a < b`.
+    - [x] Formalize Section 24 (diagonal and pairwise cancellations).
+      - [x] Partition the complete square sum exactly into the diagonal and
+        the two orientations of every strict pair, proving formula (88).
+      - [x] Remove the diagonal with formula (78) and the order divisibility
+        from (82).
+      - [x] Prove the weighted comparison (89) from formula (79), including
+        both transfers `n(a) ∣ n(b)` and `n(b) ∣ f(l)s(l,b)`.
+      - [x] Collect the surviving alternating strict-pair terms and derive
+        the final exponent congruence (90).
 
 ## Phase 4 — finite-group theorem and audit
 

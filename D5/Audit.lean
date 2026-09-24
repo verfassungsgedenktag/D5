@@ -215,4 +215,13 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula87_second_difference
 #print axioms D5.Tahara.formula87_second_congruence
 #print axioms D5.Tahara.formula87
+#print axioms D5.Tahara.formula88
+#print axioms D5.Tahara.formula88Term_pair
+#print axioms D5.Tahara.formula80_orderInt_dvd
+#print axioms D5.Tahara.formula88_diagonal_dvd
+#print axioms D5.Tahara.formula89_pair_dvd
+#print axioms D5.Tahara.formula89
+#print axioms D5.Tahara.formula90_positive_difference
+#print axioms D5.Tahara.formula90_positive_congruence
+#print axioms D5.Tahara.formula90
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

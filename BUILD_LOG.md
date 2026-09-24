@@ -305,3 +305,11 @@ Run the current verification with:
 - Full build after Section 23: successful (`3142` jobs).  The axiom audit for
   formulas (85)--(87) reports only Lean's standard logical axioms and the
   previously accepted commutator-weight background theorem.
+- Section 24 is formalized in `D5/Section24.lean`.  Lean checks the exact
+  diagonal/strict-pair partition (88), eliminates its diagonal through (78),
+  proves the weighted pair congruence (89) through (79) and the two required
+  invariant-factor divisibilities, and derives the alternating exponent in
+  formula (90).  No new mathematical axiom is introduced.
+- Full build after Section 24: successful (`3143` jobs).  The axiom audit for
+  formulas (88)--(90) contains only standard logical axioms and the already
+  accepted commutator-weight background theorem.
