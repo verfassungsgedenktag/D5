@@ -225,6 +225,15 @@
         condition (14), and the coordinate divisibility in (66).
       - [x] Expand and eliminate the symmetric two-coordinate product in
         formula (79), including the transfer along `f(l) ∣ f(m)`.
+    - [x] Formalize Section 22 (coordinates in `γ₂(G)/γ₄(G)`).
+      - [x] Isolate the invariant-factor decomposition in (80) as one
+        explicit finite-abelian-group background axiom.
+      - [x] Define the actual coordinates `r(i,a)` and `s(l,a)` and prove
+        both congruences in (81) from their unique normal forms.
+      - [x] Prove the order divisibility (82) and coordinate comparison
+        (83), including conversion of the complete formula-(68) word.
+      - [x] Expand the full formula-(62) word in the new basis and prove
+        the complete coordinate congruence (84).
 
 ## Phase 4 — finite-group theorem and audit
 

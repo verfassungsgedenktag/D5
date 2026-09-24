@@ -284,3 +284,13 @@ Run the current verification with:
 - Full build after Section 21: successful (`3140` jobs).  The axiom audit
   reports only Lean's standard logical axioms and the previously accepted
   commutator-weight background theorem; Section 21 introduces no new axiom.
+- Section 22 is formalized in `D5/Section22.lean`.  Formula (80) is isolated
+  as the explicit standard invariant-factor axiom for the finite abelian
+  quotient `γ₂(G)/γ₄(G)`.  Lean then constructs the coordinates in (81),
+  derives (82) from the cyclic order relation, and verifies the complete
+  coordinate expansions and congruences (83)--(84) from formulas (68),
+  (69), and (62).
+- Full build after Section 22: successful (`3141` jobs).  The audit records
+  exactly one new accepted background axiom,
+  `D5.Background.gammaTwoFourBasis_exists`; formulas (81)--(84) themselves
+  are derived from the selected basis and the earlier checked calculation.

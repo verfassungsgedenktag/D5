@@ -191,4 +191,14 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula79_expansion
 #print axioms D5.Tahara.formula79_last_dvd
 #print axioms D5.Tahara.formula79
+#print axioms D5.Background.gammaTwoFourBasis_exists
+#print axioms D5.Tahara.GammaTwoFourBasis.formula80_finite
+#print axioms D5.Tahara.GammaTwoFourBasis.formula80
+#print axioms D5.Tahara.GammaTwoFourBasis.coordinate_dvd_of_product_mem
+#print axioms D5.Tahara.formula81_first
+#print axioms D5.Tahara.formula81_second
+#print axioms D5.Tahara.formula82
+#print axioms D5.Tahara.formula83
+#print axioms D5.Tahara.formula84_coordinates
+#print axioms D5.Tahara.formula84
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise
