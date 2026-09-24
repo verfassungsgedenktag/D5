@@ -224,4 +224,14 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula90_positive_difference
 #print axioms D5.Tahara.formula90_positive_congruence
 #print axioms D5.Tahara.formula90
+#print axioms D5.Tahara.strictPairProduct_strictPairProduct_swap_gammaThree
+#print axioms D5.Tahara.strictPairProduct_zpow_gammaThree
+#print axioms D5.Tahara.coordinateCommSquare_to_strictPairs
+#print axioms D5.Tahara.formula91
+#print axioms D5.Tahara.zpow_modEq_of_period
+#print axioms D5.Tahara.formula85_to_formula90_coordinates
+#print axioms D5.Tahara.formula92_middle_coordinates
+#print axioms D5.Tahara.formula92_middle_vanishes
+#print axioms D5.Tahara.formula92
+#print axioms D5.Tahara.formula92_finite
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

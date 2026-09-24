@@ -313,3 +313,16 @@ Run the current verification with:
 - Full build after Section 24: successful (`3143` jobs).  The axiom audit for
   formulas (88)--(90) contains only standard logical axioms and the already
   accepted commutator-weight background theorem.
+- Section 25 is formalized in `D5/Section25.lean`.  Formula (91) is proved by
+  replacing both `x₃` entries with their `y` coordinates and collecting the
+  full commutator square into strict pairs.  A checked permutation exchanges
+  the two finite strict-pair loops in formula (92), and the period from (86)
+  applies the exponent congruence (90) factor by factor.
+- The resulting product consists of powers of `[x₃ₗ,x₃ₘ]`; each base lies in
+  `γ₆` because both entries lie in `γ₃`.  Thus Lean proves
+  `D5.Tahara.formula92 : κ ≡ 1 mod γ₆`.  No new axiom is introduced.
+- Full build after Section 25: successful (`3144` jobs).  The audit confirms
+  that formula (92) depends only on Lean's standard logical axioms and the
+  previously accepted commutator-weight background theorem.  Its finite-group
+  wrapper additionally uses exactly the accepted invariant-factor basis axiom
+  `D5.Background.gammaTwoFourBasis_exists`.

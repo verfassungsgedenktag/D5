@@ -167,7 +167,7 @@
     - [x] Reorder the complete formula-(29) product, identify its remaining
       pair factors with the source of (45), and derive the finite-group
       theorem `section13_finite` ending at formula (46).
-  - [ ] Formalize Sections 14–25 (`κ ≡ 1 mod γ₆`).
+  - [x] Formalize Sections 14–25 (`κ ≡ 1 mod γ₆`).
     - [x] Complete Section 14 (cancellation of the first two products).
       - [x] Prove formulas (47)--(49) by expanding the multiplicative form
         of condition (6), including all finite-product reindexing.
@@ -252,6 +252,16 @@
         both transfers `n(a) ∣ n(b)` and `n(b) ∣ f(l)s(l,b)`.
       - [x] Collect the surviving alternating strict-pair terms and derive
         the final exponent congruence (90).
+    - [x] Formalize Section 25 (return to commutator products).
+      - [x] Expand each `[x₃ₗ,x₃ₘ]` in the `y` coordinates and prove
+        formula (91), including diagonal removal and reversed-pair collection.
+      - [x] Prove that congruent exponents modulo `n(a)` give congruent powers
+        of `[yₐ,y_b]` by the period established in formula (86).
+      - [x] Exchange and collect the two finite strict-pair products, matching
+        the complete exponent in formula (90).
+      - [x] Prove every remaining `[x₃ₗ,x₃ₘ]` factor lies in `γ₆` and
+        conclude formula (92), `κ ≡ 1 mod γ₆`, including its finite-group
+        wrapper using the accepted basis existence theorem (80).
 
 ## Phase 4 — finite-group theorem and audit
 
