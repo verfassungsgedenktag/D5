@@ -4,8 +4,7 @@ import D5.FiniteGoal
 # Axiom audit
 
 This file is part of the default build. During elaboration, Lean prints the
-axioms on which representative completed declarations depend. The final
-theorem will be added here when it exists.
+axioms on which representative completed declarations depend.
 -/
 
 #print axioms D5.paperComm_eq
@@ -234,4 +233,10 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula92_middle_vanishes
 #print axioms D5.Tahara.formula92
 #print axioms D5.Tahara.formula92_finite
+#print axioms D5.Tahara.context_exists
+#print axioms D5.Tahara.formula54_formula92_finite
+#print axioms D5.Tahara.finite_elementwise
+#print axioms D5.finite_nilpotent_elementwise
+#print axioms D5.finite_group_difficult_inclusion
+#print axioms D5.finite_group_theorem
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

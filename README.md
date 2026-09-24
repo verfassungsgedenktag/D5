@@ -8,7 +8,7 @@ The source document and the synced files under the parent project's
 
 ## Verification target
 
-The final theorem is intended to state the subgroup equality
+The final theorem `D5.finite_group_theorem` states the subgroup equality
 `[D₅(G), G] = γ₆(G)` for every finite group `G`, where `D₅` is defined from
 the fifth power of the augmentation ideal in `ℤ[G]`.
 
@@ -19,8 +19,9 @@ calculations are to be proved in Lean.
 
 The complete formal interface to Tahara's Theorem 4.3.3 is in
 `D5/Tahara.lean`. It contains the three cyclic-coordinate systems, structural
-coefficients, the word (4.3.1), every condition (4.3.2)--(4.3.15), and the
-single axiom `D5.Tahara.description`.
+coefficients, the word (4.3.1), every condition (4.3.2)--(4.3.15), the
+Tahara axiom `D5.Tahara.description`, and the separately listed standard
+coordinate-existence axiom `D5.Tahara.context_exists`.
 
 The source-to-Lean transcription checklist is recorded in
 `TAHARA_INTERFACE.md`.
@@ -31,8 +32,8 @@ The source-to-Lean transcription checklist is recorded in
 ./scripts/lake-local build
 ```
 
-The project pins both Lean and Mathlib. A final audit file will print the
-axioms of the main theorem.
+The project pins both Lean and Mathlib. `D5/Audit.lean` prints the exact
+axioms of the main theorem during the build.
 
 Lean is currently installed locally under `.tooling/elan`; no shell profile
 or system-wide `PATH` was changed.

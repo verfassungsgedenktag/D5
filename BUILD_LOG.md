@@ -326,3 +326,14 @@ Run the current verification with:
   previously accepted commutator-weight background theorem.  Its finite-group
   wrapper additionally uses exactly the accepted invariant-factor basis axiom
   `D5.Background.gammaTwoFourBasis_exists`.
+- Section 26 is formalized in `D5/Section26.lean`.  Lean composes formulas
+  (54) and (92), then uses the lifted Tahara description together with the
+  checked centrality of `γ₅` modulo `γ₆` to obtain the elementwise theorem
+  for every finite group.
+- `D5/FiniteGoal.lean` feeds that result through the already formalized
+  finite quotient reduction, proves `[D₅(G),G] ≤ γ₆(G)`, and combines it
+  with the easy reverse inclusion in `D5.finite_group_theorem`.
+- Final full build: successful (`3145` jobs).  `#print axioms` for
+  `D5.finite_group_theorem` reports exactly the five project assumptions
+  listed in `AXIOMS.md`, in addition to Lean's logical axioms; it contains no
+  `sorryAx`.

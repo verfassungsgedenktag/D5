@@ -1,5 +1,6 @@
 import D5.Tahara
 import D5.CommutatorIdentities
+import D5.Weight
 
 /-!
 # From Tahara generators to an elementwise commutator theorem
@@ -59,10 +60,14 @@ theorem dimensionSubgroup_le_centralModulo_of_words
       ∀ ξ : G, paperComm (word C P) ξ ∈ gamma G 6) :
     dimensionSubgroup G 5 ≤ centralModulo (gamma G 6) := by
   rw [description C]
-  apply (Subgroup.closure_le (centralModulo (gamma G 6))).2
-  rintro g ⟨P, hP, rfl⟩
-  change word C P ∈ centralModulo (gamma G 6)
-  exact (mem_centralModulo_iff (gamma G 6)).2 (hword P hP)
+  apply sup_le
+  · apply (Subgroup.closure_le (centralModulo (gamma G 6))).2
+    rintro g ⟨P, hP, rfl⟩
+    change word C P ∈ centralModulo (gamma G 6)
+    exact (mem_centralModulo_iff (gamma G 6)).2 (hword P hP)
+  · intro g hg
+    exact (mem_centralModulo_iff (gamma G 6)).2 fun ξ =>
+      modEq_one_iff_mem.mp (gamma_five_central_mod_gamma_six hg)
 
 /-- Elementwise form of the preceding reduction. -/
 theorem dimensionSubgroup_paperComm_mem_of_words

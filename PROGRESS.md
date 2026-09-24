@@ -29,6 +29,8 @@
 - [x] Transcribe Theorem 4.3.3 exactly from the cited source.
 - [x] Represent its finite cyclic coordinates and arithmetic conditions.
 - [x] Declare the reviewed statement as the named Tahara axiom.
+- [x] Lift the class-at-most-four description from `G/γ₅(G)` to the
+  finite-group equality `D₅(G) = generatedSubgroup C ⊔ γ₅(G)`.
 
 ## Phase 3 — document calculations
 
@@ -265,10 +267,10 @@
 
 ## Phase 4 — finite-group theorem and audit
 
-- [ ] Prove the finite nilpotent case.
-- [x] Formalize the reduction from a finite group to `G / γ₆(G)`; its use
-  is conditional only on the remaining finite nilpotent calculation.
-- [ ] Prove both subgroup inclusions.
+- [x] Prove the finite nilpotent case.
+- [x] Formalize the reduction from a finite group to `G / γ₆(G)`.
+- [x] Prove both subgroup inclusions.
   - [x] Prove `γ₆(G) ≤ [D₅(G),G]` from the recorded background axiom.
-  - [ ] Prove `[D₅(G),G] ≤ γ₆(G)` using the Tahara calculation.
-- [ ] Run `lake build` and audit the final theorem with `#print axioms`.
+  - [x] Prove `[D₅(G),G] ≤ γ₆(G)` using the Tahara calculation.
+- [x] Combine them into `D5.finite_group_theorem`.
+- [x] Run `lake build` and audit the final theorem with `#print axioms`.

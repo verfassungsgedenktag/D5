@@ -32,6 +32,7 @@ import D5.Section22
 import D5.Section23
 import D5.Section24
 import D5.Section25
+import D5.Section26
 import D5.Rotation
 import D5.RotationSix
 import D5.Weight
@@ -110,6 +111,25 @@ theorem finite_group_theorem_of_nilpotent_elementwise
   le_antisymm
     (finite_group_difficult_inclusion_of_nilpotent_elementwise hNil G)
     (gamma_six_le_commutator_dimension_five G)
+
+/-- Section 26 supplies the elementwise hypothesis needed by the finite
+quotient reduction. -/
+theorem finite_nilpotent_elementwise : FiniteNilpotentElementwiseStatement := by
+  intro H _ _ _ w hw ξ
+  exact Tahara.finite_elementwise H w hw ξ
+
+/-- The difficult inclusion for every finite group. -/
+theorem finite_group_difficult_inclusion
+    (G : Type u) [Group G] [Finite G] :
+    ⁅dimensionSubgroup G 5, (⊤ : Subgroup G)⁆ ≤ gamma G 6 :=
+  finite_group_difficult_inclusion_of_nilpotent_elementwise
+    finite_nilpotent_elementwise G
+
+/-- The finite-group theorem `[D₅(G),G] = γ₆(G)`. -/
+theorem finite_group_theorem (G : Type u) [Group G] [Finite G] :
+    ⁅dimensionSubgroup G 5, (⊤ : Subgroup G)⁆ = gamma G 6 :=
+  finite_group_theorem_of_nilpotent_elementwise
+    finite_nilpotent_elementwise G
 
 end
 
