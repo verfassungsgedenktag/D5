@@ -138,7 +138,16 @@
           off-diagonal parts by an explicit finite-list permutation.
         - [x] Identify line 7 with the diagonal word from (32) and finish the
           diagonal cancellation using (36).
-  - [ ] Formalize Sections 12–25 (`κ ≡ 1 mod γ₆`).
+  - [x] Formalize Section 12 (strict triples).
+    - [x] Derive formulas (37)--(38) directly from conditions (5) and (10).
+    - [x] Transfer all three cyclic powers in formula (39), retaining and
+      identifying the three weight-five binomial corrections.
+    - [x] Eliminate the principal exponent by (37) and all corrections by
+      the divisibilities in (38).
+    - [x] Collect the local calculation over every strict triple and connect
+      it to the three separate principal streams of formula (34).
+    - [x] Remove the completely diagonal factor using condition (2).
+  - [ ] Formalize Sections 13–25 (`κ ≡ 1 mod γ₆`).
 
 ## Phase 4 — finite-group theorem and audit
 

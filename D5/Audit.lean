@@ -99,4 +99,11 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula36_yields_wdoubleprime_diagonal_main
 #print axioms D5.Tahara.formula34_transformed_streams
 #print axioms D5.Tahara.formula34
+#print axioms D5.Tahara.formula37
+#print axioms D5.Tahara.formula38
+#print axioms D5.Tahara.formula39_expand
+#print axioms D5.Tahara.formula39
+#print axioms D5.Tahara.formula39_strictTripleProduct_vanish
+#print axioms D5.Tahara.formula39_strict_principal_streams_vanish
+#print axioms D5.Tahara.formula34WMainFactor_diagonal_eq_one
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise

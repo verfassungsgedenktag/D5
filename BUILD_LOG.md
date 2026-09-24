@@ -166,3 +166,14 @@ Run the current verification with:
   `#print axioms D5.Tahara.formula34` reports only Lean's standard logical
   axioms and the accepted commutator-weight background theorem; no new
   mathematical axiom, `sorry`, or `admit` is used.
+- Section 12, formulas (37)--(39): Lean derives the strict-triple exponent
+  identity and three divisibilities from Tahara conditions (5) and (10),
+  expands all three cyclic powers with their weight-five corrections, and
+  proves every local strict-triple contribution trivial modulo `γ₆`.
+- The local calculation is collected over `i < j < k` and identified with
+  the product of the three strict principal streams from formula (34).
+  Condition (2) separately removes the fully diagonal factor.
+- Full build after completing Section 12: successful (`3131` jobs).  The
+  axiom audit for all new public theorems contains only Lean's standard
+  logical axioms and the accepted background theorem
+  `D5.Background.commutator_gamma_le_gamma_add`.
