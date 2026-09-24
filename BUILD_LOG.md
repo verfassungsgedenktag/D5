@@ -276,3 +276,11 @@ Run the current verification with:
 - Full build after completing Section 20: successful (`3139` jobs).  The
   audit of formulas (74)--(77) reports only Lean's standard logical axioms
   and the accepted commutator-weight background theorem.
+- Section 21 is formalized in `D5/Section21.lean`.  Lean verifies the exact
+  polynomial expansions (78)--(79), all lower-to-upper triangular sum
+  reindexings, and the final strict-pair coefficient divisibility from
+  condition (14).  The mixed case also checks the required transfer along
+  `f(l) ∣ f(m)`.
+- Full build after Section 21: successful (`3140` jobs).  The axiom audit
+  reports only Lean's standard logical axioms and the previously accepted
+  commutator-weight background theorem; Section 21 introduces no new axiom.

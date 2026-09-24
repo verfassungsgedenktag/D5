@@ -218,6 +218,13 @@
         its three products in the `x₂` basis and applying Bezout.
       - [x] Commute (73) with `ξ` and derive formulas (74)--(77), including
         the coordinate witnesses and both finite-sum reindexings.
+    - [x] Formalize Section 21 (cancellation of the corrected exponents).
+      - [x] Expand the complete one-coordinate product in formula (78),
+        including the lower-to-upper triangular reindexing.
+      - [x] Eliminate all four terms in (78) using formulas (70), (76),
+        condition (14), and the coordinate divisibility in (66).
+      - [x] Expand and eliminate the symmetric two-coordinate product in
+        formula (79), including the transfer along `f(l) ∣ f(m)`.
 
 ## Phase 4 — finite-group theorem and audit
 

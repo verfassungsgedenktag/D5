@@ -184,4 +184,11 @@ theorem will be added here when it exists.
 #print axioms D5.Tahara.formula76
 #print axioms D5.Tahara.formula77_expansion
 #print axioms D5.Tahara.formula77
+#print axioms D5.Tahara.formula78_expansion
+#print axioms D5.Tahara.formula78_pair_coefficient_dvd
+#print axioms D5.Tahara.formula78_last_dvd
+#print axioms D5.Tahara.formula78
+#print axioms D5.Tahara.formula79_expansion
+#print axioms D5.Tahara.formula79_last_dvd
+#print axioms D5.Tahara.formula79
 #print axioms D5.finite_group_theorem_of_nilpotent_elementwise
