@@ -1,4 +1,10 @@
-/.lake/
+# Local Lean installation and Lake build cache
 /.tooling/
+/.lake/
+
+# Compiled Lean artifacts
 *.olean
 *.ilean
+
+# macOS metadata
+.DS_Store
