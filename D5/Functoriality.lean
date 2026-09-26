@@ -94,12 +94,13 @@ variable {G : Type u} {H : Type v} [Group G] [Group H]
 theorem dimensionSubgroup_map (f : G →* H) (n : ℕ) :
     Subgroup.map f (dimensionSubgroup G n) ≤ dimensionSubgroup H n := by
   rintro y ⟨x, hx, rfl⟩
-  change groupRingOf H (f x) - 1 ∈ augmentationIdealPow H n
+  have hx' : x ∈ dimensionSubgroup G n := hx
+  rw [mem_dimensionSubgroup_iff] at hx' ⊢
   have hmap := map_twoSidedIdealPow_mem (groupRingMap f)
     (augmentationIdeal G) (augmentationIdeal H) (fun z hz => by
       change augmentation H (groupRingMap f z) = 0
       rw [augmentation_groupRingMap]
-      exact hz) n (groupRingOf G x - 1) hx
+      exact hz) n (groupRingOf G x - 1) hx'
   simpa using hmap
 
 theorem map_mem_dimensionSubgroup (f : G →* H) (n : ℕ) {g : G}

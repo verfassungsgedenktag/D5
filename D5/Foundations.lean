@@ -2,7 +2,6 @@ import Mathlib.Algebra.MonoidAlgebra.Basic
 import Mathlib.GroupTheory.Nilpotent
 import Mathlib.RingTheory.TwoSidedIdeal.Kernel
 import Mathlib.RingTheory.TwoSidedIdeal.Operations
-import Mathlib.Tactic.NoncommRing
 
 /-!
 # Basic definitions
@@ -121,40 +120,36 @@ theorem augmentation_groupRingOf (g : G) :
     augmentation G (groupRingOf G g) = 1 := by
   simp [augmentation, groupRingOf]
 
-/-- The integral dimension subgroup
-`Dₙ(G) = {g | g - 1 ∈ I(G)^n}`. -/
-def dimensionSubgroup (n : ℕ) : Subgroup G where
-  carrier := {g | groupRingOf G g - 1 ∈ augmentationIdealPow G n}
-  one_mem' := by
-    change groupRingOf G 1 - 1 ∈ augmentationIdealPow G n
-    rw [map_one]
-    simp
-  mul_mem' := by
-    intro a b ha hb
-    change groupRingOf G (a * b) - 1 ∈ augmentationIdealPow G n
-    rw [map_mul]
-    rw [show groupRingOf G a * groupRingOf G b - 1 =
-        (groupRingOf G a - 1) + groupRingOf G a * (groupRingOf G b - 1) by
-      noncomm_ring]
-    exact (augmentationIdealPow G n).add_mem ha
-      ((augmentationIdealPow G n).mul_mem_left _ _ hb)
-  inv_mem' := by
-    intro a ha
-    change groupRingOf G a⁻¹ - 1 ∈ augmentationIdealPow G n
-    have hmul : groupRingOf G a⁻¹ * groupRingOf G a = 1 := by
-      rw [← map_mul]
-      simp
-    rw [show groupRingOf G a⁻¹ - 1 =
-        (-groupRingOf G a⁻¹) * (groupRingOf G a - 1) by
-      rw [mul_sub, neg_mul, hmul]
-      simp [sub_eq_add_neg, add_comm]]
-    exact (augmentationIdealPow G n).mul_mem_left _ _ ha
+/-- The quotient ring `ℤ[G] / I(G)^n`. -/
+abbrev GroupRingQuotient (n : ℕ) :=
+  (augmentationIdealPow G n).ringCon.Quotient
+
+/-- The canonical map `G → (ℤ[G] / I(G)^n)ˣ`. -/
+noncomputable def dimensionRepresentation (n : ℕ) :
+    G →* (GroupRingQuotient G n)ˣ :=
+  (((augmentationIdealPow G n).ringCon.mk').toMonoidHom.comp
+    (groupRingOf G)).toHomUnits
+
+/-- The integral dimension subgroup is the kernel of the canonical map
+`G → (ℤ[G] / I(G)^n)ˣ`. -/
+def dimensionSubgroup (n : ℕ) : Subgroup G :=
+  (dimensionRepresentation G n).ker
 
 @[simp]
 theorem mem_dimensionSubgroup_iff (n : ℕ) (g : G) :
     g ∈ dimensionSubgroup G n ↔
-      groupRingOf G g - 1 ∈ augmentationIdealPow G n :=
-  Iff.rfl
+      groupRingOf G g - 1 ∈ augmentationIdealPow G n := by
+  change dimensionRepresentation G n g = 1 ↔ _
+  rw [Units.ext_iff]
+  change (augmentationIdealPow G n).ringCon.mk' (groupRingOf G g) =
+    (augmentationIdealPow G n).ringCon.mk' 1 ↔ _
+  constructor
+  · intro h
+    exact ((augmentationIdealPow G n).rel_iff (groupRingOf G g) 1).1
+      (Quotient.eq'.1 h)
+  · intro h
+    exact Quotient.sound' <|
+      ((augmentationIdealPow G n).rel_iff (groupRingOf G g) 1).2 h
 
 end DimensionSubgroups
 
